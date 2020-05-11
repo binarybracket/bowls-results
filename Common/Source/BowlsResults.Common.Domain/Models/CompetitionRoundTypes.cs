@@ -1,4 +1,4 @@
-﻿namespace BowlsResults.Common.Domain.Models
+﻿namespace Com.BinaryBracket.BowlsResults.Common.Domain.Models
 {
 	public enum CompetitionRoundTypes
 	{

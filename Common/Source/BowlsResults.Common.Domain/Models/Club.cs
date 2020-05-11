@@ -1,6 +1,6 @@
 using Com.BinaryBracket.Core.Domain2.Entities;
 
-namespace BowlsResults.Common.Domain.Models
+namespace Com.BinaryBracket.BowlsResults.Common.Domain.Models
 {
 	public class Club : AuditableEntity<int>
 	{

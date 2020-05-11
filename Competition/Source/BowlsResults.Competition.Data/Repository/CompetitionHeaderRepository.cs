@@ -1,11 +1,10 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using BowlsResults.Competition.Domain.Models;
-using BowlsResults.Competition.Domain.Repository;
+﻿using System.Threading.Tasks;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Models;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Com.BinaryBracket.Core.Data2;
 using Com.BinaryBracket.Core.Data2.Repositories;
 
-namespace BowlsResults.Competition.Data.Repository
+namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 {
 	public sealed class CompetitionHeaderRepository : IdentityRepository<CompetitionHeader, int>, ICompetitionHeaderRepository
 	{

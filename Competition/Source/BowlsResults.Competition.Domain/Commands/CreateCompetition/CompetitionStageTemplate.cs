@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using BowlsResults.Common.Domain.Models;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Models;
 
-namespace BowlsResults.Competition.Domain.Commands.CreateCompetition
+namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompetition
 {
 	public sealed class CompetitionStageTemplate
 	{

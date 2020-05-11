@@ -1,7 +1,7 @@
-using BowlsResults.Common.Domain.Models;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Models;
 using Com.BinaryBracket.Core.Data2.Mapping;
 
-namespace BowlsResults.Common.Data.Mappings
+namespace Com.BinaryBracket.BowlsResults.Common.Data.Mappings
 {
 	public class ClubMap : AuditableEntityClassMap<Club, int>
 	{

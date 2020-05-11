@@ -1,6 +1,6 @@
 using Com.BinaryBracket.Core.Domain2.Entities;
 
-namespace BowlsResults.Competition.Domain.Models
+namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Models
 {
 	public class CompetitionHeader : IdentityEntity<int>
 	{

@@ -2,6 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <AssemblyName>Com.BinaryBracket.BowlsResults.Common.Domain</AssemblyName>
+        <RootNamespace>Com.BinaryBracket.BowlsResults.Common.Domain</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

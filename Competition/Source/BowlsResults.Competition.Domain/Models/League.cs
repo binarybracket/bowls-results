@@ -1,6 +1,6 @@
-using BowlsResults.Common.Domain.Models;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Models;
 
-namespace BowlsResults.Competition.Domain.Models
+namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Models
 {
 	public class League : CompetitionEvent
 	{

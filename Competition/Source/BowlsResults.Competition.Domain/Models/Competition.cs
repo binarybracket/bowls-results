@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using BowlsResults.Common.Domain.Models;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Models;
 using Com.BinaryBracket.Core.Domain2.Entities;
 
-namespace BowlsResults.Competition.Domain.Models
+namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Models
 {
 	public class Competition : AuditableEntity<int>
 	{

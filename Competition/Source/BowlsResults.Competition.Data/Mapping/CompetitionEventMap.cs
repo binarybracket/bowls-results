@@ -1,7 +1,7 @@
-using BowlsResults.Competition.Domain.Models;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Models;
 using Com.BinaryBracket.Core.Data2.Mapping;
 
-namespace BowlsResults.Competition.Data.Mapping
+namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 {
 	public class CompetitionEventMap : IdentityEntityMap<CompetitionEvent, short>
 	{

@@ -2,10 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <AssemblyName>Com.BinaryBracket.BowlsResults.Competition.Domain</AssemblyName>
+        <RootNamespace>Com.BinaryBracket.BowlsResults.Competition.Domain</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\bowlsresults\Platform\Source\OriginalData\Com.BinaryBracket.BowlsResults.Data.csproj" />
       <ProjectReference Include="..\..\..\..\core\Source\Domain\Com.BinaryBracket.Core.Domain2.csproj" />
       <ProjectReference Include="..\..\..\Common\Source\BowlsResults.Common.Domain\BowlsResults.Common.Domain.csproj" />
     </ItemGroup>

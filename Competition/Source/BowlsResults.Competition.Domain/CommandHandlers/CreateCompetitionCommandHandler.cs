@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BowlsResults.Competition.Domain.Commands.CreateCompetition;
-using BowlsResults.Competition.Domain.Repository;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompetition;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Com.BinaryBracket.Core.Domain2;
 using Com.BinaryBracket.Core.Domain2.CommandHandlers;
 using Com.BinaryBracket.Core.Domain2.Commands;
 
-namespace BowlsResults.Competition.Domain.CommandHandlers
+namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 {
 	public class CreateCompetitionCommandHandler : ICommandHandler<CreateCompetitionCommand, DefaultCommandResponse>
 	{

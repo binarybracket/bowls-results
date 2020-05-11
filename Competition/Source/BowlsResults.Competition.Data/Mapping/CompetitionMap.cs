@@ -1,10 +1,10 @@
-using BowlsResults.Competition.Domain.Models;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Models;
 using Com.BinaryBracket.Core.Data2.Mapping;
 using FluentNHibernate;
 
-namespace BowlsResults.Competition.Data.Mapping
+namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 {
-	public class CompetitionMap : AuditableEntityClassMap<Competition.Domain.Models.Competition, int>
+	public class CompetitionMap : AuditableEntityClassMap<global::Com.BinaryBracket.BowlsResults.Competition.Domain.Models.Competition, int>
 	{
 		public CompetitionMap()
 		{
@@ -26,7 +26,7 @@ namespace BowlsResults.Competition.Data.Mapping
 			this.Map(x => x.StartDate).Column("StartDate").Not.Nullable();
 			this.Map(x => x.EndDate).Column("EndDate");
 			this.Map(x => x.PlayerMeritTableCalculationEngineID).Column("PlayerMeritTableCalculationEngineID");
-			this.HasMany<CompetitionStage>(Reveal.Member<Competition.Domain.Models.Competition>("InternalStages")).Cascade.SaveUpdate().Not.LazyLoad();
+			this.HasMany<CompetitionStage>(Reveal.Member<global::Com.BinaryBracket.BowlsResults.Competition.Domain.Models.Competition>("InternalStages")).Cascade.SaveUpdate().Not.LazyLoad();
 		}
 	}
 }
