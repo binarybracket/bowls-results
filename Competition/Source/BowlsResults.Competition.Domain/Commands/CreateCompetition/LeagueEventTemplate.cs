@@ -1,4 +1,4 @@
-﻿using Com.BinaryBracket.BowlsResults.Common.Domain.Models;
+﻿using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompetition
 {

@@ -1,7 +1,7 @@
-using Com.BinaryBracket.BowlsResults.Common.Domain.Models;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.Core.Domain2.Entities;
 
-namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Models
+namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 {
 	public class CompetitionEvent : IdentityEntity<short>
 	{

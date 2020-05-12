@@ -1,4 +1,4 @@
-using Com.BinaryBracket.BowlsResults.Common.Domain.Models;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.Core.Data2.Mapping;
 
 namespace Com.BinaryBracket.BowlsResults.Common.Data.Mappings

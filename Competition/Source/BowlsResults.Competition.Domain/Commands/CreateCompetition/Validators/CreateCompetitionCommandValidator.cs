@@ -1,6 +1,6 @@
 using System;
 using System.Xml.Linq;
-using Com.BinaryBracket.BowlsResults.Common.Domain.Models;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.Core.Domain2.Commands;
 using Com.BinaryBracket.Core.Domain2.Validators;
 using FluentValidation;

@@ -1,4 +1,4 @@
-﻿namespace Com.BinaryBracket.BowlsResults.Common.Domain.Models
+﻿namespace Com.BinaryBracket.BowlsResults.Common.Domain.Entities
 {
 	/// <summary>
 	/// League Calculation Engines

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Com.BinaryBracket.BowlsResults.Common.Domain.Models;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.Core.Domain2.Commands;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompetition
