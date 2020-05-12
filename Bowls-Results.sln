@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10. Common", "10. Common", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "20. Competition", "20. Competition", "{DB3C7F00-4A3C-4E56-9AC7-4C8EDB50E006}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidatorTestApp", "POC\ValidatorTestApp\ValidatorTestApp.csproj", "{B42AADBA-68D3-4358-903B-6BF8F971EF12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{BD4DB721-BD94-4D38-A228-34FD6B74E279}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD4DB721-BD94-4D38-A228-34FD6B74E279}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD4DB721-BD94-4D38-A228-34FD6B74E279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B42AADBA-68D3-4358-903B-6BF8F971EF12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B42AADBA-68D3-4358-903B-6BF8F971EF12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B42AADBA-68D3-4358-903B-6BF8F971EF12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B42AADBA-68D3-4358-903B-6BF8F971EF12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CA0D1E61-C907-45BB-BF77-63220D2E3DE2} = {ACD00A56-81E2-4083-9618-C994C018E11E}

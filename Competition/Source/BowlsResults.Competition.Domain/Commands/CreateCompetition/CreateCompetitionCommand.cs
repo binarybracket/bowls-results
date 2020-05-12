@@ -15,6 +15,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 		public short SeasonID { get; set; }
 		public string Name { get; set; }
 		public CompetitionOrganisers Organiser { get; set; }
+		public CompetitionFormats Format { get; set; }
 		public CompetitionScopes Scope { get; set; }
 		public AgeGroups AgeGroup { get; set; }
 		public Genders Gender { get; set; }
