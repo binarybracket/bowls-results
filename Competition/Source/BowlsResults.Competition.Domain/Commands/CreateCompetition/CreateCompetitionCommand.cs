@@ -22,6 +22,5 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 		public DateTime StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
 		public MeritCalculationEngines? PlayerMeritCalculationEngine { get; set; }
-		public List<CompetitionStageTemplate> Stages { get; set; }
 	}
 }

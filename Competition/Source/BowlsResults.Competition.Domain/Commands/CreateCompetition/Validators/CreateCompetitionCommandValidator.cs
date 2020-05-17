@@ -17,6 +17,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 			this.RuleFor(command => command.Organiser).NotEmpty();
 			this.RuleFor(command => command.AgeGroup).NotEmpty();
 			this.RuleFor(command => command.Gender).NotEmpty();			
+			this.RuleFor(command => command.Format).NotEmpty();
 			this.RuleFor(command => command.Scope).NotEmpty();
 			this.RuleFor(command => command.StartDate).NotEmpty();
 			this.RuleFor(command => command.EndDate)
@@ -24,22 +25,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 				.GreaterThanOrEqualTo(x => x.StartDate)
 				.When(x => x.EndDate.HasValue && x.StartDate != default(DateTime));
 			this.RuleFor(command => command.PlayerMeritCalculationEngine).Null();
-
-			this.RuleFor(command => command.Format).NotEmpty().DependentRules(() =>
-			{
-				this.When(x => x.Format == CompetitionFormats.SingleStage, () =>
-					{
-						this.RuleFor(x => x.Stages).SetValidator(singleStageValidator);
-					}
-				).Otherwise(() =>
-				{
-					this.When(x => x.Format == CompetitionFormats.MultipleStages, () =>
-						{
-							this.RuleFor(x => x.Stages).SetValidator(multiStageValidator);
-						})
-						.Otherwise(() => { this.RuleFor(x => x.Stages).NotEmpty(); });
-				});
-			});
 		}
 	}
 }
