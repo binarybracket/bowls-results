@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompetition
@@ -8,7 +7,5 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 		public CompetitionStageFormats CompetitionStageFormatID { get; set; }
 		public string Name { get; set; }
 		public byte Sequence { get; set; }
-
-		public List	<EventTemplate> Events { get; set; }
 	}
 }

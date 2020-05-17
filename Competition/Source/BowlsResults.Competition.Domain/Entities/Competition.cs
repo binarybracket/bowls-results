@@ -8,12 +8,12 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 {
 	public class Competition : AuditableEntity<int>
 	{
-		protected Competition()
+		public Competition()
 		{
 			this.InternalStages = new List<CompetitionStage>();
 		}
 
-		public virtual int CompetitionTemplateID { get; set; }
+		public virtual int? CompetitionTemplateID { get; set; }
 		public virtual CompetitionOrganisers CompetitionOrganiserID { get; set; }
 		public virtual CompetitionScopes CompetitionScopeID { get; set; }
 		public virtual CompetitionFormats CompetitionFormatID { get; set; }
@@ -53,7 +53,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 				StartDate = startDate,
 				EndDate = endDate
 			};
-			data.SetAuditFields();
 
 			return data;
 		}

@@ -7,20 +7,10 @@ using FluentValidation;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompetition.Validators
 {
-	public interface ICreateCompetitionCommandValidator : IValidator<CreateCompetitionCommand>
+	public sealed class CreateCompetitionCommandValidator : CommandValidator<CreateCompetitionCommand, DefaultCommandResponse>
 	{
-	}
-
-	public sealed class CreateCompetitionCommandValidator : CommandValidator<CreateCompetitionCommand, DefaultCommandResponse>, ICreateCompetitionCommandValidator
-	{
-		private SingleStageValidator _singleStageValidator;
-		private MultiStageValidator _multiStageValidator;
-
 		public CreateCompetitionCommandValidator(SingleStageValidator singleStageValidator, MultiStageValidator multiStageValidator)
 		{
-			this._singleStageValidator = singleStageValidator;
-			this._multiStageValidator = multiStageValidator;
-
 			this.RuleFor(command => command.CompetitionHeaderID).NotEmpty();
 			this.RuleFor(command => command.SeasonID).NotEmpty();
 			this.RuleFor(command => command.Name).NotEmpty();
@@ -29,20 +19,23 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 			this.RuleFor(command => command.Gender).NotEmpty();			
 			this.RuleFor(command => command.Scope).NotEmpty();
 			this.RuleFor(command => command.StartDate).NotEmpty();
-			this.RuleFor(command => command.EndDate).Cascade(CascadeMode.StopOnFirstFailure).NotEmpty().LessThan(x => x.StartDate).When(x => x.StartDate > DateTime.MinValue);
+			this.RuleFor(command => command.EndDate)
+				.Cascade(CascadeMode.StopOnFirstFailure)
+				.GreaterThanOrEqualTo(x => x.StartDate)
+				.When(x => x.EndDate.HasValue && x.StartDate != default(DateTime));
 			this.RuleFor(command => command.PlayerMeritCalculationEngine).Null();
 
 			this.RuleFor(command => command.Format).NotEmpty().DependentRules(() =>
 			{
 				this.When(x => x.Format == CompetitionFormats.SingleStage, () =>
 					{
-						this.RuleFor(x => x.Stages).SetValidator(this._singleStageValidator);
+						this.RuleFor(x => x.Stages).SetValidator(singleStageValidator);
 					}
 				).Otherwise(() =>
 				{
 					this.When(x => x.Format == CompetitionFormats.MultipleStages, () =>
 						{
-							this.RuleFor(x => x.Stages).SetValidator(this._multiStageValidator);
+							this.RuleFor(x => x.Stages).SetValidator(multiStageValidator);
 						})
 						.Otherwise(() => { this.RuleFor(x => x.Stages).NotEmpty(); });
 				});

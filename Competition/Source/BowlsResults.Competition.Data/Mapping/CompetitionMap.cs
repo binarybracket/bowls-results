@@ -1,3 +1,4 @@
+using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
 using Com.BinaryBracket.Core.Data2.Mapping;
 using FluentNHibernate;

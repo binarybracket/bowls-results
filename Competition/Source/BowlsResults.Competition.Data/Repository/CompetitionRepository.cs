@@ -6,9 +6,9 @@ using Com.BinaryBracket.Core.Data2.SessionProvider;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 {
-	public sealed class CompetitionHeaderRepository : IdentityRepository<CompetitionHeader, int>, ICompetitionHeaderRepository
+	public sealed class CompetitionRepository : IdentityRepository<Domain.Entities.Competition, int>, ICompetitionRepository
 	{
-		public CompetitionHeaderRepository(ISessionProvider provider) : base(provider)
+		public CompetitionRepository(ISessionProvider provider) : base(provider)
 		{
 		}
 	}
