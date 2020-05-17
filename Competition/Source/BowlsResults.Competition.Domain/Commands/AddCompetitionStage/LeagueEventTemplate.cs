@@ -1,6 +1,6 @@
 ﻿using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 
-namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompetition
+namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.AddCompetitionStage
 {
 	public sealed class LeagueEventTemplate : EventTemplate
 	{

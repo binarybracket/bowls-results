@@ -1,6 +1,4 @@
 using System;
-using System.Xml.Linq;
-using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.Core.Domain2.Commands;
 using Com.BinaryBracket.Core.Domain2.Validators;
 using FluentValidation;
@@ -9,7 +7,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 {
 	public sealed class CreateCompetitionCommandValidator : CommandValidator<CreateCompetitionCommand, DefaultCommandResponse>
 	{
-		public CreateCompetitionCommandValidator(SingleStageValidator singleStageValidator, MultiStageValidator multiStageValidator)
+		public CreateCompetitionCommandValidator()
 		{
 			this.RuleFor(command => command.CompetitionHeaderID).NotEmpty();
 			this.RuleFor(command => command.SeasonID).NotEmpty();
