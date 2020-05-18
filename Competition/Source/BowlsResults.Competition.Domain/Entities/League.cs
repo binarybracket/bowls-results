@@ -9,6 +9,21 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 			this.CompetitionEventTypeID = CompetitionEventTypes.League;
 		}
 
+		public static League Create(string code, string name, LeagueCalculationEngines leagueCalculationEngine, CompetitionStage stage)
+		{
+			var data = new League
+			{
+				Code = code,
+				Competition = stage.Competition,
+				Name = name,
+				LeagueCalculationEngineID = leagueCalculationEngine,
+				Season = stage.Competition.Season,
+				CompetitionStage = stage
+			};
+
+			return data;
+		}
+
 		public virtual LeagueCalculationEngines LeagueCalculationEngineID { get; set; }
 		public virtual string Code { get; set; }
 		public virtual string Name { get; set; }

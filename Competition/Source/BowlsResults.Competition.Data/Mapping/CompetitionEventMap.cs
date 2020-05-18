@@ -10,7 +10,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 			this.Table("CompetitionEvent");
 			this.LazyLoad();
 			
-			//this.Map(x => x.CompetitionEventTypeID).Column("CompetitionEventTypeID");
+			this.Map(x => x.CompetitionEventTypeID).Column("CompetitionEventTypeID");
 			this.References(x => x.CompetitionStage).Column("CompetitionStageID");
 			this.Map(x => x.SaveResultRuleSetID).Column("SaveResultRuleSetID");
 			this.Map(x => x.DataInt1).Column("DataInt1");

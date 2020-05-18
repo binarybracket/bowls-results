@@ -13,7 +13,7 @@ using FluentValidation.Results;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 {
-	public class CreateCompetitionCommandHandler : ICommandHandler<CreateCompetitionCommand, DefaultCommandResponse>
+	public sealed class CreateCompetitionCommandHandler : ICommandHandler<CreateCompetitionCommand, DefaultCommandResponse>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ICompetitionHeaderRepository _competitionHeaderRepository;
