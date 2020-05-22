@@ -24,8 +24,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 		private ValidationResult _validationResult;
 
 		public AddCompetitionStageCommandHandler(
-			IUnitOfWork unitOfWork, 
-			ICompetitionRepository competitionRepository, 
+			IUnitOfWork unitOfWork,
+			ICompetitionRepository competitionRepository,
 			ICompetitionStageRepository competitionStageRepository,
 			ICompetitionEventRepository competitionEventRepository,
 			AddCompetitionStageCommandValidator validator)
@@ -56,13 +56,15 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 					{
 						if (eventTemplate is LeagueEventTemplate)
 						{
-							//this.CreateLeague(stage, eventTemplate as LeagueEventTemplate);
+							throw new NotImplementedException("League not yet supported");
 						}
+
 						if (eventTemplate is KnockoutEventTemplate)
 						{
-							await this.CreateKnockout(stage, eventTemplate as KnockoutEventTemplate);
+							var knockoutTemplate = eventTemplate as KnockoutEventTemplate;
+							await this.CreateKnockout(stage, knockoutTemplate);
 						}
-					}				
+					}
 				}
 
 				this._unitOfWork.HardCommit();
@@ -81,7 +83,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 			var knockout = Knockout.Create(stage, knockoutEventTemplate.KnockoutCalculationEngine);
 			await this._competitionEventRepository.Save(knockout);
 		}
-		
+
 		private async Task Load(int competitionID)
 		{
 			this._competition = await this._competitionRepository.GetForUpdate(competitionID);
