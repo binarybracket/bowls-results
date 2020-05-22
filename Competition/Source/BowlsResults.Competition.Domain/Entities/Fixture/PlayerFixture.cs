@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Extensions;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 {
@@ -15,9 +16,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 		{
 			this._matches = new HashSet<PlayerMatch>();
 		}
-
-		public virtual int? Player1ID { get; set; }
-		public virtual int? Player2ID { get; set; }
 
 		// TODO public virtual PendingPlayerFixture PendingPlayer1Fixture { get; set; }
 		// TODO public virtual PendingPlayerFixture PendingPlayer2Fixture { get; set; }
@@ -36,45 +34,22 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			get { return this._matches.ToReadOnlyCollection(); }
 		}
 
-		public virtual int WinningPlayerID
+		public virtual PlayerMatch CreateMatch()
 		{
-			get
+			if (this._matches.Count == this.Legs)
 			{
-				if (this.Player1ResultTypeID.Value == ResultType.Win)
-				{
-					return this.Player1ID.Value;
-				}
-
-				if (this.Player2ResultTypeID.Value == ResultType.Win)
-				{
-					return this.Player2ID.Value;
-				}
-
-				throw new InvalidOperationException("No winning team");
+				throw new InvalidOperationException("Too many Matches added for this fixture.  Fixture already has enough matches for the configured number of legs.");
 			}
-		}
 
-		public virtual int LosingPlayerID
-		{
-			get
-			{
-				if (this.Player1ResultTypeID.Value == ResultType.Lose)
-				{
-					return this.Player1ID.Value;
-				}
-
-				if (this.Player2ResultTypeID.Value == ResultType.Lose)
-				{
-					return this.Player2ID.Value;
-				}
-
-				throw new InvalidOperationException("No winning team");
-			}
-		}
-
-		public virtual PlayerMatch CreateMatch(int homePlayerID, int awayPlayerID, VenueTypes venueTypeID)
-		{
-			throw new NotImplementedException(); // TODO
+			var match = new PlayerMatch();
+			match.PlayerFixture = this;
+			match.MatchStatusID = MatchStatuses.Incomplete;
+			match.Leg = (byte)(this._matches.Count + 1); // NOTE - calculated based on currently added matches
+			match.Player1Home = false;
+			
+			match.SetAuditFields();
+			this._matches.Add(match);
+			return match;
 		}
 
 		/// <summary>
@@ -85,19 +60,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 		public virtual PlayerMatch GetMatchByID(int id)
 		{
 			return this.Matches.Single(x => x.ID == id);
-		}
-
-		public virtual int GetPlayerByResultType(ResultType pendingPlayer1ResultType)
-		{
-			switch (pendingPlayer1ResultType)
-			{
-				case ResultType.Win:
-					return this.WinningPlayerID;
-				case ResultType.Lose:
-					return this.LosingPlayerID;
-				default:
-					throw new ArgumentOutOfRangeException("pendingPlayer1ResultType");
-			}
 		}
 	}
 }
