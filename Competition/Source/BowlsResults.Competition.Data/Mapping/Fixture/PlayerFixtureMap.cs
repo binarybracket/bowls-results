@@ -20,6 +20,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Fixture
 			this.Map(x => x.Player2ResultTypeID).Column("Player2ResultTypeID");
 			this.Map(x => x.Player1Walkover).Column("Player1Walkover");
 			this.Map(x => x.Player2Walkover).Column("Player2Walkover");
+
+			this.References(x => x.Entrant1).Column("Entrant1ID").Cascade.None();
+			this.References(x => x.Entrant2).Column("Entrant2ID").Cascade.None();
 			
 			this.HasMany(x => x.Matches).Fetch.Join().Cascade.None().Inverse().Access.CamelCaseField(Prefix.Underscore).AsSet();
 		}

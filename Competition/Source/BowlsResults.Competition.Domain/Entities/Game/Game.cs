@@ -81,10 +81,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game
 			gamePlayer.Game = this;
 			gamePlayer.Player = player;
 			this._players.Add(gamePlayer);
-			//if (this._players.Add(gamePlayer))
-			//{
-			//    throw new InvalidOperationException("Player has already been added to this game");
-			//}
 		}
 
 		/// <summary>
@@ -97,10 +93,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game
 			gamePlayer.Game = this;
 			gamePlayer.Player = player;
 			this._players.Add(gamePlayer);
-			//if (!this._players.Add(gamePlayer))
-			//{
-			//    throw new InvalidOperationException("Player has already been added to this game");
-			//}
 		}
 
 		public virtual void GetScoresByPlayerID(int playerID, out short chalks, out short? handicap, out bool? walkover)

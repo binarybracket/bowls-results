@@ -20,6 +20,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 		// TODO public virtual PendingPlayerFixture PendingPlayer1Fixture { get; set; }
 		// TODO public virtual PendingPlayerFixture PendingPlayer2Fixture { get; set; }
 
+		public virtual CompetitionEntrant Entrant1 { get; set; }
+		public virtual CompetitionEntrant Entrant2 { get; set; }
+		
 		public virtual short? Player1GameScore { get; set; }
 		public virtual short? Player2GameScore { get; set; }
 		public virtual short? Player1ChalkScore { get; set; }

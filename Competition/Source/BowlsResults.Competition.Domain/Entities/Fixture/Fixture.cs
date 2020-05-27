@@ -13,8 +13,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 		public virtual int CompetitionID { get; set; }
 		public virtual byte Legs { get; set; }
 		public virtual DateTime? PendingDate { get; set; }
-		public virtual int? Entrant1ID { get; set; }
-		public virtual int? Entrant2ID { get; set; }
 		public virtual short? Pending1FixtureID { get; set; }
 		public virtual short? Pending1ResultTypeID { get; set; }
 		public virtual short? Pending2FixtureID { get; set; }
