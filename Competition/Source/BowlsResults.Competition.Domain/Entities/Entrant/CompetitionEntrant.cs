@@ -20,7 +20,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Entrant
 		public virtual IList<CompetitionEntrantPlayer> Players { get; set; }
 		public virtual CompetitionEntrantStatuses CompetitionEntrantStatusID { get; set; }
 
-		public IList<Player> GetPlayers()
+		public virtual IList<Player> GetPlayers()
 		{
 			return this.Players.Select(x => x.Player).ToList();
 		}
