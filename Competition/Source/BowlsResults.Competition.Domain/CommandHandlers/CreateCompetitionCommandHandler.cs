@@ -13,7 +13,7 @@ using FluentValidation.Results;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 {
-	public sealed class CreateCompetitionCommandHandler : ICommandHandler<CreateCompetitionCommand, DefaultCommandResponse>
+	public sealed class CreateCompetitionCommandHandler : ICommandHandler<CreateCompetitionCommand, DefaultIdentityCommandResponse>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ICompetitionHeaderRepository _competitionHeaderRepository;
@@ -24,8 +24,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 		private CompetitionHeader _header;
 		private Season _season;
 		private ValidationResult _validationResult;
-		
-		public CreateCompetitionCommandHandler(IUnitOfWork unitOfWork,  ISeasonRepository seasonRepository, ICompetitionHeaderRepository competitionHeaderRepository, ICompetitionRepository competitionRepository, CreateCompetitionCommandValidator validator)
+		private Entities.Competition _competition;
+
+		public CreateCompetitionCommandHandler(IUnitOfWork unitOfWork, ISeasonRepository seasonRepository, ICompetitionHeaderRepository competitionHeaderRepository, ICompetitionRepository competitionRepository,
+			CreateCompetitionCommandValidator validator)
 		{
 			this._unitOfWork = unitOfWork;
 			this._competitionHeaderRepository = competitionHeaderRepository;
@@ -34,7 +36,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 			this._validator = validator;
 		}
 
-		public async Task<DefaultCommandResponse> Handle(CreateCompetitionCommand command)
+		public async Task<DefaultIdentityCommandResponse> Handle(CreateCompetitionCommand command)
 		{
 			this._unitOfWork.Begin();
 
@@ -54,19 +56,19 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 				}
 
 				this._unitOfWork.HardCommit();
-				return DefaultCommandResponse.Create(this._validationResult);
+				return DefaultIdentityCommandResponse.Create(this._validationResult, this._competition.ID);
 			}
 			catch (Exception e)
 			{
 				this._unitOfWork.Rollback();
-				Console.WriteLine(e);	
+				Console.WriteLine(e);
 				throw;
 			}
 		}
 
 		private async Task SaveCompetition(CreateCompetitionCommand command)
 		{
-			var competition = Entities.Competition.Create(
+			this._competition = Entities.Competition.Create(
 				this._header,
 				this._season,
 				command.Organiser,
@@ -78,10 +80,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 				command.Name,
 				command.StartDate,
 				command.EndDate);
-			
-			competition.SetAuditFields();
-			
-			await this._competitionRepository.Save(competition);
+
+			this._competition.SetAuditFields();
+
+			await this._competitionRepository.Save(this._competition);
 		}
 
 		private void ValidateAssociation(int associationID)

@@ -10,7 +10,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 	{
 		public Competition()
 		{
-			this.InternalStages = new List<CompetitionStage>();
+			//this.InternalStages = new List<CompetitionStage>();
+			this.Stages = new List<CompetitionStage>();
 		}
 
 		public virtual int? CompetitionTemplateID { get; set; }
@@ -28,15 +29,19 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 		public virtual string Sponsor { get; set; }
 		public virtual DateTime StartDate { get; set; }
 		public virtual DateTime? EndDate { get; set; }
+
 		public virtual int? PlayerMeritTableCalculationEngineID { get; set; }
-		protected internal virtual IList<CompetitionStage> InternalStages { get; set; }
 
-		public virtual ReadOnlyCollection<CompetitionStage> Stages
-		{
-			get { return new ReadOnlyCollection<CompetitionStage>(this.InternalStages); }
-		}
+//		protected internal virtual IList<CompetitionStage> InternalStages { get; set; }
+		public virtual IList<CompetitionStage> Stages { get; set; }
 
-		public static Competition Create(CompetitionHeader header, Season season, CompetitionOrganisers organiser, CompetitionScopes scope, CompetitionFormats format, AgeGroups ageGroup, Genders gender, int associationID, string name, DateTime startDate,
+//		public virtual ReadOnlyCollection<CompetitionStage> Stages
+//		{
+//			get { return new ReadOnlyCollection<CompetitionStage>(this.InternalStages); }
+//		}
+
+		public static Competition Create(CompetitionHeader header, Season season, CompetitionOrganisers organiser, CompetitionScopes scope, CompetitionFormats format, AgeGroups ageGroup, Genders gender, int associationID, string name,
+			DateTime startDate,
 			DateTime? endDate)
 		{
 			var data = new Competition
@@ -66,8 +71,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 				Name = name,
 				Sequence = sequence
 			};
-			
-			this.InternalStages.Add(data);
+
+			this.Stages.Add(data);
 
 			return data;
 		}

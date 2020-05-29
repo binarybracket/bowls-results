@@ -5,7 +5,7 @@ using FluentNHibernate;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 {
-	public class CompetitionMap : AuditableEntityClassMap<global::Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Competition, int>
+	public class CompetitionMap : AuditableEntityClassMap<Domain.Entities.Competition, int>
 	{
 		public CompetitionMap()
 		{
@@ -27,7 +27,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 			this.Map(x => x.StartDate).Column("StartDate").Not.Nullable();
 			this.Map(x => x.EndDate).Column("EndDate");
 			this.Map(x => x.PlayerMeritTableCalculationEngineID).Column("PlayerMeritTableCalculationEngineID");
-			this.HasMany<CompetitionStage>(Reveal.Member<global::Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Competition>("InternalStages")).Cascade.SaveUpdate().Not.LazyLoad();
+			this.HasMany(x => x.Stages).Cascade.SaveUpdate().Inverse();
 		}
 	}
 }

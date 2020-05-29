@@ -5,7 +5,7 @@ using FluentValidation;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompetition.Validators
 {
-	public sealed class CreateCompetitionCommandValidator : CommandValidator<CreateCompetitionCommand, DefaultCommandResponse>
+	public sealed class CreateCompetitionCommandValidator : CommandValidator<CreateCompetitionCommand, DefaultIdentityCommandResponse>
 	{
 		public CreateCompetitionCommandValidator()
 		{

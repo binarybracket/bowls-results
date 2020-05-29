@@ -8,7 +8,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 	/// <summary>
 	/// Create Competition Command
 	/// </summary>
-	public sealed class CreateCompetitionCommand : ICommand<DefaultCommandResponse>
+	public sealed class CreateCompetitionCommand : ICommand<DefaultIdentityCommandResponse>
 	{
 		public int CompetitionHeaderID { get; set; }
 		public int AssociationID { get; set; }
