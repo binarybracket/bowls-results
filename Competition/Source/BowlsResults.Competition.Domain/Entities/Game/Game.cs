@@ -148,5 +148,18 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game
 
 			throw new InvalidOperationException("There is no loser set");
 		}
+
+		public static Game CreateGame(GameFormats format)
+		{
+			switch (format)
+			{
+				case GameFormats.Singles:
+					return new SinglesGame();
+				case GameFormats.Doubles:
+					return new DoublesGame();
+				default:
+					throw new ArgumentOutOfRangeException(nameof(format), format, null);
+			}
+		}
 	}
 }

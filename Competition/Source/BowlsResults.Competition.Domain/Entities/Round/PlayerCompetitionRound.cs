@@ -16,21 +16,16 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round
 
 		private readonly ISet<PlayerFixture> _fixtures;
 
-		
-		
 		public virtual ReadOnlyCollection<PlayerFixture> Fixtures
 		{
-			get
-			{
-				return this._fixtures.ToReadOnlyCollection();
-			}
+			get { return this._fixtures.ToReadOnlyCollection(); }
 		}
 
 		public virtual void Add(PlayerFixture playerFixture)
 		{
 			this._fixtures.Add(playerFixture);
 		}
-		
+
 		public virtual PlayerFixture CreateFixture(byte legs, CompetitionEntrant entrant1, CompetitionEntrant entrant2)
 		{
 			if (legs <= 0 || legs > 2)
@@ -51,5 +46,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round
 
 			return fixture;
 		}
+
 	}
 }

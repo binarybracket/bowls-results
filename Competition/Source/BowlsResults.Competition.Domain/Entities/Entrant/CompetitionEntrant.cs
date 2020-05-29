@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.Core.Domain2.Entities;
 
@@ -18,6 +20,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Entrant
 		public virtual IList<CompetitionEntrantPlayer> Players { get; set; }
 		public virtual CompetitionEntrantStatuses CompetitionEntrantStatusID { get; set; }
 
+		public IList<Player> GetPlayers()
+		{
+			return this.Players.Select(x => x.Player).ToList();
+		}
+		
 		public virtual CompetitionEntrantPlayer CreatePlayer(string firstName, string lastName)
 		{
 			var player = new CompetitionEntrantPlayer
