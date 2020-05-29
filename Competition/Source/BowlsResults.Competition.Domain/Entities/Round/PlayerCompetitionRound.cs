@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Extensions;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Entrant;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round
@@ -27,6 +29,27 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round
 		public virtual void Add(PlayerFixture playerFixture)
 		{
 			this._fixtures.Add(playerFixture);
+		}
+		
+		public virtual PlayerFixture CreateFixture(byte legs, CompetitionEntrant entrant1, CompetitionEntrant entrant2)
+		{
+			if (legs <= 0 || legs > 2)
+			{
+				throw new InvalidOperationException("Legs can only be one or two.");
+			}
+
+			var fixture = new PlayerFixture();
+			fixture.CompetitionID = this.Competition.ID;
+			fixture.CompetitionRound = this;
+			fixture.Season = this.Season;
+			fixture.FixtureStatusID = FixtureStatuses.Incomplete;
+			fixture.Legs = legs;
+			fixture.SetAuditFields();
+			fixture.Entrant1 = entrant1;
+			fixture.Entrant2 = entrant2;
+			this._fixtures.Add(fixture);
+
+			return fixture;
 		}
 	}
 }

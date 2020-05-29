@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Extensions;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Entrant;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round;
 
