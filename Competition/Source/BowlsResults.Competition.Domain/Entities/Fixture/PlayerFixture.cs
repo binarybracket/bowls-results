@@ -5,11 +5,13 @@ using System.Linq;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Extensions;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 {
 	public class PlayerFixture : Fixture
 	{
+		public virtual PlayerCompetitionRound CompetitionRound { get; set; }
 		private ISet<PlayerMatch> _matches;
 
 		public PlayerFixture()
@@ -23,15 +25,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 		public virtual CompetitionEntrant Entrant1 { get; set; }
 		public virtual CompetitionEntrant Entrant2 { get; set; }
 		
-		public virtual short? Player1GameScore { get; set; }
-		public virtual short? Player2GameScore { get; set; }
-		public virtual short? Player1ChalkScore { get; set; }
-		public virtual short? Player2ChalkScore { get; set; }
-		public virtual bool? Player1Walkover { get; set; }
-		public virtual bool? Player2Walkover { get; set; }
-		public virtual ResultType? Player1ResultTypeID { get; set; }
-		public virtual ResultType? Player2ResultTypeID { get; set; }
-
 		public virtual ReadOnlyCollection<PlayerMatch> Matches
 		{
 			get { return this._matches.ToReadOnlyCollection(); }
