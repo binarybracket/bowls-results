@@ -11,10 +11,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 			this.KeyColumn("KnockoutID");
 			this.LazyLoad();
 			//TODO: check if cascade is required this.References(x => x.Competition).Cascade.None().Not.Update();
-			this.References(x => x.Competition).Column("CompetitionID");
-			this.References(x => x.Season);
+			this.References(x => x.Competition).Column("CompetitionID").Not.Nullable().Cascade.None();
+			this.References(x => x.Season).Column("SeasonID").Not.Nullable().Cascade.None();
 			
-			this.Map(x => x.KnockoutCalculationEngineID);
+			this.References(x => x.KnockoutCalculationEngine).Column("KnockoutCalculationEngineID").Not.Nullable().Cascade.None();
 		//	this.HasMany(x => x.KnockoutDates).Cascade.None().KeyColumn("KnockoutID");
 		}
 	}

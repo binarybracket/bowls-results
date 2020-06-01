@@ -10,7 +10,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 			this.CompetitionEventTypeID = CompetitionEventTypes.Knockout;
 		}
 	
-		public virtual KnockoutCalculationEngines KnockoutCalculationEngineID { get; set; }
+		public virtual KnockoutCalculationEngine KnockoutCalculationEngine { get; set; }
 
 		//public virtual ISet<KnockoutDate> KnockoutDates { get; set; }
 		
@@ -21,12 +21,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 				Competition = stage.Competition,
 				Season = stage.Competition.Season,
 				CompetitionStage = stage,
-				KnockoutCalculationEngineID = knockoutCalculationEngineID
+				KnockoutCalculationEngine = new KnockoutCalculationEngine{ ID = (byte)knockoutCalculationEngineID}
 			};
 
 			return data;
 		}
 	}
-
-	
 }

@@ -4,7 +4,7 @@ using Com.BinaryBracket.Core.Data2.Mapping;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 {
-	public class KnockoutCalculationEngineMap : IdentityEntityMap<KnockoutCalculationEngine, KnockoutCalculationEngines> {
+	public class KnockoutCalculationEngineMap : IdentityEntityMap<KnockoutCalculationEngine, byte> {
 		public KnockoutCalculationEngineMap() {
 			this.Table("KnockoutCalculationEngine");
 			this.LazyLoad();
