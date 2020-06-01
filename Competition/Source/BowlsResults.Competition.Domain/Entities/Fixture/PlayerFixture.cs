@@ -33,6 +33,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 
 		public virtual PlayerMatch CreateMatch()
 		{
+			throw new NotImplementedException();
 			if (this._matches.Count == this.Legs)
 			{
 				throw new InvalidOperationException("Too many Matches added for this fixture.  Fixture already has enough matches for the configured number of legs.");
@@ -42,7 +43,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			match.PlayerFixture = this;
 			match.MatchStatusID = MatchStatuses.Incomplete;
 			match.Leg = (byte)(this._matches.Count + 1); // NOTE - calculated based on currently added matches
-			match.Player1Home = false;
+			//todo match.Player1Home = false;
 			
 			match.SetAuditFields();
 			this._matches.Add(match);

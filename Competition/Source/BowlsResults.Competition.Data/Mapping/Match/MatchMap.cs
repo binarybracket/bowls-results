@@ -6,14 +6,34 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Match
 	{
 		public MatchMap()
 		{
-			this.Map(x => x.MatchFormatID);
-			this.Map(x => x.MatchCalculationEngineID);
-			this.Map(x => x.MatchStatusID);
+			this.Table("Match2");
+			this.LazyLoad();
 
-			this.Map(x => x.Sequence);
+			this.References(x => x.MatchFormat).Column("MatchFormatID").Not.Nullable().Cascade.None();
+			
+			this.Map(x => x.MatchStatusID).Column("MatchStatusID").Not.Nullable();
+			this.Map(x => x.Date).Column("Date").Not.Nullable();
+			this.Map(x => x.Leg).Column("Leg").Not.Nullable();
+			this.Map(x => x.PitchID).Column("PitchID").Not.Nullable();
+			this.Map(x => x.VenueTypeID).Column("VenueTypeID").Not.Nullable();
+			this.Map(x => x.HomeChalkHandicap).Column("HomeChalkHandicap");
+			this.Map(x => x.AwayChalkHandicap).Column("AwayChalkHandicap");
+			this.Map(x => x.HomeGameScore).Column("HomeGameScore");
+			this.Map(x => x.AwayGameScore).Column("AwayGameScore");
+			this.Map(x => x.HomeBonusScore).Column("HomeBonusScore");
+			this.Map(x => x.AwayBonusScore).Column("AwayBonusScore");
+			this.Map(x => x.HomeChalkScore).Column("HomeChalkScore");
+			this.Map(x => x.AwayChalkScore).Column("AwayChalkScore");
+			this.Map(x => x.HomeWalkover).Column("HomeWalkover");
+			this.Map(x => x.AwayWalkover).Column("AwayWalkover");
+			this.Map(x => x.HomeResultTypeID).Column("HomeResultTypeID");
+			this.Map(x => x.AwayResultTypeID).Column("AwayResultTypeID");
+			this.Map(x => x.MatchCalculationEngineID).Column("MatchCalculationEngineID").Not.Nullable();
+			this.Map(x => x.Sequence).Column("Sequence");
+			this.Map(x => x.DataString1).Column("DataString1");
+			this.Map(x => x.DataString2).Column("DataString2");
 
-			this.Map(x => x.DataString1);
-			this.Map(x => x.DataString2);
+			this.DiscriminateSubClassesOnColumn("ScopeID");
 		}
 	}
 }
