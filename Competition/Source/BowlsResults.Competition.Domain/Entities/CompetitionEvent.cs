@@ -1,3 +1,4 @@
+using System;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round;
 using Com.BinaryBracket.Core.Domain2.Entities;
@@ -24,8 +25,13 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 		//public virtual ReadOnlyCollection<CompetitionStage> Stages
 		//	{
 		//		get { return new ReadOnlyCollection<CompetitionStage>(this.InternalCompetitionRounds); }
-		//	}
+		//	
 
+		public virtual MatchFormat GetMatchFormat()
+		{
+			throw new NotImplementedException();
+		}
+		
 		public virtual T CreateRound<T>(CompetitionRoundTypes competitionRoundTypeID, byte gameNumber) where T : CompetitionRound, new()
 		{
 			var round = new T();

@@ -15,6 +15,7 @@
 		IomJmsVeteransShield2015 = 13,
 		IomMenRaynerShield8Players = 14,
 		IomMenRaynerPlate8Players = 15,
-		CrossfieldCup = 16
+		CrossfieldCup = 16,
+		MensSinglesOpen = 20
 	}
 }

@@ -14,17 +14,22 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 
 		//public virtual ISet<KnockoutDate> KnockoutDates { get; set; }
 		
-		public static Knockout Create(CompetitionStage stage, KnockoutCalculationEngines knockoutCalculationEngineID)
+		public static Knockout Create(CompetitionStage stage, KnockoutCalculationEngine knockoutCalculationEngine)
 		{
 			var data = new Knockout
 			{
 				Competition = stage.Competition,
 				Season = stage.Competition.Season,
 				CompetitionStage = stage,
-				KnockoutCalculationEngine = new KnockoutCalculationEngine{ ID = (byte)knockoutCalculationEngineID}
+				KnockoutCalculationEngine = knockoutCalculationEngine
 			};
 
 			return data;
+		}
+
+		public override MatchFormat GetMatchFormat()
+		{
+			return this.KnockoutCalculationEngine.MatchFormat;
 		}
 	}
 }

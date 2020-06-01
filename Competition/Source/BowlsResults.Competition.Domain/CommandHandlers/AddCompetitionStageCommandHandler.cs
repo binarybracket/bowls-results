@@ -19,21 +19,25 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 		private readonly ICompetitionRepository _competitionRepository;
 		private readonly ICompetitionStageRepository _competitionStageRepository;
 		private readonly ICompetitionEventRepository _competitionEventRepository;
-
+		private readonly IKnockoutCalculationEngineRepository _knockoutCalculationEngineRepository;
+		
 		private Entities.Competition _competition;
 		private ValidationResult _validationResult;
+		
 
 		public AddCompetitionStageCommandHandler(
 			IUnitOfWork unitOfWork,
 			ICompetitionRepository competitionRepository,
 			ICompetitionStageRepository competitionStageRepository,
 			ICompetitionEventRepository competitionEventRepository,
+			IKnockoutCalculationEngineRepository knockoutCalculationEngineRepository,
 			AddCompetitionStageCommandValidator validator)
 		{
 			this._unitOfWork = unitOfWork;
 			this._competitionRepository = competitionRepository;
 			this._competitionStageRepository = competitionStageRepository;
 			this._competitionEventRepository = competitionEventRepository;
+			this._knockoutCalculationEngineRepository = knockoutCalculationEngineRepository;
 			this._validator = validator;
 		}
 
@@ -80,13 +84,15 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 
 		private async Task CreateKnockout(CompetitionStage stage, KnockoutEventTemplate knockoutEventTemplate)
 		{
-			var knockout = Knockout.Create(stage, knockoutEventTemplate.KnockoutCalculationEngine);
+			var engine = await this._knockoutCalculationEngineRepository.GetFull(knockoutEventTemplate.KnockoutCalculationEngine);
+			
+			var knockout = Knockout.Create(stage, engine);
 			await this._competitionEventRepository.Save(knockout);
 		}
 
 		private async Task Load(int competitionID)
 		{
-			this._competition = await this._competitionRepository.GetForUpdate(competitionID);
+			this._competition = await this._competitionRepository.GetForUpdate(competitionID);		
 		}
 	}
 }
