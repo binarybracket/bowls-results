@@ -5,6 +5,7 @@ using System.Linq;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Extensions;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Entrant;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round;
 
@@ -17,6 +18,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 
 		public PlayerFixture()
 		{
+			this.CompetitionScopeID = CompetitionScopes.Player;
 			this._matches = new HashSet<PlayerMatch>();
 		}
 
@@ -31,22 +33,53 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			get { return this._matches.ToReadOnlyCollection(); }
 		}
 
-		public virtual PlayerMatch CreateMatch()
+		public virtual PlayerMatch CreateMatchTemplate(bool entrant1Home, DateTime date)
 		{
-			throw new NotImplementedException();
 			if (this._matches.Count == this.Legs)
 			{
 				throw new InvalidOperationException("Too many Matches added for this fixture.  Fixture already has enough matches for the configured number of legs.");
 			}
 
-			var match = new PlayerMatch();
-			match.PlayerFixture = this;
-			match.MatchStatusID = MatchStatuses.Incomplete;
-			match.Leg = (byte)(this._matches.Count + 1); // NOTE - calculated based on currently added matches
-			//todo match.Player1Home = false;
+			var matchFormat = this.CompetitionRound.CompetitionEvent.GetMatchFormat();
+			if (matchFormat.GameVariations.Count > 1)
+			{
+				throw new InvalidOperationException("Too many game variations to auto-generate match");
+			}
+
+			var homePlayers = entrant1Home ? this.Entrant1.GetPlayers() : this.Entrant2.GetPlayers();
+			var awayPlayers = entrant1Home ? this.Entrant2.GetPlayers() : this.Entrant1.GetPlayers();
+
+			var leg = (byte) (this._matches.Count + 1);
+			var match = PlayerMatch.Create(this, DateTime.Now, leg, matchFormat, entrant1Home);
+			match.VenueTypeID = VenueTypes.HomeAway;
+			match.PitchID = 1;
 			
-			match.SetAuditFields();
 			this._matches.Add(match);
+
+			var gameVariationSettings = matchFormat.GameVariations.First();
+			var gameVariation = gameVariationSettings.GameVariation;
+			var game = Game.Game.CreateGame(gameVariation.GameFormatID);
+			game.SetAuditFields();
+			game.Date = match.Date;
+			game.Pitch = new Pitch {ID = match.PitchID};
+			game.VenueTypeID = match.VenueTypeID;
+			game.GameFormatID = gameVariation.GameFormatID;
+			game.GameVariationID = gameVariation.ID;
+			game.SeasonID = this.Season.ID;
+			game.AssociationID = this.CompetitionRound.CompetitionEvent.Competition.AssociationID;
+			game.GameStatusID = GameStatuses.Standard;
+			game.GameCalculationEngineID = gameVariationSettings.GameCalculationEngineID;
+			foreach (var homePlayer in homePlayers)
+			{
+				game.AddHomePlayer(homePlayer);
+			}
+			foreach (var awayPlayer in awayPlayers)
+			{
+				game.AddAwayPlayer(awayPlayer);
+			}
+
+			match.AddGame(gameVariationSettings, game);
+			
 			return match;
 		}
 

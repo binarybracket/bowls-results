@@ -10,7 +10,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Match
 		{
 			this.DiscriminatorValue((byte)CompetitionScopes.Player);
 			
-			this.References(x => x.Match).Cascade.None();
+			this.References(x => x.Match).Not.Nullable().Cascade.None();
 		}
 	}
 }

@@ -5,20 +5,16 @@ using FluentNHibernate.Mapping;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Fixture
 {
-	public class PlayerFixtureMap : IdentityEntitySubclassMap<PlayerFixture, short>
+	public class TeamFixtureMap : IdentityEntitySubclassMap<TeamFixture, short>
 	{
-		public PlayerFixtureMap()
+		public TeamFixtureMap()
 		{
-			//this.KeyColumn("PlayerFixtureID");
+//			this.KeyColumn("TeamFixtureID");
 
-			this.References(x => x.CompetitionRound).Column("CompetitionRoundID").Cascade.None();
-			
 			this.References(x => x.Entrant1).Column("Entrant1ID").Cascade.None();
 			this.References(x => x.Entrant2).Column("Entrant2ID").Cascade.None();
 			
-			this.HasMany(x => x.Matches).KeyColumn("FixtureID").Fetch.Join().Cascade.None().Inverse().Access.CamelCaseField(Prefix.Underscore).AsSet();
-			
-			this.DiscriminatorValue((int)CompetitionScopes.Player);
+			this.DiscriminatorValue((int)CompetitionScopes.Team);
 		}
 	}
 }

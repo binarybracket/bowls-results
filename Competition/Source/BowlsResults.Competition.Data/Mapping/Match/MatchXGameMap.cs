@@ -10,8 +10,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Match
 			this.Table("MatchXGame");
 			this.LazyLoad();
 			
-			this.References(x => x.MatchFormatXGameVariation).Column("MatchFormatXGameVariationID").Cascade.None();
-			this.References(x => x.Game).Column("GameID").Cascade.None();
+			this.References(x => x.MatchFormatXGameVariation).Column("MatchFormatXGameVariationID").Not.Nullable().Cascade.None();
+			this.References(x => x.Game).Column("GameID").Not.Nullable().Cascade.SaveUpdate();
 
 			this.DiscriminateSubClassesOnColumn("ScopeID");
 		}

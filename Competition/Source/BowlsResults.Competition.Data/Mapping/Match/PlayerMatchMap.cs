@@ -14,7 +14,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Match
 			this.References(x => x.Home).Column("HomeID").Cascade.None();
 			this.References(x => x.Away).Column("AwayID").Cascade.None();
 
-			this.HasMany(x => x.Games).Cascade.SaveUpdate();
+			this.HasMany(x => x.Games).Cascade.SaveUpdate().Inverse();
 		}
 	}
 }
