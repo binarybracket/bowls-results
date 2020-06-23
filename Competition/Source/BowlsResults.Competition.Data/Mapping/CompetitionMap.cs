@@ -27,6 +27,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 			this.Map(x => x.StartDate).Column("StartDate").Not.Nullable();
 			this.Map(x => x.EndDate).Column("EndDate");
 			this.Map(x => x.PlayerMeritTableCalculationEngineID).Column("PlayerMeritTableCalculationEngineID");
+			this.References(x => x.GameVariation).Column("GameVariationID");
 			this.HasMany(x => x.Stages).Cascade.SaveUpdate().Inverse();
 		}
 	}

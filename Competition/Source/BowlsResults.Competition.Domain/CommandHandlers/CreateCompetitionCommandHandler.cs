@@ -20,19 +20,22 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 		private readonly CreateCompetitionCommandValidator _validator;
 		private readonly ISeasonRepository _seasonRepository;
 		private readonly ICompetitionRepository _competitionRepository;
+		private readonly IGameVariationRepository _gameVariationRepository;
 
 		private CompetitionHeader _header;
 		private Season _season;
 		private ValidationResult _validationResult;
 		private Entities.Competition _competition;
+		private GameVariation _gameVariation;
 
 		public CreateCompetitionCommandHandler(IUnitOfWork unitOfWork, ISeasonRepository seasonRepository, ICompetitionHeaderRepository competitionHeaderRepository, ICompetitionRepository competitionRepository,
-			CreateCompetitionCommandValidator validator)
+			IGameVariationRepository gameVariationRepository, CreateCompetitionCommandValidator validator)
 		{
 			this._unitOfWork = unitOfWork;
 			this._competitionHeaderRepository = competitionHeaderRepository;
 			this._competitionRepository = competitionRepository;
 			this._seasonRepository = seasonRepository;
+			this._gameVariationRepository = gameVariationRepository;
 			this._validator = validator;
 		}
 
@@ -46,7 +49,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 
 				if (this._validationResult.IsValid)
 				{
-					await this.Load(command.CompetitionHeaderID, command.SeasonID);
+					await this.Load(command.CompetitionHeaderID, command.SeasonID, command.GameVariationID);
 					this.ValidateAssociation(command.AssociationID);
 				}
 
@@ -94,10 +97,14 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 			}
 		}
 
-		private async Task Load(int competitionHeaderID, short SeasonID)
+		private async Task Load(int competitionHeaderID, short SeasonID, byte? gameVariationID)
 		{
 			this._header = await this._competitionHeaderRepository.Get(competitionHeaderID);
 			this._season = await this._seasonRepository.Get(SeasonID);
+			if (gameVariationID.HasValue)
+			{
+				this._gameVariation = await this._gameVariationRepository.Get(gameVariationID.Value);
+			}
 		}
 	}
 }

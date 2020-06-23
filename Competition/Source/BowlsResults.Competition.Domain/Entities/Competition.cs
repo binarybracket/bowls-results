@@ -31,6 +31,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 		public virtual DateTime? EndDate { get; set; }
 
 		public virtual int? PlayerMeritTableCalculationEngineID { get; set; }
+		public virtual GameVariation GameVariation { get; set; }
 
 //		protected internal virtual IList<CompetitionStage> InternalStages { get; set; }
 		public virtual IList<CompetitionStage> Stages { get; set; }
