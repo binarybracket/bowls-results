@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Extensions;
-using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Entrant;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round

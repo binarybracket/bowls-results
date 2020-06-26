@@ -2,9 +2,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 {
 	public enum CompetitionEntrantStatuses
 	{
-		Open = 1,
-		ClosingSoon = 2,
-		Closed = 3,
-		Unavailable = 4
+		Pending = 1,
+		Confirmed = 2,
+		Cancelled = 3
 	}
 }
