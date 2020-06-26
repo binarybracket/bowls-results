@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "20. Competition", "20. Comp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidatorTestApp", "POC\ValidatorTestApp\ValidatorTestApp.csproj", "{B42AADBA-68D3-4358-903B-6BF8F971EF12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BowlsResults.WebApi", "WebApi\BowlsResults.WebApi.csproj", "{60793D40-3662-4E68-B373-6796D658CE1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{B42AADBA-68D3-4358-903B-6BF8F971EF12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B42AADBA-68D3-4358-903B-6BF8F971EF12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B42AADBA-68D3-4358-903B-6BF8F971EF12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60793D40-3662-4E68-B373-6796D658CE1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60793D40-3662-4E68-B373-6796D658CE1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60793D40-3662-4E68-B373-6796D658CE1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60793D40-3662-4E68-B373-6796D658CE1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CA0D1E61-C907-45BB-BF77-63220D2E3DE2} = {ACD00A56-81E2-4083-9618-C994C018E11E}
