@@ -12,10 +12,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 		{
 			this.RuleFor(command => command.CompetitionHeaderID).NotEmpty();
 			this.RuleFor(command => command.SeasonID).NotEmpty();
-			this.RuleFor(command => command.Name).NotEmpty();
+			this.RuleFor(command => command.Name).NotEmpty().MaximumLength(50);
 			this.RuleFor(command => command.Organiser).NotEmpty();
 			this.RuleFor(command => command.AgeGroup).NotEmpty();
-			this.RuleFor(command => command.Gender).NotEmpty();			
+			this.RuleFor(command => command.Gender).NotEmpty();
 			this.RuleFor(command => command.Format).NotEmpty();
 			this.RuleFor(command => command.Scope).NotEmpty();
 			this.RuleFor(command => command.StartDate).NotEmpty();
@@ -32,8 +32,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 			
 			this.When(x => x.Organiser == CompetitionOrganisers.Association, () =>
 			{
+				this.RuleFor(x=>x.OrganiserClubID).Empty();
 				this.RuleFor(x=>x.VenueClubID).NotEmpty();
 			});
+
+			this.RuleFor(x => x.Sponsor).MaximumLength(50);
 		}
 	}
 }

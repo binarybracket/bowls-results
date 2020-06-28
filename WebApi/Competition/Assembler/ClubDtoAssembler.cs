@@ -5,7 +5,7 @@ namespace BowlsResults.WebApi.Competition.Assembler
 {
 	public static class ClubDtoAssembler
 	{
-		public static ClubDto AssembleDto(Club club)
+		public static ClubDto AssembleDto(this Club club)
 		{
 			return  new ClubDto
 			{

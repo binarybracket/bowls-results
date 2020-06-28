@@ -91,7 +91,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 				command.Name,
 				command.StartDate,
 				command.EndDate);
-
+			
+			this._competition.Sponsor = command.Sponsor;
 			this._competition.OrganisingClub = this._organiserClub;
 			this._competition.VenueClub = this._venueClub;
 			this._competition.GameVariation = this._gameVariation;

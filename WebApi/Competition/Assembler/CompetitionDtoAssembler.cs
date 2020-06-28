@@ -19,11 +19,21 @@ namespace BowlsResults.WebApi.Competition.Assembler
 
 		public static CompetitionDto AssembleDto(this Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Competition competition)
 		{
-			return new CompetitionDto
+			var dto = new CompetitionDto();
+
+			dto.ID = competition.ID;
+			dto.RegistrationStatus = competition.GetRegistrationStatus();
+			dto.Name = competition.Name;
+			dto.GameVariation = competition.GameVariation.Name;
+			dto.StartDate = competition.StartDate;
+			dto.VenueClub = competition.VenueClub.AssembleDto();
+
+			if (competition.RegistrationConfiguration != null)
 			{
-				ID = competition.ID,
-				RegistrationStatus = competition.GetRegistrationStatus()
-			};
+				dto.RegistrationConfiguration = competition.RegistrationConfiguration.AssembleDto();
+			}
+
+			return dto;
 		}
 	}
 }

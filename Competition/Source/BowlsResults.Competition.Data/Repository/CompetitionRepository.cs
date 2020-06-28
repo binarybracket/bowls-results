@@ -21,7 +21,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 		public Task<List<Domain.Entities.Competition>> GetPendingPlayerCompetitions()
 		{
 			return this.Session.Query<Domain.Entities.Competition>()
-				.Fetch(x=>x.RegistrationConfiguration)
+				.Fetch(x => x.RegistrationConfiguration)
+				.Fetch(x => x.VenueClub)
+				.Fetch(x => x.OrganisingClub)
 				.Where(x => x.CompetitionScopeID == CompetitionScopes.Player && x.StartDate > DateTime.UtcNow.Date)
 				.ToListAsync();
 		}
@@ -30,7 +32,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 		{
 			return this.Session.Query<Domain.Entities.Competition>()
 				.Fetch(x => x.RegistrationConfiguration)
-				.SingleOrDefaultAsync(x=>x.ID == competitionID);
+				.SingleOrDefaultAsync(x => x.ID == competitionID);
 		}
 	}
 }
