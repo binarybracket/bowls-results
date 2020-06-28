@@ -21,15 +21,18 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 		private readonly ISeasonRepository _seasonRepository;
 		private readonly ICompetitionRepository _competitionRepository;
 		private readonly IGameVariationRepository _gameVariationRepository;
+		private readonly IClubRepository _clubRepository;
 
 		private CompetitionHeader _header;
 		private Season _season;
 		private ValidationResult _validationResult;
 		private Entities.Competition _competition;
 		private GameVariation _gameVariation;
+		private Club _venueClub;
+		private Club _organiserClub;
 
 		public CreateCompetitionCommandHandler(IUnitOfWork unitOfWork, ISeasonRepository seasonRepository, ICompetitionHeaderRepository competitionHeaderRepository, ICompetitionRepository competitionRepository,
-			IGameVariationRepository gameVariationRepository, CreateCompetitionCommandValidator validator)
+			IGameVariationRepository gameVariationRepository, CreateCompetitionCommandValidator validator, IClubRepository clubRepository)
 		{
 			this._unitOfWork = unitOfWork;
 			this._competitionHeaderRepository = competitionHeaderRepository;
@@ -37,6 +40,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 			this._seasonRepository = seasonRepository;
 			this._gameVariationRepository = gameVariationRepository;
 			this._validator = validator;
+			this._clubRepository = clubRepository;
 		}
 
 		public async Task<DefaultIdentityCommandResponse> Handle(CreateCompetitionCommand command)
@@ -49,17 +53,21 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 
 				if (this._validationResult.IsValid)
 				{
-					await this.Load(command.CompetitionHeaderID, command.SeasonID, command.GameVariationID);
+					await this.Load(command);
 					this.ValidateAssociation(command.AssociationID);
 				}
 
 				if (this._validationResult.IsValid)
 				{
 					await this.SaveCompetition(command);
+					this._unitOfWork.SoftCommit();
+					return DefaultIdentityCommandResponse.Create(this._validationResult, this._competition.ID);
 				}
-
-				this._unitOfWork.HardCommit();
-				return DefaultIdentityCommandResponse.Create(this._validationResult, this._competition.ID);
+				else
+				{
+					this._unitOfWork.Rollback();
+					return DefaultIdentityCommandResponse.Create(this._validationResult);
+				}
 			}
 			catch (Exception e)
 			{
@@ -84,6 +92,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 				command.StartDate,
 				command.EndDate);
 
+			this._competition.OrganisingClub = this._organiserClub;
+			this._competition.VenueClub = this._venueClub;
+			this._competition.GameVariation = this._gameVariation;
+
 			this._competition.SetAuditFields();
 
 			await this._competitionRepository.Save(this._competition);
@@ -97,13 +109,24 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 			}
 		}
 
-		private async Task Load(int competitionHeaderID, short SeasonID, byte? gameVariationID)
+		private async Task Load(CreateCompetitionCommand command)
 		{
-			this._header = await this._competitionHeaderRepository.Get(competitionHeaderID);
-			this._season = await this._seasonRepository.Get(SeasonID);
-			if (gameVariationID.HasValue)
+			this._header = await this._competitionHeaderRepository.Get(command.CompetitionHeaderID);
+			this._season = await this._seasonRepository.Get(command.SeasonID);
+			if (command.GameVariationID.HasValue)
 			{
-				this._gameVariation = await this._gameVariationRepository.Get(gameVariationID.Value);
+				this._gameVariation = await this._gameVariationRepository.Get(command.GameVariationID.Value);
+			}
+
+			if (command.Organiser == CompetitionOrganisers.Association)
+			{
+				this._venueClub = await this._clubRepository.Get(command.VenueClubID.Value);
+			}
+
+			if (command.Organiser == CompetitionOrganisers.Club)
+			{
+				this._organiserClub = await this._clubRepository.Get(command.OrganiserClubID.Value);
+				this._venueClub = this._organiserClub;
 			}
 		}
 	}

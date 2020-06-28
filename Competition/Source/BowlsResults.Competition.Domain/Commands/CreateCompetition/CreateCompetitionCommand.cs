@@ -19,9 +19,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 		public CompetitionScopes Scope { get; set; }
 		public AgeGroups AgeGroup { get; set; }
 		public Genders Gender { get; set; }
+		public int? OrganiserClubID { get; set; }
+		public int? VenueClubID { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
 		public MeritCalculationEngines? PlayerMeritCalculationEngine { get; set; }
-		public byte? GameVariationID { get; set; }
+		public byte? GameVariationID { get; set; }		
 	}
 }

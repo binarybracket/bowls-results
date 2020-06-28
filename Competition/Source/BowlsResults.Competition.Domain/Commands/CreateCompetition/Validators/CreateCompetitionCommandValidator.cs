@@ -1,4 +1,5 @@
 using System;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.Core.Domain2.Commands;
 using Com.BinaryBracket.Core.Domain2.Validators;
 using FluentValidation;
@@ -23,6 +24,16 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 				.GreaterThanOrEqualTo(x => x.StartDate)
 				.When(x => x.EndDate.HasValue && x.StartDate != default(DateTime));
 			this.RuleFor(command => command.PlayerMeritCalculationEngine).Null();
+
+			this.When(x => x.Organiser == CompetitionOrganisers.Club, () =>
+			{
+				this.RuleFor(x=>x.OrganiserClubID).NotEmpty();
+			});
+			
+			this.When(x => x.Organiser == CompetitionOrganisers.Association, () =>
+			{
+				this.RuleFor(x=>x.VenueClubID).NotEmpty();
+			});
 		}
 	}
 }
