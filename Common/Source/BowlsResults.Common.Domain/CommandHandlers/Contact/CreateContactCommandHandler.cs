@@ -68,7 +68,7 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.CommandHandlers.Contact
 					if (command.AssociationID.HasValue)
 					{
 						this._association.AddContact(this._contact);
-						await this._clubRepository.Save(this._club);
+						await this._associationRepository.Save(this._association);
 					}
 				}
 
