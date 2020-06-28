@@ -19,18 +19,21 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.CommandHandlers.Contact
 		private readonly CreateContactCommandValidator _validator;
 		private readonly IContactRepository _contactRepository;
 		private readonly IClubRepository _clubRepository;
+		private readonly IAssociationRepository _associationRepository;
 		
 		private ValidationResult _validationResult;
 		private Entities.Contact _contact;
 		private Club _club;
+		private Association _association;
 
-		public CreateContactCommandHandler(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, CreateContactCommandValidator validator, IContactRepository contactRepository, IClubRepository clubRepository)
+		public CreateContactCommandHandler(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, CreateContactCommandValidator validator, IContactRepository contactRepository, IClubRepository clubRepository, IAssociationRepository associationRepository)
 		{
 			this._logger = loggerFactory.CreateLogger<CreateContactCommandHandler>();
 			this._unitOfWork = unitOfWork;
 			this._validator = validator;
 			this._contactRepository = contactRepository;
 			this._clubRepository = clubRepository;
+			this._associationRepository = associationRepository;
 		}
 		
 		public async Task<DefaultIdentityCommandResponse> Handle(CreateContactCommand command)
@@ -62,6 +65,11 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.CommandHandlers.Contact
 						this._club.AddContact(this._contact);
 						await this._clubRepository.Save(this._club);
 					}
+					if (command.AssociationID.HasValue)
+					{
+						this._association.AddContact(this._contact);
+						await this._clubRepository.Save(this._club);
+					}
 				}
 
 				if (this._validationResult.IsValid)
@@ -89,6 +97,10 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.CommandHandlers.Contact
 			if (command.ClubID.HasValue)
 			{
 				this._club = await this._clubRepository.GetWithContacts(command.ClubID.Value);
+			}
+			if (command.AssociationID.HasValue)
+			{
+				this._association = await this._associationRepository.GetWithContacts(command.AssociationID.Value);
 			}
 		}
 	}
