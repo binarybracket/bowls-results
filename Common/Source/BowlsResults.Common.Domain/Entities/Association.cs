@@ -11,6 +11,11 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.Entities
 
 		public virtual IList<AssociationXContact> Contacts { get; set; }
 
+		public virtual Contact GetContactByType(ContactTypes contactType)
+		{
+			return this.Contacts.Single(x => x.Contact.ContactTypeID == contactType).Contact;
+		}
+		
 		public virtual void AddContact(Contact contact)
 		{
 			this.RemoveAll(contact);
