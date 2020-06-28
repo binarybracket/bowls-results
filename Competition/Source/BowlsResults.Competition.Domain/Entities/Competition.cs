@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.Core.Domain2.Entities;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
@@ -36,10 +37,24 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 //		protected internal virtual IList<CompetitionStage> InternalStages { get; set; }
 		public virtual IList<CompetitionStage> Stages { get; set; }
 
+		public virtual CompetitionRegistrationConfiguration RegistrationConfiguration { get; set; }
+		
 //		public virtual ReadOnlyCollection<CompetitionStage> Stages
 //		{
 //			get { return new ReadOnlyCollection<CompetitionStage>(this.InternalStages); }
 //		}
+
+		public virtual CompetitionRegistrationStatuses GetRegistrationStatus()
+		{
+			var status = CompetitionRegistrationStatuses.Unavailable;
+
+			if (this.RegistrationConfiguration != null && this.RegistrationConfiguration.CompetitionRegistrationModeID == CompetitionRegistrationModes.Online)
+			{
+				return this.RegistrationConfiguration.CalculateStatus();
+			}
+
+			return status;
+		}
 
 		public static Competition Create(CompetitionHeader header, Season season, CompetitionOrganisers organiser, CompetitionScopes scope, CompetitionFormats format, AgeGroups ageGroup, Genders gender, int associationID, string name,
 			DateTime startDate,
@@ -76,6 +91,14 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 			this.Stages.Add(data);
 
 			return data;
+		}
+
+		public virtual void CreateRegistrationConfiguration(CompetitionRegistrationModes mode, Contact contact)
+		{
+			this.RegistrationConfiguration = new CompetitionRegistrationConfiguration();
+			this.RegistrationConfiguration.Competition = this;
+			this.RegistrationConfiguration.CompetitionRegistrationModeID = mode;
+			this.RegistrationConfiguration.OrganiserContact = contact;
 		}
 	}
 }
