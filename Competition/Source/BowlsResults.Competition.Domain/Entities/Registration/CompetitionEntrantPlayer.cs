@@ -14,5 +14,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 		public virtual string FirstName { get; set; }
 		public virtual string LastName { get; set; }
 		public virtual Player Player { get; set; }
+
+		public virtual void SetPlayer(Player player)
+		{
+			this.Player = player;
+		}
 	}
 }
