@@ -21,7 +21,8 @@ namespace BowlsResults.WebApi.Competition.Assembler
 		{
 			return new CompetitionDto
 			{
-				ID = competition.ID
+				ID = competition.ID,
+				RegistrationStatus = competition.GetRegistrationStatus()
 			};
 		}
 	}

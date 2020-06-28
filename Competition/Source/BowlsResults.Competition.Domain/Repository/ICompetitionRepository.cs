@@ -8,5 +8,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Repository
 	public interface ICompetitionRepository : IIdentityRepository<Entities.Competition, int>
 	{
 		Task<List<Entities.Competition>> GetPendingPlayerCompetitions();
+
+		Task<Entities.Competition> GetWithRegistrationConfiguration(int competitionID);
 	}
 }

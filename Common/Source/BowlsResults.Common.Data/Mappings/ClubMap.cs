@@ -9,9 +9,12 @@ namespace Com.BinaryBracket.BowlsResults.Common.Data.Mappings
 		{
 			this.Table("Club");
 			this.LazyLoad();
-			//this.Map(x => x.Name).Column("Name");
-			//this.Map(x => x.PitchID).Column("PitchID");
-			//this.Map(x => x.AssociationID).Column("AssociationID");
+
+			this.Map(x => x.AssociationID).Column("AssociationID").Not.Nullable();
+			this.Map(x => x.Name).Column("Name");
+			this.Map(x => x.PitchID).Column("PitchID");
+
+			this.HasMany(x => x.Contacts).KeyColumn("ClubID").Inverse().Cascade.AllDeleteOrphan();
 		}
 	}
 }

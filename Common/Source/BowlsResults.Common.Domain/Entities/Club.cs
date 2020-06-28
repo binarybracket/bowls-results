@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Com.BinaryBracket.Core.Domain2.Entities;
 
 namespace Com.BinaryBracket.BowlsResults.Common.Domain.Entities
@@ -11,5 +13,30 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.Entities
 		public virtual int AssociationID { get; set; }
 		public virtual string Name { get; set; }
 		public virtual int? PitchID { get; set; }
+		
+		public virtual IList<ClubXContact> Contacts { get; set; }
+
+		public virtual void AddContact(Contact contact)
+		{
+			this.RemoveAll(contact);
+			if (!this.Contacts.Any(x => x.Contact.ContactTypeID == contact.ContactTypeID && x.Contact.ID == contact.ID))
+			{
+				var data = new ClubXContact
+				{
+					Contact = contact,
+					Club = this
+				};
+				this.Contacts.Add(data);
+			}
+		}
+
+		private void RemoveAll(Contact contact)
+		{
+			var itemsToRemove = this.Contacts.Where(x => x.Contact.ContactTypeID == contact.ContactTypeID && x.Contact.ID != contact.ID).ToArray();
+			foreach(var item in itemsToRemove)
+			{
+				this.Contacts.Remove(item);
+			}
+		}
 	}
 }
