@@ -5,6 +5,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 		Open = 1,
 		ClosingSoon = 2,
 		Closed = 3,
-		Unavailable = 4
+		Unavailable = 4,
+		NotOpenYet = 5
 	}
 }
