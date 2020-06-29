@@ -100,5 +100,15 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 			this.RegistrationConfiguration.CompetitionRegistrationModeID = mode;
 			this.RegistrationConfiguration.OrganiserContact = contact;
 		}
+		
+		public virtual CompetitionRegistration CreateRegistration(string forename, string surname, string emailAddress)
+		{
+			var data = new CompetitionRegistration();
+			data.Competition = this;
+			data.Forename = forename;
+			data.Surname = surname;
+			data.EmailAddress = emailAddress;
+			return data;
+		}
 	}
 }

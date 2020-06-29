@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BowlsResults.WebApi.Competition.Assembler;
 using BowlsResults.WebApi.Competition.Dto;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Models.Registration;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Models.Registration.Players;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Microsoft.AspNetCore.Mvc;
 

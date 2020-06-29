@@ -3,7 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Com.BinaryBracket.BowlsResults.Competition.Data.Repository;
+using Com.BinaryBracket.BowlsResults.Competition.Data.Repository.Registration;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Registration;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registration.Validators;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Registration;
 using Com.BinaryBracket.Core.Data2.SessionProvider;
 using Com.BinaryBracket.Core.Domain2;
 using Microsoft.AspNetCore.Builder;
@@ -72,6 +76,10 @@ namespace BowlsResults.WebApi
 			services.AddScoped<IUnitOfWork, TestAppUnitOfWork>();
 			services.AddScoped<ISessionProvider, TestAppSessionProvider>();
 			services.AddTransient<ICompetitionRepository, CompetitionRepository>();
+			services.AddTransient<ICompetitionRegistrationRepository, CompetitionRegistrationRepository>();
+
+			services.AddTransient<CreateSinglesRegistrationCommandHandler, CreateSinglesRegistrationCommandHandler>();
+			services.AddTransient<CreateSinglesRegistrationCommandValidator, CreateSinglesRegistrationCommandValidator>();
 
 			TestAppSessionProvider.Initialise(@"Server=.\SQL2008R2;Database=db1066353_Bowls_Node3;User Id=sa;Password=b4ll4cr1yp4rk;MultipleActiveResultSets=True;");
 			//TestAppSessionProvider.Initialise(@"Server=mssql792int.cp.blacknight.com;Database=db1066353_Bowls_Node3;User Id=u1066353_BowlsNode3;Password=e|w[3KXY)x{pExNH;Pooling=False;Application Name=BowlsN3;");

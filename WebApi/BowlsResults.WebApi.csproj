@@ -28,6 +28,7 @@
       <ProjectReference Include="..\..\core\Source\Data\Com.BinaryBracket.Core.Data2.csproj" />
       <ProjectReference Include="..\Common\Source\BowlsResults.Common.Data\BowlsResults.Common.Data.csproj" />
       <ProjectReference Include="..\Competition\Source\BowlsResults.Competition.Data\BowlsResults.Competition.Data.csproj" />
+      <ProjectReference Include="..\Competition\Source\BowlsResults.Competition.Domain\BowlsResults.Competition.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
