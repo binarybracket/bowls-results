@@ -10,6 +10,8 @@ using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Registration;
 using Com.BinaryBracket.Core.Data2.SessionProvider;
 using Com.BinaryBracket.Core.Domain2;
+using Com.BinaryBracket.Core.Domain2.reCAPTCHA;
+using Com.BinaryBracket.Core.Domain2.reCAPTCHA.Gateway;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -19,7 +21,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
-using reCAPTCHA.AspNetCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace BowlsResults.WebApi
@@ -71,6 +72,7 @@ namespace BowlsResults.WebApi
 				throw new ArgumentException("Missing RecaptchaSettings in configuration.");
 
 			services.Configure<RecaptchaSettings>(section);
+			services.AddTransient<IRecaptchaGateway, RecaptchaGateway>();
 			services.AddTransient<IRecaptchaService, RecaptchaService>();
 
 			services.AddScoped<IUnitOfWork, TestAppUnitOfWork>();

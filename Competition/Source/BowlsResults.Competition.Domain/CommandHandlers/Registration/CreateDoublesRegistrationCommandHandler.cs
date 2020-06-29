@@ -8,6 +8,7 @@ using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Registration;
 using Com.BinaryBracket.Core.Domain2;
 using Com.BinaryBracket.Core.Domain2.CommandHandlers;
 using Com.BinaryBracket.Core.Domain2.Commands;
+using Com.BinaryBracket.Core.Domain2.reCAPTCHA;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 
@@ -20,19 +21,20 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 		private readonly ICompetitionRepository _competitionRepository;
 		private readonly ILogger<CreateDoublesRegistrationCommandHandler> _logger;
 		private readonly ICompetitionRegistrationRepository _competitionRegistrationRepository;
+		private readonly IRecaptchaService _recaptchaService;
 
 		private ValidationResult _validationResult;
 		private Entities.Competition _competition;
 
-
 		public CreateDoublesRegistrationCommandHandler(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, CreateDoublesRegistrationCommandValidator validator, ICompetitionRepository competitionRepository,
-			ICompetitionRegistrationRepository competitionRegistrationRepository)
+			ICompetitionRegistrationRepository competitionRegistrationRepository, IRecaptchaService recaptchaService)
 		{
 			this._logger = loggerFactory.CreateLogger<CreateDoublesRegistrationCommandHandler>();
 			this._validator = validator;
 			this._unitOfWork = unitOfWork;
 			this._competitionRepository = competitionRepository;
 			this._competitionRegistrationRepository = competitionRegistrationRepository;
+			this._recaptchaService = recaptchaService;
 		}
 
 		public async Task<DefaultCommandResponse> Handle(CreateDoublesRegistrationCommand command)
@@ -48,6 +50,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 					await this.Load(command);
 
 					RegistrationValidatorHelper.Validate(this._validationResult, this._competition);
+				}
+				
+				if (this._validationResult.IsValid)
+				{
+					await this._recaptchaService.Validate(command.Registration, "opens/registration", this._validationResult);
 				}
 
 				if (this._validationResult.IsValid)

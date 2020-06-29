@@ -7,6 +7,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registratio
 	{
 		public CompetitionRegistrationModelValidator()
 		{
+			this.RuleFor(x => x.VerificationToken).NotEmpty();
 			this.RuleFor(x => x.CompetitionID).NotEmpty();
 			this.RuleFor(x => x.Contact).NotNull();
 			this.RuleFor(x => x.Players).NotEmpty();
