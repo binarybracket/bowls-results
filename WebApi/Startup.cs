@@ -79,7 +79,12 @@ namespace BowlsResults.WebApi
 			services.AddTransient<ICompetitionRegistrationRepository, CompetitionRegistrationRepository>();
 
 			services.AddTransient<CreateSinglesRegistrationCommandHandler, CreateSinglesRegistrationCommandHandler>();
+			services.AddTransient<CreateDoublesRegistrationCommandHandler, CreateDoublesRegistrationCommandHandler>();
+			services.AddTransient<CreateTriplesRegistrationCommandHandler, CreateTriplesRegistrationCommandHandler>();
+			
 			services.AddTransient<CreateSinglesRegistrationCommandValidator, CreateSinglesRegistrationCommandValidator>();
+			services.AddTransient<CreateDoublesRegistrationCommandValidator, CreateDoublesRegistrationCommandValidator>();
+			services.AddTransient<CreateTriplesRegistrationCommandValidator, CreateTriplesRegistrationCommandValidator>();
 
 			TestAppSessionProvider.Initialise(@"Server=.\SQL2008R2;Database=db1066353_Bowls_Node3;User Id=sa;Password=b4ll4cr1yp4rk;MultipleActiveResultSets=True;");
 			//TestAppSessionProvider.Initialise(@"Server=mssql792int.cp.blacknight.com;Database=db1066353_Bowls_Node3;User Id=u1066353_BowlsNode3;Password=e|w[3KXY)x{pExNH;Pooling=False;Application Name=BowlsN3;");

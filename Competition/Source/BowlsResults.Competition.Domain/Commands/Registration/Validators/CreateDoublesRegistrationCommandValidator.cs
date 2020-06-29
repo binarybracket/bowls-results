@@ -5,9 +5,9 @@ using FluentValidation;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registration.Validators
 {
-	public class CreateSinglesRegistrationCommandValidator : CommandValidator<CreateSinglesRegistrationCommand, DefaultCommandResponse>
+	public class CreateDoublesRegistrationCommandValidator : CommandValidator<CreateDoublesRegistrationCommand, DefaultCommandResponse>
 	{
-		public CreateSinglesRegistrationCommandValidator()
+		public CreateDoublesRegistrationCommandValidator()
 		{
 			this.RuleFor(x => x.Registration).NotNull();
 			this.RuleFor(x => x.Registration).SetValidator(new CompetitionRegistrationModelValidator());
@@ -16,6 +16,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registratio
 			var playerValidator = new PlayerRegistrationModelValidator();
 			validator.RuleFor(x => x.Player1).NotNull();
 			validator.RuleFor(x => x.Player1).SetValidator(playerValidator);
+			validator.RuleFor(x => x.Player2).NotNull();
+			validator.RuleFor(x => x.Player2).SetValidator(playerValidator);
 			this.RuleForEach(x => x.Registration.Players).SetValidator(validator);
 		}
 	}

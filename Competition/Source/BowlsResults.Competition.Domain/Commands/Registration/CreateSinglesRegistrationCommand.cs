@@ -7,4 +7,16 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registratio
 	{
 		public CompetitionRegistrationModel Registration { get; set; }
 	}
+	public sealed class CreateDoublesRegistrationCommand : ICommand<DefaultCommandResponse>
+	{
+		public CompetitionRegistrationModel Registration { get; set; }
+	}
+	public sealed class CreateTriplesRegistrationCommand : ICommand<DefaultCommandResponse>
+	{
+		public CompetitionRegistrationModel Registration { get; set; }
+	}
+	public sealed class CreateTeamRegistrationCommand : ICommand<DefaultCommandResponse>
+	{
+		public CompetitionRegistrationModel Registration { get; set; }
+	}
 }
