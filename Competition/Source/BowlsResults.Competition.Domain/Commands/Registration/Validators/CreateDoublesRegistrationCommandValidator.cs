@@ -18,6 +18,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registratio
 			validator.RuleFor(x => x.Player1).SetValidator(playerValidator);
 			validator.RuleFor(x => x.Player2).NotNull();
 			validator.RuleFor(x => x.Player2).SetValidator(playerValidator);
+			validator.RuleFor(x => x.Player3).Null();
+			validator.RuleFor(x => x.Player4).Null();
 			this.RuleForEach(x => x.Registration.Players).SetValidator(validator);
 		}
 	}

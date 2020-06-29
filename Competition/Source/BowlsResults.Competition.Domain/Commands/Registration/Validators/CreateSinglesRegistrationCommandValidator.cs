@@ -16,6 +16,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registratio
 			var playerValidator = new PlayerRegistrationModelValidator();
 			validator.RuleFor(x => x.Player1).NotNull();
 			validator.RuleFor(x => x.Player1).SetValidator(playerValidator);
+			validator.RuleFor(x => x.Player2).Null();
+			validator.RuleFor(x => x.Player3).Null();
+			validator.RuleFor(x => x.Player4).Null();
 			this.RuleForEach(x => x.Registration.Players).SetValidator(validator);
 		}
 	}
