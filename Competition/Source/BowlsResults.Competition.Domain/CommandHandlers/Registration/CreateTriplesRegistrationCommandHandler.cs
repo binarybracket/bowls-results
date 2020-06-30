@@ -27,7 +27,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 		private readonly ICompetitionRegistrationRepository _competitionRegistrationRepository;
 		private readonly IRecaptchaService _recaptchaService;
 		private readonly IRegistrationEmailManager _registrationEmailManager;
-		private readonly IEmailSender _emailSender;
 
 		private ValidationResult _validationResult;
 		private Entities.Competition _competition;
