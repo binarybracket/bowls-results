@@ -6,7 +6,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 {
 	public class CompetitionRegistrationConfiguration : IdentityEntity<int>
 	{
-		public virtual int ID { get; set; }
 		public virtual Competition Competition { get; set; }
 		public virtual CompetitionRegistrationModes CompetitionRegistrationModeID { get; set; }
 		public virtual DateTime? OpenDate { get; set; }
