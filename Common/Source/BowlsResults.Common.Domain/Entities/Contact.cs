@@ -9,5 +9,10 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.Entities
 		public virtual string Surname { get; set; }
 		public virtual string EmailAddress { get; set; }
 		public virtual string Telephone { get; set; }
+
+		public virtual string DisplayName()
+		{
+			return $"{this.Forename} {this.Surname}";
+		}
 	}
 }

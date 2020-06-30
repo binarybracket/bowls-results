@@ -30,5 +30,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 			this.Entrants.Add(data);
 			return data;
 		}
+
+		public virtual string DisplayName()
+		{
+			return $"{this.Forename} {this.Surname}";
+		}
 	}
 }
