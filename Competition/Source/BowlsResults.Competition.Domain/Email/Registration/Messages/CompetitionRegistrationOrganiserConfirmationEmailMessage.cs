@@ -222,12 +222,11 @@ Competition Details
 				var first = true;
 				foreach (var player in competitionEntrant.Players)
 				{
-					players.Append(player.DisplayName());
 					if (!first)
 					{
 						players.Append(" & ");
 					}
-
+					players.Append(player.DisplayName());
 					first = false;
 				}
 
@@ -248,12 +247,11 @@ Competition Details
 				var first = true;
 				foreach (var player in competitionEntrant.Players)
 				{
-					players.Append(player.DisplayName());
 					if (!first)
 					{
 						players.Append(" & ");
 					}
-
+					players.Append(player.DisplayName());
 					first = false;
 				}
 

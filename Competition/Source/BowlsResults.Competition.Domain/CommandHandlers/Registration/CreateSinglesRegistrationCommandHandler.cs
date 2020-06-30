@@ -1,11 +1,9 @@
 using System;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registration.Validators;
-using Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Messages;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Registration;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Helpers.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
@@ -15,10 +13,8 @@ using Com.BinaryBracket.Core.Domain2.CommandHandlers;
 using Com.BinaryBracket.Core.Domain2.Commands;
 using Com.BinaryBracket.Core.Domain2.Email;
 using Com.BinaryBracket.Core.Domain2.reCAPTCHA;
-using Com.BinaryBracket.Core.Domain2.reCAPTCHA.Gateway;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
-using MimeKit;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Registration
 {
@@ -66,6 +62,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 
 				if (this._validationResult.IsValid)
 				{
+					RegistrationValidatorHelper.ValidateGameFormat(this._validationResult, this._competition, GameFormats.Singles);
+				}
+
+				if (this._validationResult.IsValid)
+				{
 					await this._recaptchaService.Validate(command.Registration, "opens/registration", this._validationResult);
 				}
 
@@ -87,7 +88,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 					this._unitOfWork.SoftCommit();
 
 					await this._registrationEmailManager.SendConfirmationEmails(registration);
-					
+
 					return DefaultCommandResponse.Create(this._validationResult);
 				}
 				else

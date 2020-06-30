@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Validation.Failure;
 using FluentValidation.Results;
@@ -6,7 +8,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Helpers.Registration
 {
 	public static class RegistrationValidatorHelper
 	{
-
 		public static void Validate(ValidationResult validationResult, Entities.Competition competition)
 		{
 			ValidateRegistrationOnline(validationResult, competition);
@@ -15,7 +16,15 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Helpers.Registration
 				ValidateRegistrationStatus(validationResult, competition);
 			}
 		}
-		
+
+		public static void ValidateGameFormat(ValidationResult validationResult, Entities.Competition competition, GameFormats gameFormat)
+		{
+			if (competition.GameVariation.GameFormatID != gameFormat)
+			{
+				validationResult.Errors.Add(new ValidationFailure("GameFormat", "Invalid Game Format."));
+			}
+		}
+
 		private static void ValidateRegistrationOnline(ValidationResult validationResult, Entities.Competition competition)
 		{
 			bool unavailable = false;
