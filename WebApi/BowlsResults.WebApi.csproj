@@ -38,4 +38,16 @@
       <_ContentIncludedByDefault Remove="publish\WebApplication1.runtimeconfig.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="entrant.html" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="assets\entrant-confirmation.html" />
+      <None Remove="assets\contact-value.html" />
+      <None Remove="assets\competition-value.html" />
+      <None Remove="assets\images\logo.png" />
+      <None Remove="assets\images\okok.gif" />
+    </ItemGroup>
+
 </Project>

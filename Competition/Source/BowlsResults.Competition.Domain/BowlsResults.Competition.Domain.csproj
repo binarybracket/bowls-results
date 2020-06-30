@@ -12,8 +12,27 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.1.0" />
       <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.1" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.1" />
+      <PackageReference Include="MimeKit" Version="2.8.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Email\Registration\Assets\images\logo.png" />
+      <EmbeddedResource Include="Email\Registration\Assets\images\logo.png" />
+      <None Remove="Email\Registration\Assets\images\okok.gif" />
+      <EmbeddedResource Include="Email\Registration\Assets\images\okok.gif" />
+      <None Remove="Email\Registration\Assets\competition-value.html" />
+      <EmbeddedResource Include="Email\Registration\Assets\competition-value.html" />
+      <None Remove="Email\Registration\Assets\contact-value.html" />
+      <EmbeddedResource Include="Email\Registration\Assets\contact-value.html" />
+      <None Remove="Email\Registration\Assets\entrant-value.html" />
+      <EmbeddedResource Include="Email\Registration\Assets\entrant-value.html" />
+      <None Remove="Email\Registration\Assets\registration-oraniser-confirmation.html" />
+      <EmbeddedResource Include="Email\Registration\Assets\registration-organiser-confirmation.html" />
+      <None Remove="Email\Registration\Assets\registration-player-confirmation.html" />
+      <EmbeddedResource Include="Email\Registration\Assets\registration-player-confirmation.html" />
     </ItemGroup>
 
 </Project>

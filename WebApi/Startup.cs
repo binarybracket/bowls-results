@@ -6,10 +6,12 @@ using Com.BinaryBracket.BowlsResults.Competition.Data.Repository;
 using Com.BinaryBracket.BowlsResults.Competition.Data.Repository.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registration.Validators;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Registration;
 using Com.BinaryBracket.Core.Data2.SessionProvider;
 using Com.BinaryBracket.Core.Domain2;
+using Com.BinaryBracket.Core.Domain2.Email;
 using Com.BinaryBracket.Core.Domain2.reCAPTCHA;
 using Com.BinaryBracket.Core.Domain2.reCAPTCHA.Gateway;
 using Microsoft.AspNetCore.Builder;
@@ -17,6 +19,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.OpenApi.Any;
@@ -67,13 +70,19 @@ namespace BowlsResults.WebApi
 					//options.IncludeXmlComments(XmlCommentsFilePath);
 				});
 
-			var section = this.Configuration.GetSection("RecaptchaSettings");
-			if (!section.Exists())
+			var recaptchaSection = this.Configuration.GetSection("RecaptchaSettings");
+			if (!recaptchaSection.Exists())
 				throw new ArgumentException("Missing RecaptchaSettings in configuration.");
+			services.Configure<RecaptchaSettings>(recaptchaSection);
 
-			services.Configure<RecaptchaSettings>(section);
+			var emailSection = this.Configuration.GetSection("EmailSettings");
+			if (!emailSection.Exists())
+				throw new ArgumentException("Missing EmailSettings in configuration.");
+			services.Configure<EmailSettings>(emailSection);
+
 			services.AddTransient<IRecaptchaGateway, RecaptchaGateway>();
 			services.AddTransient<IRecaptchaService, RecaptchaService>();
+			services.AddTransient<IEmailSender, EmailSender>();
 
 			services.AddScoped<IUnitOfWork, TestAppUnitOfWork>();
 			services.AddScoped<ISessionProvider, TestAppSessionProvider>();
@@ -83,27 +92,29 @@ namespace BowlsResults.WebApi
 			services.AddTransient<CreateSinglesRegistrationCommandHandler, CreateSinglesRegistrationCommandHandler>();
 			services.AddTransient<CreateDoublesRegistrationCommandHandler, CreateDoublesRegistrationCommandHandler>();
 			services.AddTransient<CreateTriplesRegistrationCommandHandler, CreateTriplesRegistrationCommandHandler>();
-			
+
 			services.AddTransient<CreateSinglesRegistrationCommandValidator, CreateSinglesRegistrationCommandValidator>();
 			services.AddTransient<CreateDoublesRegistrationCommandValidator, CreateDoublesRegistrationCommandValidator>();
 			services.AddTransient<CreateTriplesRegistrationCommandValidator, CreateTriplesRegistrationCommandValidator>();
+			
+			services.AddTransient<IRegistrationEmailManager, RegistrationEmailManager>();
 
 			TestAppSessionProvider.Initialise(@"Server=.\SQL2008R2;Database=db1066353_Bowls_Node3;User Id=sa;Password=b4ll4cr1yp4rk;MultipleActiveResultSets=True;");
 			//TestAppSessionProvider.Initialise(@"Server=mssql792int.cp.blacknight.com;Database=db1066353_Bowls_Node3;User Id=u1066353_BowlsNode3;Password=e|w[3KXY)x{pExNH;Pooling=False;Application Name=BowlsN3;");
 		}
-		
+
 		static string XmlCommentsFilePath
 		{
 			get
 			{
 				var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-				var fileName = typeof( Startup ).GetTypeInfo().Assembly.GetName().Name + ".xml";
-				return Path.Combine( basePath, fileName );
+				var fileName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name + ".xml";
+				return Path.Combine(basePath, fileName);
 			}
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider )
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
 		{
 			if (env.IsDevelopment())
 			{
@@ -116,61 +127,61 @@ namespace BowlsResults.WebApi
 				options =>
 				{
 					// build a swagger endpoint for each discovered API version
-					foreach ( var description in provider.ApiVersionDescriptions )
+					foreach (var description in provider.ApiVersionDescriptions)
 					{
-						options.SwaggerEndpoint( $"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant() );
+						options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
 					}
-				} );
+				});
 
 			app.UseMvc();
 		}
 	}
-	
+
 	/// <summary>
-    /// Configures the Swagger generation options.
-    /// </summary>
-    /// <remarks>This allows API versioning to define a Swagger document per API version after the
-    /// <see cref="IApiVersionDescriptionProvider"/> service has been resolved from the service container.</remarks>
-    public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
-    {
-        readonly IApiVersionDescriptionProvider provider;
+	/// Configures the Swagger generation options.
+	/// </summary>
+	/// <remarks>This allows API versioning to define a Swagger document per API version after the
+	/// <see cref="IApiVersionDescriptionProvider"/> service has been resolved from the service container.</remarks>
+	public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
+	{
+		readonly IApiVersionDescriptionProvider provider;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigureSwaggerOptions"/> class.
-        /// </summary>
-        /// <param name="provider">The <see cref="IApiVersionDescriptionProvider">provider</see> used to generate Swagger documents.</param>
-        public ConfigureSwaggerOptions( IApiVersionDescriptionProvider provider ) => this.provider = provider;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ConfigureSwaggerOptions"/> class.
+		/// </summary>
+		/// <param name="provider">The <see cref="IApiVersionDescriptionProvider">provider</see> used to generate Swagger documents.</param>
+		public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) => this.provider = provider;
 
-        /// <inheritdoc />
-        public void Configure( SwaggerGenOptions options )
-        {
-            // add a swagger document for each discovered API version
-            // note: you might choose to skip or document deprecated API versions differently
-            foreach ( var description in this.provider.ApiVersionDescriptions )
-            {
-                options.SwaggerDoc( description.GroupName, CreateInfoForApiVersion( description ) );
-            }
-        }
+		/// <inheritdoc />
+		public void Configure(SwaggerGenOptions options)
+		{
+			// add a swagger document for each discovered API version
+			// note: you might choose to skip or document deprecated API versions differently
+			foreach (var description in this.provider.ApiVersionDescriptions)
+			{
+				options.SwaggerDoc(description.GroupName, CreateInfoForApiVersion(description));
+			}
+		}
 
-        static OpenApiInfo CreateInfoForApiVersion( ApiVersionDescription description )
-        {
-            var info = new OpenApiInfo()
-            {
-                Title = "Sample API",
-                Version = description.ApiVersion.ToString(),
-                Description = "A sample application with Swagger, Swashbuckle, and API versioning.",
-                Contact = new OpenApiContact() { Name = "Bill Mei", Email = "bill.mei@somewhere.com" },
-                License = new OpenApiLicense() { Name = "MIT", Url = new Uri( "https://opensource.org/licenses/MIT" ) }
-            };
+		static OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
+		{
+			var info = new OpenApiInfo()
+			{
+				Title = "Sample API",
+				Version = description.ApiVersion.ToString(),
+				Description = "A sample application with Swagger, Swashbuckle, and API versioning.",
+				Contact = new OpenApiContact() {Name = "Bill Mei", Email = "bill.mei@somewhere.com"},
+				License = new OpenApiLicense() {Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT")}
+			};
 
-            if ( description.IsDeprecated )
-            {
-                info.Description += " This API version has been deprecated.";
-            }
+			if (description.IsDeprecated)
+			{
+				info.Description += " This API version has been deprecated.";
+			}
 
-            return info;
-        }
-    }
+			return info;
+		}
+	}
 
 	/// <summary>
 	/// Represents the Swagger/Swashbuckle operation filter used to document the implicit API version parameter.

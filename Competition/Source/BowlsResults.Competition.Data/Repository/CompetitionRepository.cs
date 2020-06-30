@@ -32,6 +32,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 		{
 			return this.Session.Query<Domain.Entities.Competition>()
 				.Fetch(x => x.RegistrationConfiguration)
+				.Fetch(x => x.VenueClub)
+				.Fetch(x => x.GameVariation)
 				.SingleOrDefaultAsync(x => x.ID == competitionID);
 		}
 	}
