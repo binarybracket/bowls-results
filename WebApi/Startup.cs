@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using BowlsResults.WebApi.Jobs;
 using Com.BinaryBracket.BowlsResults.Competition.Data.Repository;
 using Com.BinaryBracket.BowlsResults.Competition.Data.Repository.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Registration;
@@ -14,16 +15,21 @@ using Com.BinaryBracket.Core.Domain2;
 using Com.BinaryBracket.Core.Domain2.Email;
 using Com.BinaryBracket.Core.Domain2.reCAPTCHA;
 using Com.BinaryBracket.Core.Domain2.reCAPTCHA.Gateway;
+using Com.BinaryBracket.Core.Job.Quartz;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace BowlsResults.WebApi
@@ -33,6 +39,13 @@ namespace BowlsResults.WebApi
 		public Startup(IConfiguration configuration)
 		{
 			this.Configuration = configuration;
+			
+			Log.Logger = new LoggerConfiguration()
+				.ReadFrom.Configuration(configuration)
+				.Enrich.FromLogContext()
+				//.WriteTo.Console()
+				//.WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+				.CreateLogger();
 		}
 
 		public IConfiguration Configuration { get; }
@@ -70,6 +83,11 @@ namespace BowlsResults.WebApi
 					//options.IncludeXmlComments(XmlCommentsFilePath);
 				});
 
+
+//			services.AddLogging(loggingBuilder =>
+//				loggingBuilder.AddSerilog(dispose: true));
+
+
 			var recaptchaSection = this.Configuration.GetSection("RecaptchaSettings");
 			if (!recaptchaSection.Exists())
 				throw new ArgumentException("Missing RecaptchaSettings in configuration.");
@@ -96,11 +114,20 @@ namespace BowlsResults.WebApi
 			services.AddTransient<CreateSinglesRegistrationCommandValidator, CreateSinglesRegistrationCommandValidator>();
 			services.AddTransient<CreateDoublesRegistrationCommandValidator, CreateDoublesRegistrationCommandValidator>();
 			services.AddTransient<CreateTriplesRegistrationCommandValidator, CreateTriplesRegistrationCommandValidator>();
-			
+
 			services.AddTransient<IRegistrationEmailManager, RegistrationEmailManager>();
 
-			TestAppSessionProvider.Initialise(@"Server=.\SQL2008R2;Database=db1066353_Bowls_Node3;User Id=sa;Password=b4ll4cr1yp4rk;MultipleActiveResultSets=True;");
-			//TestAppSessionProvider.Initialise(@"Server=mssql792int.cp.blacknight.com;Database=db1066353_Bowls_Node3;User Id=u1066353_BowlsNode3;Password=e|w[3KXY)x{pExNH;Pooling=False;Application Name=BowlsN3;");
+			TestAppSessionProvider.Initialise(this.Configuration.GetConnectionString("BowlingDatabase"));
+
+			services.AddSingleton<IJobFactory, SingletonJobFactory>();
+			services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+
+			services.AddSingleton<HelloWorldJob>();
+			//services.AddSingleton(new JobSchedule(
+			//	jobType: typeof(HelloWorldJob),
+			//	cronExpression: "0/5 * * * * ?")); // run every 5 seconds
+
+			services.AddHostedService<QuartzHostedService>();
 		}
 
 		static string XmlCommentsFilePath
@@ -114,8 +141,10 @@ namespace BowlsResults.WebApi
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory loggerFactory)
 		{
+			loggerFactory.AddSerilog();
+			
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
@@ -134,6 +163,10 @@ namespace BowlsResults.WebApi
 				});
 
 			app.UseMvc();
+
+			//loggerFactory.AddSerilog();
+
+//			
 		}
 	}
 

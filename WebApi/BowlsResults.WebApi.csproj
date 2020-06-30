@@ -15,6 +15,12 @@
         <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.6" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.2.1" />
+        <PackageReference Include="Quartz" Version="3.0.7" />
+        <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+        <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.5.0" />
     </ItemGroup>
@@ -25,6 +31,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\core\Source\Data\Com.BinaryBracket.Core.Data2.csproj" />
+      <ProjectReference Include="..\..\core\Source\Job\Com.BinaryBracket.Core.Job.csproj" />
       <ProjectReference Include="..\Common\Source\BowlsResults.Common.Data\BowlsResults.Common.Data.csproj" />
       <ProjectReference Include="..\Competition\Source\BowlsResults.Competition.Data\BowlsResults.Competition.Data.csproj" />
       <ProjectReference Include="..\Competition\Source\BowlsResults.Competition.Domain\BowlsResults.Competition.Domain.csproj" />
@@ -36,6 +43,9 @@
       <_ContentIncludedByDefault Remove="publish\appsettings.json" />
       <_ContentIncludedByDefault Remove="publish\WebApplication1.deps.json" />
       <_ContentIncludedByDefault Remove="publish\WebApplication1.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="publish\appsettings.Production.json" />
+      <_ContentIncludedByDefault Remove="publish\BowlsResults.WebApi.deps.json" />
+      <_ContentIncludedByDefault Remove="publish\BowlsResults.WebApi.runtimeconfig.json" />
     </ItemGroup>
 
     <ItemGroup>

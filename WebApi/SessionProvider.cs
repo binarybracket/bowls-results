@@ -9,7 +9,9 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions;
 using FluentNHibernate.Conventions.Helpers;
+using Microsoft.Extensions.Logging;
 using NHibernate;
+using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace BowlsResults.WebApi
 {
@@ -20,9 +22,9 @@ namespace BowlsResults.WebApi
 
 		private ISession _session;
 
-		public TestAppSessionProvider()
+		public TestAppSessionProvider(ILogger<TestAppSessionProvider> logger)
 		{
-			Console.Write("CCC");
+			logger.LogWarning("AAA");
 		}
 
 		public ISession Session
