@@ -75,7 +75,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 
 					foreach (var player in command.Registration.Players)
 					{
-						var entrant = registration.CreateEntrant();
+						var entrant = registration.CreateEntrant(this._competition);
 						entrant.CreatePlayer(player.Player1.Forename, player.Player1.Surname);
 						entrant.CreatePlayer(player.Player2.Forename, player.Player2.Surname);
 						entrant.CreatePlayer(player.Player3.Forename, player.Player3.Surname);
@@ -88,7 +88,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 				{
 					this._unitOfWork.SoftCommit();
 
-					await this._registrationEmailManager.SendConfirmationEmails(registration);
+					await this._registrationEmailManager.SendConfirmationEmails(registration, this._competition);
 
 					return DefaultCommandResponse.Create(this._validationResult);
 				}

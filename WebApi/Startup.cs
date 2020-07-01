@@ -53,6 +53,16 @@ namespace BowlsResults.WebApi
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddCors(options =>
+			{
+				options.AddPolicy("BOB",
+					builder =>
+					{
+						builder.WithOrigins(
+							"http://localhost:8080");
+					});
+			});
+			
 			services.AddMvc();
 
 			services.AddApiVersioning(x =>
@@ -104,6 +114,7 @@ namespace BowlsResults.WebApi
 
 			services.AddScoped<IUnitOfWork, TestAppUnitOfWork>();
 			services.AddScoped<ISessionProvider, TestAppSessionProvider>();
+			services.AddScoped<IRegistrationSessionProvider, RegistrationSessionProvider>();
 			services.AddTransient<ICompetitionRepository, CompetitionRepository>();
 			services.AddTransient<ICompetitionRegistrationRepository, CompetitionRegistrationRepository>();
 
@@ -118,6 +129,7 @@ namespace BowlsResults.WebApi
 			services.AddTransient<IRegistrationEmailManager, RegistrationEmailManager>();
 
 			TestAppSessionProvider.Initialise(this.Configuration.GetConnectionString("BowlingDatabase"));
+			RegistrationSessionProvider.Initialise(this.Configuration.GetConnectionString("RegistrationDatabase"));
 
 			services.AddSingleton<IJobFactory, SingletonJobFactory>();
 			services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
@@ -162,6 +174,7 @@ namespace BowlsResults.WebApi
 					}
 				});
 
+			app.UseCors("BOB"); 
 			app.UseMvc();
 
 			//loggerFactory.AddSerilog();

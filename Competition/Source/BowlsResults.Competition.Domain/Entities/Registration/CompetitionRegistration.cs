@@ -14,19 +14,19 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 			this.Entrants = new List<CompetitionEntrant>();
 		}
 
-		public virtual Competition Competition { get; set; }
+		public virtual int CompetitionID { get; set; }
 		public virtual string EmailAddress { get; set; }
 		public virtual string Forename { get; set; }
 		public virtual string Surname { get; set; }
 		public virtual IList<CompetitionEntrant> Entrants { get; set; }
 
-		public virtual CompetitionEntrant CreateEntrant()
+		public virtual CompetitionEntrant CreateEntrant(Entities.Competition competition)
 		{
 			var data = new CompetitionEntrant();
 			data.CompetitionRegistration = this;
 			data.CompetitionEntrantStatusID = CompetitionEntrantStatuses.Pending;
-			data.CompetitionID = this.Competition.ID;
-			data.EntrantGameFormatID = this.Competition.GameVariation.GameFormatID;
+			data.CompetitionID = competition.ID;
+			data.EntrantGameFormatID = competition.GameVariation.GameFormatID;
 			this.Entrants.Add(data);
 			return data;
 		}

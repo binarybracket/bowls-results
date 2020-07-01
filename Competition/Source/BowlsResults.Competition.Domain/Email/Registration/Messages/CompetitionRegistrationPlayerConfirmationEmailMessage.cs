@@ -37,6 +37,7 @@ This email is your Entry Confirmation for the competition %%COMPETITION-NAME%%
 Competition Details
 %%COMPETITION-VALUES%%";
 
+		private readonly Entities.Competition _competition;
 		private readonly CompetitionRegistration _competitionRegistration;
 
 		static CompetitionRegistrationPlayerConfirmationEmailMessage()
@@ -57,9 +58,11 @@ Competition Details
 			reader = new StreamReader(embeddedProvider.GetFileInfo($"{AssetBasePath}registration-player-confirmation.html").CreateReadStream());
 			_registrationConfirmationTemplate = reader.ReadToEnd();
 		}
+		
 
-		public CompetitionRegistrationPlayerConfirmationEmailMessage(CompetitionRegistration competitionRegistration)
+		public CompetitionRegistrationPlayerConfirmationEmailMessage(Entities.Competition competition, CompetitionRegistration competitionRegistration)
 		{
+			this._competition = competition;
 			this._competitionRegistration = competitionRegistration;
 		}
 
@@ -87,7 +90,7 @@ Competition Details
 
 		public string GetSubject()
 		{
-			return $"Competition Entry Confirmation ({this._competitionRegistration.Competition.Name})";
+			return $"Competition Entry Confirmation ({this._competition.Name})";
 		}
 
 		public BodyBuilder GetBodyBuilder()
@@ -107,7 +110,7 @@ Competition Details
 			var entrantsHeader = this.GetEntrantsHeader();
 
 			var message = PlainTextTemplate.Replace("%%CONTACT-NAME%%", this._competitionRegistration.DisplayName());
-			message = message.Replace("%%COMPETITION-NAME%%", this._competitionRegistration.Competition.Name);
+			message = message.Replace("%%COMPETITION-NAME%%", this._competition.Name);
 			message = message.Replace("%%ENTRANTS%%", entrants.ToString());
 			message = message.Replace("%%COMPETITION-VALUES%%", competitionValues.ToString());
 			message = message.Replace("%%ENTRANTS-HEADER%%", entrantsHeader);
@@ -132,7 +135,7 @@ Competition Details
 			file = file.Replace("LOGOIMAGEID", image1.ContentId);
 			file = file.Replace("OKIMAGEID", image2.ContentId);
 			file = file.Replace("%%ENTRANTS-HEADER%%", entrantsHeader.ToUpperInvariant());
-			file = file.Replace("%%COMPETITION-NAME%%", this._competitionRegistration.Competition.Name);
+			file = file.Replace("%%COMPETITION-NAME%%", this._competition.Name);
 			builder.HtmlBody = file;
 		}
 
@@ -152,15 +155,15 @@ Competition Details
 
 			var ukCulture = CultureInfo.CreateSpecificCulture("en-GB");
 			var britishZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-			DateTime newTime = TimeZoneInfo.ConvertTimeFromUtc(this._competitionRegistration.Competition.StartDate, britishZone);
+			DateTime newTime = TimeZoneInfo.ConvertTimeFromUtc(this._competition.StartDate, britishZone);
 
 			builder.Append(_competitionValueTemplate.Replace("%%COMPETITION-KEY%%", "Date").Replace("%%COMPETITION-VALUE%%", newTime.ToString("f")));
-			builder.Append(_competitionValueTemplate.Replace("%%COMPETITION-KEY%%", "Venue").Replace("%%COMPETITION-VALUE%%", this._competitionRegistration.Competition.VenueClub.Name));
-			builder.Append(_competitionValueTemplate.Replace("%%COMPETITION-KEY%%", "Format").Replace("%%COMPETITION-VALUE%%", this._competitionRegistration.Competition.GameVariation.Name));
+			builder.Append(_competitionValueTemplate.Replace("%%COMPETITION-KEY%%", "Venue").Replace("%%COMPETITION-VALUE%%", this._competition.VenueClub.Name));
+			builder.Append(_competitionValueTemplate.Replace("%%COMPETITION-KEY%%", "Format").Replace("%%COMPETITION-VALUE%%", this._competition.GameVariation.Name));
 
-			if (this._competitionRegistration.Competition.RegistrationConfiguration.Amount.HasValue)
+			if (this._competition.RegistrationConfiguration.Amount.HasValue)
 			{
-				builder.Append(_competitionValueTemplate.Replace("%%COMPETITION-KEY%%", "Entry Fee").Replace("%%COMPETITION-VALUE%%", $"£" + String.Format("{0:n}", this._competitionRegistration.Competition.RegistrationConfiguration.Amount)));
+				builder.Append(_competitionValueTemplate.Replace("%%COMPETITION-KEY%%", "Entry Fee").Replace("%%COMPETITION-VALUE%%", $"£" + String.Format("{0:n}", this._competition.RegistrationConfiguration.Amount)));
 			}
 
 			return builder;
@@ -172,24 +175,24 @@ Competition Details
 
 			var ukCulture = CultureInfo.CreateSpecificCulture("en-GB");
 			var britishZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-			DateTime newTime = TimeZoneInfo.ConvertTimeFromUtc(this._competitionRegistration.Competition.StartDate, britishZone);
+			DateTime newTime = TimeZoneInfo.ConvertTimeFromUtc(this._competition.StartDate, britishZone);
 
 			builder.Append("Date - ");
 			builder.Append(newTime.ToString("f"));
 			builder.AppendLine();
 
 			builder.Append("Venue - ");
-			builder.Append(this._competitionRegistration.Competition.VenueClub.Name);
+			builder.Append(this._competition.VenueClub.Name);
 			builder.AppendLine();
 
 			builder.Append("Format - ");
-			builder.Append(this._competitionRegistration.Competition.GameVariation.Name);
+			builder.Append(this._competition.GameVariation.Name);
 			builder.AppendLine();
 
-			if (this._competitionRegistration.Competition.RegistrationConfiguration.Amount.HasValue)
+			if (this._competition.RegistrationConfiguration.Amount.HasValue)
 			{
 				builder.Append("Entry Fee - ");
-				builder.Append($"£" + String.Format("{0:n}", this._competitionRegistration.Competition.RegistrationConfiguration.Amount));
+				builder.Append($"£" + String.Format("{0:n}", this._competition.RegistrationConfiguration.Amount));
 				builder.AppendLine();
 			}
 
@@ -256,7 +259,7 @@ Competition Details
 		{
 			plural = "Players";
 			singular = "Player";
-			if (this._competitionRegistration.Competition.GameVariation.GameFormatID != GameFormats.Singles)
+			if (this._competition.GameVariation.GameFormatID != GameFormats.Singles)
 			{
 				plural = "Teams";
 				singular = "Team";

@@ -20,11 +20,11 @@ namespace BowlsResults.WebApi.Competition
 		private ICompetitionRepository _competitionRepository;
 		
 		[HttpGet]
-		public async Task<List<CompetitionDto>> Get()
+		public async Task<ApiResponse> Get()
 		{
 			List<Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Competition> competitions = await this._competitionRepository.GetPendingPlayerCompetitions();
 			List<CompetitionDto> dto = competitions.AssembleDtoList();
-			return dto;
+			return ApiResponse.CreateSuccess(dto);
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Registration
 {
 	public interface IRegistrationEmailManager
 	{
-		Task SendConfirmationEmails(CompetitionRegistration registration);
+		Task SendConfirmationEmails(CompetitionRegistration registration, Entities.Competition competition);
 	}
 
 	public sealed class RegistrationEmailManager : IRegistrationEmailManager
@@ -19,12 +19,12 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Registration
 			this._emailSender = emailSender;
 		}
 
-		public async Task SendConfirmationEmails(CompetitionRegistration registration)
+		public async Task SendConfirmationEmails(CompetitionRegistration registration, Entities.Competition competition)
 		{
-			var message1 = new CompetitionRegistrationPlayerConfirmationEmailMessage(registration);
+			var message1 = new CompetitionRegistrationPlayerConfirmationEmailMessage(competition, registration);
 			await this._emailSender.Send(message1);
 			
-			var message2 = new CompetitionRegistrationOrganiserConfirmationEmailMessage(registration);
+			var message2 = new CompetitionRegistrationOrganiserConfirmationEmailMessage(competition, registration);
 			await this._emailSender.Send(message2);
 		}
 	}

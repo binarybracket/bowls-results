@@ -104,7 +104,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 		public virtual CompetitionRegistration CreateRegistration(string forename, string surname, string emailAddress)
 		{
 			var data = new CompetitionRegistration();
-			data.Competition = this;
+			data.CompetitionID = this.ID;
 			data.Forename = forename;
 			data.Surname = surname;
 			data.EmailAddress = emailAddress;
