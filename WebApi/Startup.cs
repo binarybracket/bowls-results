@@ -58,8 +58,7 @@ namespace BowlsResults.WebApi
 				options.AddPolicy("BOB",
 					builder =>
 					{
-						builder.WithOrigins(
-							"http://localhost:8080");
+						builder.WithOrigins("http://localhost:8080", "http://dev.iombowls.dev.cc");
 					});
 			});
 			

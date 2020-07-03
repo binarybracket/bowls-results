@@ -9,7 +9,7 @@ namespace BowlsResults.WebApi.Competition
 {
 	[ApiController]
 	[ApiVersion("1.0")]
-	[Route("api/{v:apiVersion}/competition")]
+	[Route("api/{v:apiVersion}/competition/")]
 	public class CompetitionController
 	{
 		public CompetitionController(ICompetitionRepository competitionRepository)
@@ -18,6 +18,15 @@ namespace BowlsResults.WebApi.Competition
 		}
 		
 		private ICompetitionRepository _competitionRepository;
+		
+		[Route("{id}")]
+		[HttpGet]
+		public async Task<ApiResponse> Get(int id)
+		{
+			Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Competition competition = await this._competitionRepository.GetWithRegistrationConfiguration(id);
+			CompetitionDto dto = competition.AssembleDto();
+			return ApiResponse.CreateSuccess(dto);
+		}
 		
 		[HttpGet]
 		public async Task<ApiResponse> Get()

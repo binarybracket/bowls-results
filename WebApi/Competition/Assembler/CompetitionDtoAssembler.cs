@@ -27,6 +27,7 @@ namespace BowlsResults.WebApi.Competition.Assembler
 			dto.GameVariation = competition.GameVariation.Name;
 			dto.StartDate = competition.StartDate;
 			dto.VenueClub = competition.VenueClub.AssembleDto();
+			dto.Sponsor = competition.Sponsor;
 
 			if (competition.RegistrationConfiguration != null)
 			{

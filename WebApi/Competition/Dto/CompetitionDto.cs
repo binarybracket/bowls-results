@@ -12,6 +12,7 @@ namespace BowlsResults.WebApi.Competition.Dto
 		public ClubDto VenueClub { get; set; }
 		public CompetitionRegistrationConfigurationDto RegistrationConfiguration { get; set; }
 		public CompetitionRegistrationStatuses RegistrationStatus { get; set; }
+		public string Sponsor { get; set; }
 		
 	}
 }

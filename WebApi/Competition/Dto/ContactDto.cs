@@ -5,6 +5,7 @@ namespace BowlsResults.WebApi.Competition.Dto
 		public int ID { get; set; }
 		public string Forename { get; set; }
 		public string Surname { get; set; }
+		public string DisplayName { get; set; }
 		public string EmailAddress { get; set; }
 		public string Telephone { get; set; }
 	}

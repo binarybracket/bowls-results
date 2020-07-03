@@ -12,6 +12,7 @@ namespace BowlsResults.WebApi.Competition.Assembler
 			{
 				Surname = data.Surname,
 				Forename = data.Forename,
+				DisplayName =  data.DisplayName(),
 				Telephone = data.Telephone,
 				ID = data.ID,
 				EmailAddress = data.EmailAddress
