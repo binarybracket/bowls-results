@@ -26,11 +26,19 @@ namespace BowlsResults.WebApi
 			response.Result = result;
 			return response;
 		}
+		
+		public static ApiResponse CreateError(ValidationResult validationResult)
+		{
+			var response = new ApiResponse();
+			response.Status = ApiResponseStatuses.Error;
+			response.ValidationResult = validationResult;
+			return response;
+		}
 	}
 
 	public enum ApiResponseStatuses
 	{
 		Success,
-		Error
+		Error = -1
 	}
 }

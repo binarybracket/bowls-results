@@ -5,6 +5,7 @@ using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Models.Registration;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 namespace BowlsResults.WebApi.Competition.Registration
 {
@@ -29,43 +30,64 @@ namespace BowlsResults.WebApi.Competition.Registration
 
 		[Route("singles")]
 		[HttpPost]
-		public async Task<ValidationResult> Post([FromBody] SinglesCompetitionRegistrationModel data)
+		public async Task<ApiResponse> Post([FromBody] SinglesCompetitionRegistrationModel data)
 		{
 			var command = new CreateSinglesRegistrationCommand();
 			command.Registration = data;
 
 			var response = await this._singlesRegistrationCommandHandler.Handle(command);
 
-			return response.ValidationResult;
+			if (response.ValidationResult.IsValid)
+			{
+				return ApiResponse.CreateSuccess(null);
+			}
+			else
+			{
+				return ApiResponse.CreateError(response.ValidationResult);
+			}
 		}
 
 		[Route("doubles")]
 		[HttpPost]
-		public async Task<ValidationResult> Post([FromBody] DoublesCompetitionRegistrationModel data)
+		public async Task<ApiResponse> Post([FromBody] DoublesCompetitionRegistrationModel data)
 		{
 			var command = new CreateDoublesRegistrationCommand();
 			command.Registration = data;
 
 			var response = await this._doublesRegistrationCommandHandler.Handle(command);
 
-			return response.ValidationResult;
+			if (response.ValidationResult.IsValid)
+			{
+				return ApiResponse.CreateSuccess(null);
+			}
+			else
+			{
+				return ApiResponse.CreateError(response.ValidationResult);
+			}
 		}
 
 		[Route("triples")]
 		[HttpPost]
-		public async Task<ValidationResult> Post([FromBody] TriplesCompetitionRegistrationModel data)
+		public async Task<ApiResponse> Post([FromBody] TriplesCompetitionRegistrationModel data)
 		{
 			var command = new CreateTriplesRegistrationCommand();
 			command.Registration = data;
 
 			var response = await this._triplesRegistrationCommandHandler.Handle(command);
 
-			return response.ValidationResult;
+			if (response.ValidationResult.IsValid)
+			{
+				return ApiResponse.CreateSuccess(null);
+			}
+			else
+			{
+				return ApiResponse.CreateError(response.ValidationResult);
+			}
 		}
 
 		[Route("team")]
 		[HttpPost]
-		public async Task<ValidationResult> Post([FromBody] TeamCompetitionRegistrationModel data)
+		public async Task<ApiResponse> Post([FromBody] TeamCompetitionRegistrationModel data)
 		{
 			throw new NotImplementedException();
 		}
