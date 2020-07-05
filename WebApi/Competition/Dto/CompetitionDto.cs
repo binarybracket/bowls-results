@@ -1,4 +1,5 @@
 using System;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 
 namespace BowlsResults.WebApi.Competition.Dto
@@ -9,6 +10,7 @@ namespace BowlsResults.WebApi.Competition.Dto
 		public DateTime StartDate { get; set; }
 		public string Name { get; set; }
 		public string GameVariation { get; set; }
+		public GameFormats GameFormatID { get; set; }
 		public ClubDto VenueClub { get; set; }
 		public CompetitionRegistrationConfigurationDto RegistrationConfiguration { get; set; }
 		public CompetitionRegistrationStatuses RegistrationStatus { get; set; }

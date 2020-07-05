@@ -25,6 +25,7 @@ namespace BowlsResults.WebApi.Competition.Assembler
 			dto.RegistrationStatus = competition.GetRegistrationStatus();
 			dto.Name = competition.Name;
 			dto.GameVariation = competition.GameVariation.Name;
+			dto.GameFormatID = competition.GameVariation.GameFormatID;
 			dto.StartDate = competition.StartDate;
 			dto.VenueClub = competition.VenueClub.AssembleDto();
 			dto.Sponsor = competition.Sponsor;

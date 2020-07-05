@@ -11,6 +11,7 @@ namespace Com.BinaryBracket.BowlsResults.Common.Data.Mappings
 			this.LazyLoad();
 
 			this.References(x => x.Club).Column("ClubID").Not.Nullable().Cascade.None();
+			this.References(x => x.Captain).Column("CaptainContactID").Nullable().Cascade.None();
 			this.Map(x => x.GenderID).Column("GenderID");
 			this.Map(x => x.AgeGroupID).Column("AgeGroupID");
 			this.Map(x => x.TeamHeaderID).Column("TeamHeaderID");

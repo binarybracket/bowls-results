@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Repository;
@@ -19,6 +21,14 @@ namespace Com.BinaryBracket.BowlsResults.Common.Data.Repository
 				.FetchMany(x => x.Contacts)
 				.ThenFetch(x => x.Contact)
 				.SingleOrDefaultAsync(x => x.ID == id);
+		}
+
+		public Task<List<Club>> GetAllActiveByAssociation(int associationId)
+		{
+			return this.SessionQuery()
+				.FetchMany(x => x.Contacts)
+				.ThenFetch(x => x.Contact)
+				.Where(x => x.AssociationID == associationId && x.Active == true).ToListAsync();
 		}
 	}
 }

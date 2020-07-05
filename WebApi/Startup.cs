@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using BowlsResults.WebApi.Jobs;
+using Com.BinaryBracket.BowlsResults.Common.Data.Repository;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Repository;
 using Com.BinaryBracket.BowlsResults.Competition.Data.Repository;
 using Com.BinaryBracket.BowlsResults.Competition.Data.Repository.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Registration;
@@ -58,7 +60,9 @@ namespace BowlsResults.WebApi
 				options.AddPolicy("BOB",
 					builder =>
 					{
-						builder.WithOrigins("http://localhost:8080", "http://dev.iombowls.dev.cc");
+						builder.WithOrigins("http://localhost:8080", "http://dev.iombowls.dev.cc")
+							.AllowAnyMethod()
+							.AllowAnyHeader();
 					});
 			});
 			
@@ -116,6 +120,7 @@ namespace BowlsResults.WebApi
 			services.AddScoped<IRegistrationSessionProvider, RegistrationSessionProvider>();
 			services.AddTransient<ICompetitionRepository, CompetitionRepository>();
 			services.AddTransient<ICompetitionRegistrationRepository, CompetitionRegistrationRepository>();
+			services.AddTransient<IClubRepository, ClubRepository>();
 
 			services.AddTransient<CreateSinglesRegistrationCommandHandler, CreateSinglesRegistrationCommandHandler>();
 			services.AddTransient<CreateDoublesRegistrationCommandHandler, CreateDoublesRegistrationCommandHandler>();

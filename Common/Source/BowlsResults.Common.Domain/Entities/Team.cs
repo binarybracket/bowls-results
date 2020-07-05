@@ -12,5 +12,6 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.Entities
 		public virtual string Name { get; set; }
 		public virtual string Suffix { get; set; }
 		public virtual int? PitchID { get; set; }
+		public virtual Contact Captain { get; set; }
 	}
 }
