@@ -1,3 +1,4 @@
+using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.Core.Data2.Mapping;
 using FluentNHibernate.Mapping;
 
@@ -12,8 +13,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Game
 			this.DiscriminateSubClassesOnColumn("GameFormatID");
 			
 			this.Map(x => x.GameVariationID).Column("GameVariationID");
-			this.Map(x => x.HomeResultTypeID).Column("HomeResultTypeID");
-			this.Map(x => x.AwayResultTypeID).Column("AwayResultTypeID");
+			this.Map(x => x.HomeResultTypeID).Column("HomeResultTypeID").CustomType<ResultType>();
+			this.Map(x => x.AwayResultTypeID).Column("AwayResultTypeID").CustomType<ResultType>();
 			this.Map(x => x.AssociationID).Column("AssociationID").Not.Nullable();
 			this.Map(x => x.SeasonID).Column("SeasonID").Not.Nullable();
 			this.Map(x => x.GameCalculationEngineID).Column("GameCalculationEngineID").Not.Nullable();

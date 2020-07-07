@@ -23,11 +23,42 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 		public virtual short? AwayChalkScore { get; set; }
 		public virtual bool? HomeWalkover { get; set; }
 		public virtual bool? AwayWalkover { get; set; }
-		public virtual byte? HomeResultTypeID { get; set; }
-		public virtual byte? AwayResultTypeID { get; set; }
+		public virtual ResultType? HomeResultTypeID { get; set; }
+		public virtual ResultType? AwayResultTypeID { get; set; }
 		public virtual MatchCalculationEngines MatchCalculationEngineID { get; set; }
 		public virtual int? Sequence { get; set; }
 		public virtual string DataString1 { get; set; }
 		public virtual string DataString2 { get; set; }
+		
+		public virtual void SetComplete()
+		{
+			this.MatchStatusID = MatchStatuses.Complete;
+			this.SetAuditFields();
+		}
+		
+		public virtual void SetIncomplete()
+		{
+			this.ClearScores();
+			this.MatchStatusID = MatchStatuses.Incomplete;			
+
+			this.SetAuditFields();
+		}
+		
+		public virtual void ClearScores()
+		{
+			this.MatchStatusID = MatchStatuses.Incomplete;
+			this.HomeGameScore = null;
+			this.AwayGameScore = null;
+			this.HomeBonusScore = null;
+			this.AwayBonusScore = null;
+			this.HomeChalkScore = null;
+			this.AwayChalkScore = null;
+			this.HomeWalkover = null;
+			this.AwayWalkover = null;
+			this.HomeResultTypeID = null;
+			this.AwayResultTypeID = null;
+
+			this.SetAuditFields();
+		}
 	}
 }

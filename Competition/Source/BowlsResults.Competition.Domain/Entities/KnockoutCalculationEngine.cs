@@ -1,5 +1,6 @@
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match;
 using Com.BinaryBracket.Core.Domain2.Entities;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
@@ -14,6 +15,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 		public virtual FixtureCalculationEngines FixtureCalculationEngineID { get; set; }
 		public virtual string Name { get; set; }
 		public virtual string Description { get; set; }
-		public virtual MeritCalculationEngines MatchCalculationEngineID { get; set; }
+		public virtual MatchCalculationEngines MatchCalculationEngineID { get; set; }
 	}
 }

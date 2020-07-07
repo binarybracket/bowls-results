@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 {
@@ -22,6 +24,14 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 		public virtual CompetitionEntrant Home { get; set; }
 		public virtual CompetitionEntrant Away { get; set; }
 
+		public virtual IEnumerable<PlayerMatchXGame> ValidGamesForCalculation
+		{
+			get 
+			{ 
+				return this.Games.Where(x => x.Game.GameStatusID == GameStatuses.Standard); 
+			}
+		}
+		
 		public static PlayerMatch Create(PlayerFixture fixture, DateTime date, byte leg, MatchFormat matchFormat, bool entrant1Home)
 		{
 			var data = new PlayerMatch
@@ -32,6 +42,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 				MatchFormat = matchFormat,
 				MatchStatusID = MatchStatuses.Incomplete
 			};
+			data.MatchCalculationEngineID = fixture.CompetitionRound.CompetitionEvent.GetMatchCalculationEngine();
 			data.Home = entrant1Home ? fixture.Entrant1 : fixture.Entrant2;
 			data.Away = entrant1Home ? fixture.Entrant2 : fixture.Entrant1;
 			

@@ -36,5 +36,16 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 				.Fetch(x => x.GameVariation)
 				.SingleOrDefaultAsync(x => x.ID == competitionID);
 		}
+
+		public Task<List<Domain.Entities.Competition>> GetPastPlayerCompetitions()
+		{
+			return this.Session.Query<Domain.Entities.Competition>()
+				.Fetch(x => x.RegistrationConfiguration)
+				.Fetch(x => x.VenueClub)
+				.Fetch(x => x.OrganisingClub)
+				.Fetch(x=>x.Stages)
+				.Where(x => x.CompetitionScopeID == CompetitionScopes.Player && x.StartDate < DateTime.UtcNow.Date)
+				.ToListAsync();
+		}
 	}
 }

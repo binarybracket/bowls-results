@@ -1,3 +1,4 @@
+using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.Core.Data2.Mapping;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Match
@@ -26,8 +27,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Match
 			this.Map(x => x.AwayChalkScore).Column("AwayChalkScore");
 			this.Map(x => x.HomeWalkover).Column("HomeWalkover");
 			this.Map(x => x.AwayWalkover).Column("AwayWalkover");
-			this.Map(x => x.HomeResultTypeID).Column("HomeResultTypeID");
-			this.Map(x => x.AwayResultTypeID).Column("AwayResultTypeID");
+			this.Map(x => x.HomeResultTypeID).Column("HomeResultTypeID").CustomType<ResultType>();
+			this.Map(x => x.AwayResultTypeID).Column("AwayResultTypeID").CustomType<ResultType>();
 			this.Map(x => x.MatchCalculationEngineID).Column("MatchCalculationEngineID").Not.Nullable();
 			this.Map(x => x.Sequence).Column("Sequence");
 			this.Map(x => x.DataString1).Column("DataString1");

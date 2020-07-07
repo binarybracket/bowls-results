@@ -10,5 +10,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Repository
 		Task<List<Entities.Competition>> GetPendingPlayerCompetitions();
 
 		Task<Entities.Competition> GetWithRegistrationConfiguration(int competitionID);
+
+		Task<List<Entities.Competition>> GetPastPlayerCompetitions();
 	}
 }

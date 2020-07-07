@@ -1,5 +1,7 @@
 using System;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round;
 using Com.BinaryBracket.Core.Domain2.Entities;
 
@@ -28,6 +30,16 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 		//	
 
 		public virtual MatchFormat GetMatchFormat()
+		{
+			throw new NotImplementedException();
+		}
+		
+		public virtual FixtureCalculationEngines GetFixtureCalculationEngine()
+		{
+			throw new NotImplementedException();
+		}
+		
+		public virtual MatchCalculationEngines GetMatchCalculationEngine()
 		{
 			throw new NotImplementedException();
 		}

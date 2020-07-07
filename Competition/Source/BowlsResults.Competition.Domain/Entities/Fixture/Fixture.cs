@@ -32,5 +32,17 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 		
 		public virtual bool? Completed { get; set; }
 		public virtual string Reference { get; set; }
+		
+		public virtual void SetIncomplete()
+		{
+			this.FixtureStatusID = FixtureStatuses.Incomplete;
+			this.SetAuditFields();
+		}
+
+		public virtual void SetComplete()
+		{
+			this.FixtureStatusID = FixtureStatuses.Complete;
+			this.SetAuditFields();
+		}
 	}
 }

@@ -38,6 +38,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round
 			fixture.CompetitionRound = this;
 			fixture.Season = this.Season;
 			fixture.FixtureStatusID = FixtureStatuses.Incomplete;
+			fixture.FixtureCalculationEngineID = this.CompetitionEvent.GetFixtureCalculationEngine();
 			fixture.Legs = legs;
 			fixture.SetAuditFields();
 			fixture.Entrant1 = entrant1;

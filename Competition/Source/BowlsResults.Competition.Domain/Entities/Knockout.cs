@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 {
@@ -30,6 +32,16 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 		public override MatchFormat GetMatchFormat()
 		{
 			return this.KnockoutCalculationEngine.MatchFormat;
+		}
+		
+		public override FixtureCalculationEngines GetFixtureCalculationEngine()
+		{
+			return this.KnockoutCalculationEngine.FixtureCalculationEngineID;
+		}
+
+		public override MatchCalculationEngines GetMatchCalculationEngine()
+		{
+			return this.KnockoutCalculationEngine.MatchCalculationEngineID;
 		}
 	}
 }
