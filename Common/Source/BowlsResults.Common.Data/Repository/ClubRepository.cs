@@ -28,7 +28,9 @@ namespace Com.BinaryBracket.BowlsResults.Common.Data.Repository
 			return this.SessionQuery()
 				.FetchMany(x => x.Contacts)
 				.ThenFetch(x => x.Contact)
-				.Where(x => x.AssociationID == associationId && x.Active == true).ToListAsync();
+				.Where(x => x.AssociationID == associationId && x.Active == true)
+				.OrderBy(x => x.Name)
+				.ToListAsync();
 		}
 	}
 }

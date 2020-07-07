@@ -1,3 +1,5 @@
+using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
+
 namespace BowlsResults.WebApi.Competition.Dto
 {
 	public class ContactDto
@@ -8,5 +10,6 @@ namespace BowlsResults.WebApi.Competition.Dto
 		public string DisplayName { get; set; }
 		public string EmailAddress { get; set; }
 		public string Telephone { get; set; }
+		public ContactTypes ContactTypeID { get; set; }
 	}
 }

@@ -12,6 +12,7 @@ namespace BowlsResults.WebApi.Jobs
 	{
 		private readonly IServiceProvider _provider;
 		private readonly ILogger<HelloWorldJob> _logger;
+
 		public HelloWorldJob(ILoggerFactory loggerFactory, IServiceProvider provider)
 		{
 			this._provider = provider;
@@ -20,16 +21,16 @@ namespace BowlsResults.WebApi.Jobs
 
 		public Task Execute(IJobExecutionContext context)
 		{
-			using(var scope = _provider.CreateScope())
+			using (var scope = _provider.CreateScope())
 			{
 				// Resolve the Scoped service
 				var competitionRepository = scope.ServiceProvider.GetService<ICompetitionRepository>();
-				
+
 				var competition = competitionRepository.GetWithRegistrationConfiguration(1).GetAwaiter().GetResult();
-			
+
 				this._logger.LogWarning($"Hello world! {competition.Name}");
 				return Task.CompletedTask;
-			}			
+			}
 		}
 	}
 }

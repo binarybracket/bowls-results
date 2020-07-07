@@ -10,11 +10,11 @@ namespace BowlsResults.WebApi.Competition
 	[ApiController]
 	[ApiVersion("1.0")]
 	[Route("api/{v:apiVersion}/competition/")]
-	public class CompetitionController
+	public class CompetitionController	
 	{
 		public CompetitionController(ICompetitionRepository competitionRepository)
 		{
-			this._competitionRepository = competitionRepository;
+			this._competitionRepository = competitionRepository;	
 		}
 		
 		private ICompetitionRepository _competitionRepository;
