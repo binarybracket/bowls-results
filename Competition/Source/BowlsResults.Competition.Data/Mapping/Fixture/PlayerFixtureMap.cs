@@ -13,6 +13,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Fixture
 
 			this.References(x => x.CompetitionRound).Column("CompetitionRoundID").Cascade.None();
 			
+			this.References(x => x.PendingPlayer1Fixture).Column("Pending1FixtureID").Cascade.None();
+			this.References(x => x.PendingPlayer2Fixture).Column("Pending2FixtureID").Cascade.None();
+			
 			this.References(x => x.Entrant1).Column("Entrant1ID").Cascade.None();
 			this.References(x => x.Entrant2).Column("Entrant2ID").Cascade.None();
 			

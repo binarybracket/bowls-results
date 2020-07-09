@@ -8,7 +8,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CalculationEngines.F
 	{
 		protected override void InnerCalculate(PlayerFixture fixture)
 		{
-			if (fixture.Matches.All(x => x.MatchStatusID.IsProcessedWithResult()))
+			if (fixture.Matches.Count == fixture.Legs && fixture.Matches.All(x => x.MatchStatusID.IsProcessedWithResult()))
 			{
 				var match = fixture.Matches.FirstOrDefault();
 

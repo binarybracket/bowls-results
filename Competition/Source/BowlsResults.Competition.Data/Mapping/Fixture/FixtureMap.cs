@@ -15,9 +15,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Fixture
 			this.Map(x => x.CompetitionID).Column("CompetitionID").Not.Nullable();
 			this.Map(x => x.Legs).Column("Legs").Not.Nullable();
 			this.Map(x => x.PendingDate).Column("PendingDate");
-			this.Map(x => x.Pending1FixtureID).Column("Pending1FixtureID");
+			//this.Map(x => x.Pending1FixtureID).Column("Pending1FixtureID");
 			this.Map(x => x.Pending1ResultTypeID).Column("Pending1ResultTypeID").CustomType<ResultType>();
-			this.Map(x => x.Pending2FixtureID).Column("Pending2FixtureID");
+			//this.Map(x => x.Pending2FixtureID).Column("Pending2FixtureID");
 			this.Map(x => x.Pending2ResultTypeID).Column("Pending2ResultTypeID").CustomType<ResultType>();
 			
 			this.Map(x => x.Entrant1GameScore).Column("Entrant1GameScore");

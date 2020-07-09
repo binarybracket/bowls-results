@@ -48,5 +48,25 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round
 			return fixture;
 		}
 
+		public virtual PlayerFixture CreatePendingFixture(byte legs, DateTime date)
+		{
+			if (legs <= 0 || legs > 2)
+			{
+				throw new InvalidOperationException("Legs can only be one or two.");
+			}
+
+			var fixture = new PlayerFixture();
+			fixture.CompetitionID = this.Competition.ID;
+			fixture.CompetitionRound = this;
+			fixture.Season = this.Season;
+			fixture.FixtureStatusID = FixtureStatuses.Pending;
+			fixture.FixtureCalculationEngineID = this.CompetitionEvent.GetFixtureCalculationEngine();
+			fixture.Legs = legs;
+			fixture.PendingDate = date;
+			fixture.SetAuditFields();			
+			this._fixtures.Add(fixture);
+
+			return fixture;
+		}
 	}
 }

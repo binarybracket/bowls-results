@@ -54,6 +54,39 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			}
 		}
 
+		public void UpdatePendingFixture(PlayerFixture completedFixture)
+		{
+			if (this.Data.FixtureStatusID != FixtureStatuses.Pending)
+			{
+				throw new InvalidOperationException("Fixture is not Pending");
+			}
+			if (completedFixture.FixtureStatusID != FixtureStatuses.Complete)
+			{
+				throw new InvalidOperationException("Completed fixture is not Complete");
+			}
+
+			if (this.Data.PendingPlayer1Fixture != null && this.Data.PendingPlayer1Fixture.ID == completedFixture.ID && this.Data.Entrant1 == null)
+			{
+				this.Data.Entrant1 = completedFixture.GetEntrantByResultType(this.Data.Pending1ResultTypeID.Value);
+				this.Data.PendingPlayer1Fixture = null;
+				this.Data.Pending1ResultTypeID = null;
+			}
+			
+			if (this.Data.PendingPlayer2Fixture != null && this.Data.PendingPlayer2Fixture.ID == completedFixture.ID && this.Data.Entrant2 == null)
+			{
+				this.Data.Entrant2 = completedFixture.GetEntrantByResultType(this.Data.Pending2ResultTypeID.Value);
+				this.Data.PendingPlayer2Fixture = null;
+				this.Data.Pending2ResultTypeID = null;
+			}
+			
+			if (this.Data.Entrant1 != null && this.Data.Entrant2 != null)
+			{
+				throw new NotImplementedException();
+				//this.CreateMatchForPendingFixture();
+				this.Data.SetIncomplete();
+			}
+		}
+
 		private IPlayerMatchModel GetMatchModel(PlayerMatch data)
 		{
 			var matchModel = this._serviceProvider.GetService<IPlayerMatchModel>();

@@ -13,6 +13,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 {
 	public class PlayerFixture : Fixture
 	{
+		private Guid _guid = Guid.NewGuid();
 		public virtual PlayerCompetitionRound CompetitionRound { get; set; }
 		private ISet<PlayerMatch> _matches;
 
@@ -22,12 +23,31 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			this._matches = new HashSet<PlayerMatch>();
 		}
 
-		// TODO public virtual PendingPlayerFixture PendingPlayer1Fixture { get; set; }
-		// TODO public virtual PendingPlayerFixture PendingPlayer2Fixture { get; set; }
+		public virtual PlayerFixture PendingPlayer1Fixture { get; set; }
+		public virtual PlayerFixture PendingPlayer2Fixture { get; set; }
 
 		public virtual CompetitionEntrant Entrant1 { get; set; }
 		public virtual CompetitionEntrant Entrant2 { get; set; }
-		
+
+		public override bool Equals(object obj)
+		{
+			if (this.ID == 0)
+			{
+				var other = (PlayerFixture) obj;
+				return this._guid.Equals(other._guid);
+			}
+			return base.Equals(obj);
+		}
+
+		public override int GetHashCode()
+		{
+			if (this.ID == 0)
+			{
+				return this._guid.GetHashCode();
+			}
+			return base.GetHashCode();
+		}
+
 		public virtual ReadOnlyCollection<PlayerMatch> Matches
 		{
 			get { return this._matches.ToReadOnlyCollection(); }
@@ -91,6 +111,51 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 		public virtual PlayerMatch GetMatchByID(int id)
 		{
 			return this.Matches.Single(x => x.ID == id);
+		}
+		
+		public virtual CompetitionEntrant GetEntrantByResultType(ResultType pendingTeam1ResultType)
+		{
+			switch (pendingTeam1ResultType)
+			{
+				case ResultType.Win:
+					return this.WinningEntrantID;
+				case ResultType.Lose:
+					return this.LosingEntrantID;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(pendingTeam1ResultType));
+			}
+		}
+		
+		public virtual CompetitionEntrant WinningEntrantID
+		{
+			get
+			{
+				if (this.Entrant1ResultTypeID.Value == ResultType.Win)
+				{
+					return this.Entrant1;
+				}
+				if (this.Entrant2ResultTypeID.Value == ResultType.Win)
+				{
+					return this.Entrant2;
+				}
+				throw new InvalidOperationException("No winning team");
+			}
+		}
+
+		public virtual CompetitionEntrant LosingEntrantID
+		{
+			get
+			{
+				if (this.Entrant1ResultTypeID.Value == ResultType.Lose)
+				{
+					return this.Entrant1;
+				}
+				if (this.Entrant2ResultTypeID.Value == ResultType.Lose)
+				{
+					return this.Entrant2;
+				}
+				throw new InvalidOperationException("No winning team");
+			}
 		}
 	}
 }

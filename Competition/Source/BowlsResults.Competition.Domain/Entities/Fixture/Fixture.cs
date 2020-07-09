@@ -15,9 +15,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 		public virtual byte Legs { get; set; }
 		public virtual DateTime? PendingDate { get; set; }
 		public virtual short? Pending1FixtureID { get; set; }
-		public virtual short? Pending1ResultTypeID { get; set; }
+		public virtual ResultType? Pending1ResultTypeID { get; set; }
 		public virtual short? Pending2FixtureID { get; set; }
-		public virtual short? Pending2ResultTypeID { get; set; }
+		public virtual ResultType? Pending2ResultTypeID { get; set; }
 		
 		public virtual short? Entrant1GameScore { get; set; }
 		public virtual short? Entrant2GameScore { get; set; }
