@@ -5,6 +5,5 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 	public interface ISaveStandardResultRequest : IGameResults
 	{
 		Walkover Walkover { get; }
-		Handicap Handicap { get; }		
 	}
-}
+}	

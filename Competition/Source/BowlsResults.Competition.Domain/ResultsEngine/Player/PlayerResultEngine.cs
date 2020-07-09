@@ -1,8 +1,8 @@
 using System;
+using System.Threading.Tasks;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player.Actions;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player.Request;
-using Com.BinaryBracket.Core.Domain2;
 using Microsoft.Extensions.Logging;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
@@ -32,6 +32,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 		public ResultsEngineResponse SaveStandardResult(SaveStandardResultRequest request)
 		{
 			return this._saveStandardPlayerResultAction.SaveStandardResultRequest(this._context, request);
+		}
+
+		public Task Save()
+		{
+			return this._context.Save();
 		}
 
 		private void GuardCheckContext()

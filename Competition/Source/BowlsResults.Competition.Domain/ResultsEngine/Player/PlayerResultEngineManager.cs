@@ -40,7 +40,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			PlayerFixture fixture = await this._playerFixtureRepository.GetFull(request.FixtureID);
 
 			IPlayerFixtureModel playerFixtureModel = this._serviceProvider.GetService<IPlayerFixtureModel>();
-			var context = PlayerResultEngineContext.Create(competition, stage, fixture.CompetitionRound.CompetitionEvent, fixture.CompetitionRound, playerFixtureModel);
+			IPlayerResultEngineContext context = this._serviceProvider.GetService<IPlayerResultEngineContext>();
+			context.Initialise(competition, stage, fixture.CompetitionRound.CompetitionEvent, fixture.CompetitionRound, playerFixtureModel);
+			
 			var engine = this._serviceProvider.GetService<IPlayerResultEngine>();
 			engine.SetContext(context);
 			playerFixtureModel.Initialise(fixture, context);

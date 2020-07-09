@@ -2,10 +2,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.CalculationEngines.Game;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.CalculationEngines.Match.Player;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common.Request;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Services.Game;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Services.Game.Helper;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player.Model
 {
@@ -13,11 +15,13 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 	{
 		private readonly IGameServiceFactory _gameServiceFactory;
 		private readonly IGameCalculationEngineFactory _gameCalculationEngineFactory;
+		private readonly IPlayerMatchCalculationEngineFactory _playerMatchCalculationEngineFactory;
 
-		public PlayerMatchModel(IGameServiceFactory gameServiceFactory, IGameCalculationEngineFactory gameCalculationEngineFactory)
+		public PlayerMatchModel(IGameServiceFactory gameServiceFactory, IGameCalculationEngineFactory gameCalculationEngineFactory, IPlayerMatchCalculationEngineFactory playerMatchCalculationEngineFactory)
 		{
 			this._gameServiceFactory = gameServiceFactory;
 			this._gameCalculationEngineFactory = gameCalculationEngineFactory;
+			this._playerMatchCalculationEngineFactory = playerMatchCalculationEngineFactory;
 		}
 		
 		public bool GameExists(short matchFormatXGameVariationID)
@@ -53,6 +57,18 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 		public PlayerMatchXGame GetGame(short matchFormatXGameVariationID)
 		{
 			return this.Data.Games.Single(x => x.MatchFormatXGameVariation.ID == matchFormatXGameVariationID);
+		}
+
+		public void CalculateResultFromGames()
+		{
+			var engine = this._playerMatchCalculationEngineFactory.Create(this.Data.MatchCalculationEngineID);
+			engine.CalculateResultFromGames(this.Data);
+		}
+
+		public void SetWalkover(Walkover walkover)
+		{
+			this.Data.HomeWalkover = WalkoverHelper.MapHomeWalkoverValue(walkover);
+			this.Data.AwayWalkover = WalkoverHelper.MapAwayWalkoverValue(walkover);
 		}
 	}
 }

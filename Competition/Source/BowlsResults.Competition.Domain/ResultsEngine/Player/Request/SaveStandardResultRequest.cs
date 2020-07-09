@@ -27,12 +27,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 				return this;
 			}
 
-			public Builder WithHandicap(Handicap handicap)
-			{
-				this.Instance.Handicap = handicap;
-				return this;
-			}
-
 			public Builder NotPersistGames()
 			{
 				this.Instance.PersistGames = false;
@@ -67,7 +61,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 
 		public List<GameResult> GameResults { get; private set; }
 		public Walkover Walkover { get; private set; }
-		public Handicap Handicap { get; private set; }
 		public bool PersistGames { get; private set; }
 		public bool UpdateCareerStatistics { get; private set; }
 		public bool UpdatePlayerCompetitionStatistics { get; private set; }

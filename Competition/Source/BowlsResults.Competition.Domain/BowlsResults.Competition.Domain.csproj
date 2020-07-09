@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\..\core\Source\Data\Com.BinaryBracket.Core.Data2.csproj" />
       <ProjectReference Include="..\..\..\..\core\Source\Domain\Com.BinaryBracket.Core.Domain2.csproj" />
       <ProjectReference Include="..\..\..\Common\Source\BowlsResults.Common.Domain\BowlsResults.Common.Domain.csproj" />
     </ItemGroup>

@@ -24,6 +24,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			// Processors
 			services.AddTransient<IValidateMatchNotProcessedProcessor, ValidateMatchNotProcessedProcessor>();
 			services.AddTransient<IParseGamesProcessor, ParseGamesProcessor>();
+			services.AddTransient<IMatchCalculationProcessor, MatchCalculationProcessor>();
+			services.AddTransient<IMatchWalkoverProcessor, MatchWalkoverProcessor>();
+			services.AddTransient<IFixtureCalculationProcessor, FixtureCalculationProcessor>();
+			
 			
 			// Actions
 			services.AddTransient<ISaveStandardPlayerResultAction, SaveStandardPlayerResultAction>();
@@ -31,6 +35,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			// Models
 			services.AddTransient<IPlayerMatchModel, PlayerMatchModel>();
 			services.AddTransient<IPlayerFixtureModel, PlayerFixtureModel>();
+			
+			// Context
+			services.AddTransient<IPlayerResultEngineContext, PlayerResultEngineContext>();
 		}
 	}
 }

@@ -13,5 +13,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 		
 		Task<Game> UpdateGame(GameResult gameResult);
 		PlayerMatchXGame GetGame(short matchFormatXGameVariationID);
+		void CalculateResultFromGames();
+		void SetWalkover(Walkover walkover);
 	}
 }

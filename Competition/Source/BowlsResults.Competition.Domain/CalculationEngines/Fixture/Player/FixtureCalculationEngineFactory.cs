@@ -3,9 +3,14 @@ using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CalculationEngines.Fixture.Player
 {
-	public static class FixtureCalculationEngineFactory
+	public interface IFixtureCalculationEngineFactory
 	{
-		public static IPlayerFixtureCalculationEngine CreatePlayerFixtureCalculationEngine(FixtureCalculationEngines engine)
+		IPlayerFixtureCalculationEngine Create(FixtureCalculationEngines engine);
+	}
+
+	public sealed class FixtureCalculationEngineFactory : IFixtureCalculationEngineFactory
+	{
+		public IPlayerFixtureCalculationEngine Create(FixtureCalculationEngines engine)
 		{
 			switch (engine)
 			{

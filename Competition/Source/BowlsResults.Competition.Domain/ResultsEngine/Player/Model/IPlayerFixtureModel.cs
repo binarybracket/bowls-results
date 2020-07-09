@@ -7,5 +7,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 		IPlayerMatchModel GetMatch(int id);
 
 		bool IsMatchProcessed(int id);
+
+		void CalculateFixture();
+		void CalculateMatches();
 	}
 }
