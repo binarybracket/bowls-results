@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,9 +8,8 @@ using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Com.BinaryBracket.Core.Data2.SessionProvider;
+using Com.BinaryBracket.Core.Domain2;
 using Microsoft.AspNetCore.Mvc;
-using NHibernate;
-using NHibernate.Linq;
 
 namespace BowlsResults.WebApi.Competition
 {
@@ -20,13 +18,15 @@ namespace BowlsResults.WebApi.Competition
 	[Route("api/{v:apiVersion}/competition/")]
 	public class CompetitionController	
 	{
-		public CompetitionController(ICompetitionRepository competitionRepository, ISessionProvider sessionProvider)
+		public CompetitionController(ICompetitionRepository competitionRepository, IUnitOfWork unitOfWork, ISessionProvider sessionProvider)
 		{
 			this._competitionRepository = competitionRepository;
+			this._unitOfWork = unitOfWork;
 			this._sessionProvider = sessionProvider;
 		}
 		
 		private ICompetitionRepository _competitionRepository;
+		private readonly IUnitOfWork _unitOfWork;
 		private readonly ISessionProvider _sessionProvider;
 
 		[Route("{id}")]
@@ -37,7 +37,7 @@ namespace BowlsResults.WebApi.Competition
 			CompetitionDto dto = competition.AssembleDto();
 			return ApiResponse.CreateSuccess(dto);
 		}
-		
+
 		[HttpGet]
 		public async Task<ApiResponse> Get()
 		{
@@ -45,7 +45,7 @@ namespace BowlsResults.WebApi.Competition
 			List<CompetitionDto> dto = competitions.AssembleDtoList();
 			return ApiResponse.CreateSuccess(dto);
 		}
-		
+
 		[Route("player/results")]
 		[HttpGet]
 		public async Task<ApiResponse> GetResults()

@@ -1,0 +1,33 @@
+using System.Linq;
+using System.Threading.Tasks;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Fixture;
+using Com.BinaryBracket.Core.Data2.Repositories;
+using Com.BinaryBracket.Core.Data2.SessionProvider;
+using NHibernate.Linq;
+
+namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository.Fixture
+{
+	public class PlayerFixtureRepository : IdentityRepository<PlayerFixture, short>, IPlayerFixtureRepository
+	{
+		public PlayerFixtureRepository(ISessionProvider provider) : base(provider)
+		{
+		}
+
+		public Task<PlayerFixture> GetFull(short id)
+		{
+			return this.Session.Query<PlayerFixture>()
+				.Fetch(x => x.CompetitionRound)
+				.ThenFetch(x=>x.CompetitionEvent)
+				.ThenFetch(x=>x.CompetitionStage)
+				
+				.FetchMany(x=>x.Matches)
+				.ThenFetchMany(f => f.Games)
+				.ThenFetch(f => f.Game)
+				.ThenFetchMany(f => f.Players)
+				.ThenFetch(f => f.Player)
+
+				.SingleOrDefaultAsync(x => x.ID == id);
+		}
+	}
+}

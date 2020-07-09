@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.Core.Domain2.Entities;
@@ -109,6 +110,16 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 			data.Surname = surname;
 			data.EmailAddress = emailAddress;
 			return data;
+		}
+
+		public virtual CompetitionStage GetStageByID(int id)
+		{
+			return this.Stages.Single(x => x.ID == id);
+		}
+		
+		public virtual CompetitionStage GetStageBySequence(int sequence)
+		{
+			return this.Stages.Single(x => x.Sequence == sequence);
 		}
 	}
 }

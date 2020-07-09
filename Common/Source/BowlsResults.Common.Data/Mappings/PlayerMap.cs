@@ -11,7 +11,7 @@ namespace Com.BinaryBracket.BowlsResults.Common.Data.Mappings
 			this.LazyLoad();
 			this.Map(x => x.Forename).Column("Forename").Not.Nullable();
 			this.Map(x => x.Surname).Column("Surname").Not.Nullable();
-			this.Map(x => x.GenderID).Column("GenderID").Not.Nullable();
+			this.Map(x => x.GenderID).Column("GenderID").Not.Nullable().CustomType<Genders>();
 			this.Map(x => x.RegistrationID).Column("RegistrationID").Not.Nullable();
 			this.Map(x => x.AlternativeRegistrationID).Column("AlternativeRegistrationID");
 			this.Map(x => x.Internal).Column("Internal").Not.Nullable();

@@ -3,7 +3,7 @@ using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CalculationEngines.Game
 {
-	public static class GameCalculationEngineFactory
+	public sealed class GameCalculationEngineFactory : IGameCalculationEngineFactory
 	{
 		private static readonly Game15UpCalculationEngine _game15UpInstance;
 		private static readonly Game21UpCalculationEngine _game21UpInstance;
@@ -14,7 +14,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CalculationEngines.G
 			_game21UpInstance = new Game21UpCalculationEngine();
 		}
 
-		public static IGameCalculationEngine Create(GameCalculationEngines calculationEngine)
+		public IGameCalculationEngine Create(GameCalculationEngines calculationEngine)
 		{
 			switch (calculationEngine)
 			{

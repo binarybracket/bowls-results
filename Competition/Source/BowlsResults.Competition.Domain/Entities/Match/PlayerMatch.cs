@@ -14,10 +14,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 		public PlayerMatch()
 		{
 			this.ScopeID = CompetitionScopes.Player;
-			this.Games = new List<PlayerMatchXGame>();
+			this.Games = new HashSet<PlayerMatchXGame>();
 		}
 				
-		public virtual IList<PlayerMatchXGame> Games { get; set; }
+		public virtual ISet<PlayerMatchXGame> Games { get; set; }
 		
 		public virtual PlayerFixture PlayerFixture { get; set; }
 		

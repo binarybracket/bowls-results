@@ -18,6 +18,15 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 		{
 		}
 
+		public Task<Domain.Entities.Competition> GetWithStages(int competitionID)
+		{
+			return this.Session.Query<Domain.Entities.Competition>()
+				.Fetch(x => x.Stages)
+				.Fetch(x => x.VenueClub)
+				.Fetch(x => x.GameVariation)
+				.SingleOrDefaultAsync(x => x.ID == competitionID);
+		}
+
 		public Task<List<Domain.Entities.Competition>> GetPendingPlayerCompetitions()
 		{
 			return this.Session.Query<Domain.Entities.Competition>()
