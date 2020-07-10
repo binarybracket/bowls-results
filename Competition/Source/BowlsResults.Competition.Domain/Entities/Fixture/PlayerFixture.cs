@@ -53,6 +53,46 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			get { return this._matches.ToReadOnlyCollection(); }
 		}
 
+		public virtual void SetEntrant1(CompetitionEntrant entrant)
+		{
+			if (this.Entrant1 != null || this.PendingPlayer1Fixture != null)
+			{
+				throw new InvalidOperationException("Entrant1 or Fixture1 has already been allocated.");
+			}
+
+			this.Entrant1 = entrant;
+		}
+		public virtual void SetEntrant2(CompetitionEntrant entrant)
+		{
+			if (this.Entrant2 != null || this.PendingPlayer2Fixture != null)
+			{
+				throw new InvalidOperationException("Entrant2 or Fixture2 has already been allocated.");
+			}
+
+			this.Entrant2 = entrant;
+		}
+
+		public virtual void SetPendingFixture1(PlayerFixture fixture, ResultType resultType)
+		{
+			if (this.Entrant1 != null || this.PendingPlayer1Fixture != null)
+			{
+				throw new InvalidOperationException("Entrant1 or Fixture1 has already been allocated.");
+			}
+
+			this.PendingPlayer1Fixture = fixture;
+			this.Pending1ResultTypeID = resultType;
+		}
+		public virtual void SetPendingFixture2(PlayerFixture fixture, ResultType resultType)
+		{
+			if (this.Entrant2 != null || this.PendingPlayer2Fixture != null)
+			{
+				throw new InvalidOperationException("Entrant2 or Fixture2 has already been allocated.");
+			}
+
+			this.PendingPlayer2Fixture = fixture;
+			this.Pending2ResultTypeID = resultType;
+		}
+
 		public virtual PlayerMatch CreateMatchTemplate(bool entrant1Home, DateTime date)
 		{
 			if (this._matches.Count == this.Legs)

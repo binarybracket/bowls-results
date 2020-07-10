@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Models;
 using Com.BinaryBracket.Core.Domain2.Entities;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
@@ -120,6 +121,26 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 		public virtual CompetitionStage GetStageBySequence(int sequence)
 		{
 			return this.Stages.Single(x => x.Sequence == sequence);
+		}
+
+		public virtual CompetitionStage GetStage(CompetitionLookupModel.CompetitionStageLookupModes mode, int? competitionCompetitionStageValue)
+		{
+			switch (mode)
+			{
+				case CompetitionLookupModel.CompetitionStageLookupModes.Auto:
+					return this.Stages.Single();
+					break;
+				case CompetitionLookupModel.CompetitionStageLookupModes.ByID:
+					if (competitionCompetitionStageValue == null) throw new ArgumentNullException(nameof(competitionCompetitionStageValue));
+					return this.GetStageByID(competitionCompetitionStageValue.Value);
+					break;
+				case CompetitionLookupModel.CompetitionStageLookupModes.BySequence:
+					if (competitionCompetitionStageValue == null) throw new ArgumentNullException(nameof(competitionCompetitionStageValue));
+					return this.GetStageBySequence(competitionCompetitionStageValue.Value);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+			}
 		}
 	}
 }

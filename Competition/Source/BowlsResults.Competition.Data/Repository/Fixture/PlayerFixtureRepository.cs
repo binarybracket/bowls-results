@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
@@ -18,16 +19,21 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository.Fixture
 		{
 			return this.Session.Query<PlayerFixture>()
 				.Fetch(x => x.CompetitionRound)
-				.ThenFetch(x=>x.CompetitionEvent)
-				.ThenFetch(x=>x.CompetitionStage)
-				
-				.FetchMany(x=>x.Matches)
+				.ThenFetch(x => x.CompetitionEvent)
+				.ThenFetch(x => x.CompetitionStage)
+				.FetchMany(x => x.Matches)
 				.ThenFetchMany(f => f.Games)
 				.ThenFetch(f => f.Game)
 				.ThenFetchMany(f => f.Players)
 				.ThenFetch(f => f.Player)
-
 				.SingleOrDefaultAsync(x => x.ID == id);
+		}
+
+		public Task<List<PlayerFixture>> GetAll(short competitionRoundID)
+		{
+			return this.Session.Query<PlayerFixture>()
+				.Where(x => x.CompetitionRound.ID == competitionRoundID)
+				.ToListAsync();
 		}
 	}
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Extensions;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Models.Fixture;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round
 {
@@ -63,6 +64,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round
 			fixture.FixtureCalculationEngineID = this.CompetitionEvent.GetFixtureCalculationEngine();
 			fixture.Legs = legs;
 			fixture.PendingDate = date;
+			
 			fixture.SetAuditFields();			
 			this._fixtures.Add(fixture);
 
