@@ -13,6 +13,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 		NoResult = 6, // Processed
 		Review = 7, // Processed
 		Locked = 8, // Processed
+		Pending = 9 // Pending
 	}
 
 	public static class MatchStatus
@@ -43,7 +44,12 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 			MatchStatuses.Review,
 			MatchStatuses.Locked
 		};
-
+		
+		public static bool IsPending(this MatchStatuses matchStatus)
+		{
+			return matchStatus == MatchStatuses.Pending;
+		}
+		
 		public static bool IsIncomplete(this MatchStatuses matchStatus)
 		{
 			return matchStatus == MatchStatuses.Incomplete;

@@ -87,6 +87,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			}
 		}
 
+		public bool IsMatchPending(int id)
+		{
+			return this.Data.GetMatchByID(id).MatchStatusID.IsPending();
+		}
+
 		private IPlayerMatchModel GetMatchModel(PlayerMatch data)
 		{
 			var matchModel = this._serviceProvider.GetService<IPlayerMatchModel>();

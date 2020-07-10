@@ -10,16 +10,16 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 {
 	public class SaveStandardResultProcessorFactory : ISaveStandardResultProcessorFactory
 	{
-		private readonly IValidateMatchNotProcessedProcessor _validateMatchNotProcessedProcessor;
+		private readonly IValidateMatchStatusProcessor _validateMatchStatusProcessor;
 		private readonly IParseGamesProcessor _parseGamesProcessor;
 		private readonly IMatchCalculationProcessor _matchCalculationProcessor;
 		private readonly IMatchWalkoverProcessor _walkoverProcessor;
 		private readonly IFixtureCalculationProcessor _fixtureCalculationProcessor;
 
-		public SaveStandardResultProcessorFactory(IValidateMatchNotProcessedProcessor validateMatchNotProcessedProcessor, IParseGamesProcessor parseGamesProcessor,
+		public SaveStandardResultProcessorFactory(IValidateMatchStatusProcessor validateMatchStatusProcessor, IParseGamesProcessor parseGamesProcessor,
 			IMatchCalculationProcessor matchCalculationProcessor, IMatchWalkoverProcessor walkoverProcessor, IFixtureCalculationProcessor fixtureCalculationProcessor)
 		{
-			this._validateMatchNotProcessedProcessor = validateMatchNotProcessedProcessor;
+			this._validateMatchStatusProcessor = validateMatchStatusProcessor;
 			this._parseGamesProcessor = parseGamesProcessor;
 			this._matchCalculationProcessor = matchCalculationProcessor;
 			this._walkoverProcessor = walkoverProcessor;
@@ -34,7 +34,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			{
 				case CompetitionStageFormats.SingleKnockout:
 				{
-					list.Add(this._validateMatchNotProcessedProcessor);
+					list.Add(this._validateMatchStatusProcessor);
 					list.Add(this._parseGamesProcessor);
 					list.Add(this._matchCalculationProcessor);
 					list.Add(this._walkoverProcessor);

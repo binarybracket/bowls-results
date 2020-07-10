@@ -22,7 +22,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			services.AddTransient<ISaveStandardResultProcessorFactory, SaveStandardResultProcessorFactory>();
 			
 			// Processors
-			services.AddTransient<IValidateMatchNotProcessedProcessor, ValidateMatchNotProcessedProcessor>();
+			services.AddTransient<IValidateMatchStatusProcessor, ValidateMatchStatusProcessor>();
 			services.AddTransient<IParseGamesProcessor, ParseGamesProcessor>();
 			services.AddTransient<IMatchCalculationProcessor, MatchCalculationProcessor>();
 			services.AddTransient<IMatchWalkoverProcessor, MatchWalkoverProcessor>();
