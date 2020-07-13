@@ -27,6 +27,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 			return this.Players.Select(x => x.Player).ToList();
 		}
 		
+		public virtual IList<int> GetPlayerIDs()
+		{
+			return this.Players.Select(x => x.Player.ID).ToList();
+		}
+		
 		public virtual CompetitionEntrantPlayer CreatePlayer(string firstName, string lastName)
 		{
 			var player = new CompetitionEntrantPlayer
