@@ -32,23 +32,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 			}
 		}
 		
-		public static PlayerMatch Create(PlayerFixture fixture, DateTime date, byte leg, MatchFormat matchFormat, bool entrant1Home)
-		{
-			var data = new PlayerMatch
-			{
-				PlayerFixture = fixture,
-				Date = date,
-				Leg = leg,
-				MatchFormat = matchFormat,
-				MatchStatusID = MatchStatuses.Incomplete
-			};
-			data.MatchCalculationEngineID = fixture.CompetitionRound.CompetitionEvent.GetMatchCalculationEngine();
-			data.Home = entrant1Home ? fixture.Entrant1 : fixture.Entrant2;
-			data.Away = entrant1Home ? fixture.Entrant2 : fixture.Entrant1;
-			
-			return data;
-		}
-		
 		public virtual PlayerMatchXGame AddGame(MatchFormatXGameVariation matchFormatGameVariation, Game.Game game)
 		{
 			if (game == null)

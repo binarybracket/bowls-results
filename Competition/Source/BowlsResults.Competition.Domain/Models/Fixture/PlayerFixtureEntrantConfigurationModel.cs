@@ -2,7 +2,7 @@ using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Models.Fixture
 {
-	public class PendingFixtureEntrantConfigurationModel
+	public class PlayerFixtureEntrantConfigurationModel
 	{
 		public enum PendingEntrantModes
 		{

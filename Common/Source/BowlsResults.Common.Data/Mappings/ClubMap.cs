@@ -12,7 +12,7 @@ namespace Com.BinaryBracket.BowlsResults.Common.Data.Mappings
 
 			this.Map(x => x.AssociationID).Column("AssociationID").Not.Nullable();
 			this.Map(x => x.Name).Column("Name");
-			this.Map(x => x.PitchID).Column("PitchID").Nullable();
+			this.References(x => x.Pitch).Column("PitchID").Nullable();
 			this.Map(x => x.Longitude).Column("Longitude").Nullable();
 			this.Map(x => x.Latitude).Column("Latitude").Nullable();
 			this.Map(x => x.Active).Column("Active").Not.Nullable();

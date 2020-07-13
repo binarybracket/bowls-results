@@ -34,7 +34,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Services.Game
 			gameData.SeasonID = matchModel.Context.Competition.Season.ID;
 			gameData.Date = matchModel.Data.Date;
 			gameData.VenueTypeID = matchModel.Data.VenueTypeID;
-			gameData.Pitch = await this._pitchRepository.Get(matchModel.Data.PitchID);
+			gameData.Pitch = matchModel.Data.Pitch;
 
 			if (gameResult.VoidGame)
 			{

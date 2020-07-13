@@ -11,7 +11,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 		public virtual MatchStatuses MatchStatusID { get; set; }
 		public virtual DateTime Date { get; set; }
 		public virtual byte Leg { get; set; }
-		public virtual int PitchID { get; set; }
+		public virtual Pitch Pitch { get; set; }
 		public virtual VenueTypes VenueTypeID { get; set; }
 		public virtual byte? HomeChalkHandicap { get; set; }
 		public virtual byte? AwayChalkHandicap { get; set; }

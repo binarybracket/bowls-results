@@ -12,7 +12,7 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.Entities
 
 		public virtual int AssociationID { get; set; }
 		public virtual string Name { get; set; }
-		public virtual int? PitchID { get; set; }
+		public virtual Pitch Pitch { get; set; }
 		public virtual double? Longitude { get; set; }
 		public virtual double? Latitude { get; set; }
 		public virtual bool Active { get; set; }

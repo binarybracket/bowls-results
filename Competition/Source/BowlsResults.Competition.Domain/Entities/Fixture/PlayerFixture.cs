@@ -36,6 +36,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 				var other = (PlayerFixture) obj;
 				return this._guid.Equals(other._guid);
 			}
+
 			return base.Equals(obj);
 		}
 
@@ -45,6 +46,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			{
 				return this._guid.GetHashCode();
 			}
+
 			return base.GetHashCode();
 		}
 
@@ -61,7 +63,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			}
 
 			this.Entrant1 = entrant;
+
+			this.CheckFixtureReady();
 		}
+
 		public virtual void SetEntrant2(CompetitionEntrant entrant)
 		{
 			if (this.Entrant2 != null || this.PendingPlayer2Fixture != null)
@@ -70,6 +75,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			}
 
 			this.Entrant2 = entrant;
+			
+			this.CheckFixtureReady();
 		}
 
 		public virtual void SetPendingFixture1(PlayerFixture fixture, ResultType resultType)
@@ -82,6 +89,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			this.PendingPlayer1Fixture = fixture;
 			this.Pending1ResultTypeID = resultType;
 		}
+
 		public virtual void SetPendingFixture2(PlayerFixture fixture, ResultType resultType)
 		{
 			if (this.Entrant2 != null || this.PendingPlayer2Fixture != null)
@@ -109,19 +117,14 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			var homePlayers = entrant1Home ? this.Entrant1.GetPlayers() : this.Entrant2.GetPlayers();
 			var awayPlayers = entrant1Home ? this.Entrant2.GetPlayers() : this.Entrant1.GetPlayers();
 
-			var leg = (byte) (this._matches.Count + 1);
-			var match = PlayerMatch.Create(this, DateTime.Now, leg, matchFormat, entrant1Home);
-			match.VenueTypeID = VenueTypes.HomeAway;
-			match.PitchID = 1;
-			
-			this._matches.Add(match);
+			var match = this.CreateMatch(entrant1Home);
 
 			var gameVariationSettings = matchFormat.GameVariations.First();
 			var gameVariation = gameVariationSettings.GameVariation;
 			var game = Game.Game.CreateGame(gameVariation.GameFormatID);
 			game.SetAuditFields();
 			game.Date = match.Date;
-			game.Pitch = new Pitch {ID = match.PitchID};
+			game.Pitch = new Pitch {ID = match.Pitch.ID};
 			game.VenueTypeID = match.VenueTypeID;
 			game.GameFormatID = gameVariation.GameFormatID;
 			game.GameVariationID = gameVariation.ID;
@@ -133,13 +136,14 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			{
 				game.AddHomePlayer(homePlayer);
 			}
+
 			foreach (var awayPlayer in awayPlayers)
 			{
 				game.AddAwayPlayer(awayPlayer);
 			}
 
 			match.AddGame(gameVariationSettings, game);
-			
+
 			return match;
 		}
 
@@ -152,7 +156,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 		{
 			return this.Matches.Single(x => x.ID == id);
 		}
-		
+
 		public virtual CompetitionEntrant GetEntrantByResultType(ResultType pendingTeam1ResultType)
 		{
 			switch (pendingTeam1ResultType)
@@ -165,7 +169,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 					throw new ArgumentOutOfRangeException(nameof(pendingTeam1ResultType));
 			}
 		}
-		
+
 		public virtual CompetitionEntrant WinningEntrantID
 		{
 			get
@@ -174,10 +178,12 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 				{
 					return this.Entrant1;
 				}
+
 				if (this.Entrant2ResultTypeID.Value == ResultType.Win)
 				{
 					return this.Entrant2;
 				}
+
 				throw new InvalidOperationException("No winning team");
 			}
 		}
@@ -190,12 +196,82 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 				{
 					return this.Entrant1;
 				}
+
 				if (this.Entrant2ResultTypeID.Value == ResultType.Lose)
 				{
 					return this.Entrant2;
 				}
+
 				throw new InvalidOperationException("No winning team");
 			}
+		}
+
+		private void CheckFixtureReady()
+		{
+			if (this.Entrant1 != null && this.Entrant1.CompetitionEntrantStatusID == CompetitionEntrantStatuses.Confirmed)
+			{
+				if (this.Entrant2 != null && this.Entrant2.CompetitionEntrantStatusID == CompetitionEntrantStatuses.Confirmed)
+				{
+					this.SetupPendingMatches();
+
+					this.PendingDate = null;
+					this.SetIncomplete();
+				}
+			}
+		}
+
+		private void SetupPendingMatches()
+		{
+			for (var i = 1; i <= this.Legs; i++)
+			{
+				CreateMatch(i == 1);
+			}
+		}
+
+		public virtual PlayerMatch CreateMatch(bool entrant1Home)
+		{
+			if (this._matches.Count == this.Legs)
+			{
+				throw new InvalidOperationException("Too many Matches added for this fixture.  Fixture already has enough matches for the configured number of legs.");
+			}
+
+			var matchFormat = this.CompetitionRound.CompetitionEvent.GetMatchFormat();
+			var leg = (byte) (this._matches.Count + 1);
+			var match = new PlayerMatch
+			{
+				PlayerFixture = this,
+				Date = this.PendingDate.Value,
+				Leg = leg,
+				MatchFormat = matchFormat,
+				MatchStatusID = MatchStatuses.Pending
+			};
+			match.MatchCalculationEngineID = this.CompetitionRound.CompetitionEvent.GetMatchCalculationEngine();
+			match.Home = entrant1Home ? this.Entrant1 : this.Entrant2;
+			match.Away = entrant1Home ? this.Entrant2 : this.Entrant1;
+			match.VenueTypeID = VenueTypes.Neutral;
+			match.Pitch = this.ResolvePitch();
+
+			if (leg == 1 && match.Pitch != null)
+			{
+				match.SetIncomplete();
+			}
+
+			this._matches.Add(match);
+			return match;
+		}
+
+		private Pitch ResolvePitch()
+		{
+			if (this.CompetitionRound.Competition.VenuePitch != null)
+			{
+				return this.CompetitionRound.Competition.VenuePitch;
+			}
+			else if (this.CompetitionRound.Competition.VenueClub != null)
+			{
+				return this.CompetitionRound.Competition.VenueClub.Pitch;
+			}
+
+			return null;
 		}
 	}
 }

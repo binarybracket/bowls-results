@@ -51,6 +51,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 			{
 				throw new InvalidOperationException("Entrant cannot be confirmed unless all Players have been set");
 			}
+
+			this.CompetitionEntrantStatusID = CompetitionEntrantStatuses.Confirmed;
 		}
 	}
 }

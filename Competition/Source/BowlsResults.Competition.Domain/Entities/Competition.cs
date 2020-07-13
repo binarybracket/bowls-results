@@ -27,6 +27,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 		public virtual int AssociationID { get; set; }
 		public virtual Club OrganisingClub { get; set; }
 		public virtual Club VenueClub { get; set; }
+		public virtual Pitch VenuePitch { get; set; }
 		public virtual int CompetitionHeaderID { get; set; }
 		public virtual string Name { get; set; }
 		public virtual string Sponsor { get; set; }

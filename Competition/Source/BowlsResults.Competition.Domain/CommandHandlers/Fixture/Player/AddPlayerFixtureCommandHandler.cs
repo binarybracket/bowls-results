@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.AddCompetitionStage;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Fixture.Player;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
@@ -20,10 +19,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixture.Player
 {
-	public class AddPendingPlayerFixtureCommandHandler : ICommandHandler<AddPendingPlayerFixtureCommand, DefaultIdentityCommandResponse>
+	public class AddPlayerFixtureCommandHandler : ICommandHandler<AddPlayerFixtureCommand, DefaultIdentityCommandResponse>
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly ILogger<AddPendingPlayerFixtureCommandHandler> _logger;
+		private readonly ILogger<AddPlayerFixtureCommandHandler> _logger;
 		private readonly ICompetitionRepository _competitionRepository;
 		private readonly ICompetitionStageRepository _competitionStageRepository;
 		private readonly ICompetitionEventRepository _competitionEventRepository;
@@ -41,9 +40,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 		private PlayerFixture _pendingFixture1;
 		private PlayerFixture _pendingFixture2;
 
-		public AddPendingPlayerFixtureCommandHandler(
+		public AddPlayerFixtureCommandHandler(
 			IUnitOfWork unitOfWork,
-			ILogger<AddPendingPlayerFixtureCommandHandler> logger,
+			ILogger<AddPlayerFixtureCommandHandler> logger,
 			ICompetitionRepository competitionRepository,
 			ICompetitionStageRepository competitionStageRepository,
 			ICompetitionEventRepository competitionEventRepository,
@@ -62,7 +61,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 			this._validationResult = new ValidationResult();
 		}
 
-		public async Task<DefaultIdentityCommandResponse> Handle(AddPendingPlayerFixtureCommand command)
+		public async Task<DefaultIdentityCommandResponse> Handle(AddPlayerFixtureCommand command)
 		{
 			this._unitOfWork.Begin();
 
@@ -73,17 +72,13 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 				if (this._validationResult.IsValid)
 				{
 					await this.Load(command);
-
-					if (this._round.Fixtures.Any(x => x.Reference == command.Reference))
-					{
-						this._validationResult.Errors.Add(new ValidationFailure("reference", "Fixture already exists with this reference."));
-					}
+					this.Validate(command);
 				}
 
 				if (this._validationResult.IsValid)
 				{
-					fixture = this._round.CreatePendingFixture(command.TotalLegs, command.Date);
-					this.SetupPendingFixture(fixture, command);
+					fixture = this._round.CreateFixture(command.TotalLegs, command.Date);
+					this.SetupFixture(fixture, command);
 
 					await this._playerCompetitionRoundRepository.Save(this._round);
 				}
@@ -102,12 +97,29 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 			catch (Exception e)
 			{
 				this._unitOfWork.Rollback();
-				this._logger.LogCritical(e, nameof(AddPendingPlayerFixtureCommandHandler));
+				this._logger.LogCritical(e, nameof(AddPlayerFixtureCommandHandler));
 				throw;
 			}
 		}
 
-		private async Task Load(AddPendingPlayerFixtureCommand command)
+		private void Validate(AddPlayerFixtureCommand command)
+		{
+			if (this._round.Fixtures.Any(x => x.Reference == command.Reference))
+			{
+				this._validationResult.Errors.Add(new ValidationFailure("reference", "Fixture already exists with this reference."));
+			}
+			// TODO - may use this yet
+			// if (this._entrant1 != null && this._entrant1.CompetitionEntrantStatusID != CompetitionEntrantStatuses.Confirmed)
+			// {
+			// 	this._validationResult.Errors.Add(new ValidationFailure("entrant1", "Entrant 1 has not been confirmed."));
+			// }
+			// if (this._entrant2 != null && this._entrant2.CompetitionEntrantStatusID != CompetitionEntrantStatuses.Confirmed)
+			// {
+			// 	this._validationResult.Errors.Add(new ValidationFailure("entrant2", "Entrant 2 has not been confirmed."));
+			// }
+		}
+
+		private async Task Load(AddPlayerFixtureCommand command)
 		{
 			await this._competitionRepository.GetForUpdate(command.Competition.CompetitionID);
 			this._competition = await this._competitionRepository.GetWithStages(command.Competition.CompetitionID);
@@ -119,35 +131,35 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 			await this.PendingFixtures(command);
 		}
 
-		private async Task PendingFixtures(AddPendingPlayerFixtureCommand command)
+		private async Task PendingFixtures(AddPlayerFixtureCommand command)
 		{
-			if (command.Entrant1.Mode == PendingFixtureEntrantConfigurationModel.PendingEntrantModes.Fixture)
+			if (command.Entrant1.Mode == PlayerFixtureEntrantConfigurationModel.PendingEntrantModes.Fixture)
 			{
 				if (command.Entrant1.FixtureID == null) throw new ArgumentNullException(nameof(command.Entrant1.FixtureID));
 				this._pendingFixture1 = await this._playerFixtureRepository.Get(command.Entrant1.FixtureID.Value);
 			}
-			if (command.Entrant2.Mode == PendingFixtureEntrantConfigurationModel.PendingEntrantModes.Fixture)
+			if (command.Entrant2.Mode == PlayerFixtureEntrantConfigurationModel.PendingEntrantModes.Fixture)
 			{
 				if (command.Entrant2.FixtureID == null) throw new ArgumentNullException(nameof(command.Entrant2.FixtureID));
 				this._pendingFixture2 = await this._playerFixtureRepository.Get(command.Entrant2.FixtureID.Value);
 			}
 		}
 
-		private async Task LoadEntrants(AddPendingPlayerFixtureCommand command)
+		private async Task LoadEntrants(AddPlayerFixtureCommand command)
 		{
-			if (command.Entrant1.Mode == PendingFixtureEntrantConfigurationModel.PendingEntrantModes.Entrant)
+			if (command.Entrant1.Mode == PlayerFixtureEntrantConfigurationModel.PendingEntrantModes.Entrant)
 			{
 				if (command.Entrant1.EntrantID == null) throw new ArgumentNullException(nameof(command.Entrant1.EntrantID));
 				this._entrant1 = await this._competitionEntrantRepository.Get(command.Entrant1.EntrantID.Value);
 			}
-			if (command.Entrant2.Mode == PendingFixtureEntrantConfigurationModel.PendingEntrantModes.Entrant)
+			if (command.Entrant2.Mode == PlayerFixtureEntrantConfigurationModel.PendingEntrantModes.Entrant)
 			{
 				if (command.Entrant2.EntrantID == null) throw new ArgumentNullException(nameof(command.Entrant2.EntrantID));
 				this._entrant2 = await this._competitionEntrantRepository.Get(command.Entrant2.EntrantID.Value);
 			}
 		}
 
-		private async Task LoadRound(AddPendingPlayerFixtureCommand command, List<PlayerCompetitionRound> rounds)
+		private async Task LoadRound(AddPlayerFixtureCommand command, List<PlayerCompetitionRound> rounds)
 		{
 			if (this._competitionEvent is Knockout)
 			{
@@ -166,7 +178,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 			}
 		}
 		
-		private void SetupPendingFixture(PlayerFixture fixture, AddPendingPlayerFixtureCommand command)
+		private void SetupFixture(PlayerFixture fixture, AddPlayerFixtureCommand command)
 		{
 			if (this._pendingFixture1 != null)
 			{

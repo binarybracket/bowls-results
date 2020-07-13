@@ -15,7 +15,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Match
 			this.Map(x => x.MatchStatusID).Column("MatchStatusID").Not.Nullable();
 			this.Map(x => x.Date).Column("Date").Not.Nullable();
 			this.Map(x => x.Leg).Column("Leg").Not.Nullable();
-			this.Map(x => x.PitchID).Column("PitchID").Not.Nullable();
+			this.References(x => x.Pitch).Column("PitchID").Nullable();
 			this.Map(x => x.VenueTypeID).Column("VenueTypeID").Not.Nullable();
 			this.Map(x => x.HomeChalkHandicap).Column("HomeChalkHandicap");
 			this.Map(x => x.AwayChalkHandicap).Column("AwayChalkHandicap");

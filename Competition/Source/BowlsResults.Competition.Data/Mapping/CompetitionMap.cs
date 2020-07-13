@@ -20,7 +20,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 			this.References(x => x.Season).Column("SeasonID");
 			this.Map(x => x.AssociationID).Column("AssociationID");
 			this.References(x => x.OrganisingClub).Column("OrganisingClubID");
-			this.References(x => x.VenueClub).Column("VenueClubID");
+			this.References(x => x.VenueClub).Column("VenueClubID").Nullable();
+			this.References(x => x.VenuePitch).Column("VenuePitchID").Nullable();
 			this.Map(x => x.CompetitionHeaderID).Column("CompetitionHeaderID").Not.Nullable();
 			this.Map(x => x.Name).Column("Name").Not.Nullable();
 			this.Map(x => x.Sponsor).Column("Sponsor");
