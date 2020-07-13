@@ -92,6 +92,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			return this.Data.GetMatchByID(id).MatchStatusID.IsPending();
 		}
 
+		public bool IsComplete()
+		{
+			return this.Data.FixtureStatusID == FixtureStatuses.Complete;
+		}
+
 		private IPlayerMatchModel GetMatchModel(PlayerMatch data)
 		{
 			var matchModel = this._serviceProvider.GetService<IPlayerMatchModel>();

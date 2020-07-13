@@ -1,4 +1,5 @@
-﻿using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common.Request;
+﻿using System.Threading.Tasks;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common.Request;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common.Processor
 {
@@ -7,6 +8,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common
         where TRequest : IResultsEngineRequest
         where TResponse : IResultsEngineResponse
     {
-        bool IsSatisfiedBy(TContext context, TRequest request, TResponse response);
+        Task<bool> IsSatisfiedBy(TContext context, TRequest request, TResponse response);
     }
 }

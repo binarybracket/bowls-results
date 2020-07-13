@@ -35,5 +35,13 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository.Fixture
 				.Where(x => x.CompetitionRound.ID == competitionRoundID)
 				.ToListAsync();
 		}
+
+		public Task<List<PlayerFixture>> GetPendingFixtures(short relatedFixtureID)
+		{
+			return this.Session.Query<PlayerFixture>().Where(
+				x =>
+					x.PendingPlayer1Fixture.ID == relatedFixtureID ||
+					x.PendingPlayer2Fixture.ID == relatedFixtureID).ToListAsync();
+		}
 	}
 }

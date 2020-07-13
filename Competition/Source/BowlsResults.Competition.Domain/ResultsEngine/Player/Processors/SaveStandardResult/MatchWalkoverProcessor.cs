@@ -18,11 +18,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			this._logger = logger;
 		}
 
-		public bool IsSatisfiedBy(IPlayerResultEngineContext context, ISaveStandardResultRequest request, ResultsEngineResponse response)
+		public Task<bool> IsSatisfiedBy(IPlayerResultEngineContext context, ISaveStandardResultRequest request, ResultsEngineResponse response)
 		{
-			return true; // TODO - review
+			return Task.FromResult(true);
 		}
-		
+
 		public Task<ResultsEngineStatuses> Process(IPlayerResultEngineContext context, ISaveStandardResultRequest request, ResultsEngineResponse response)
 		{
 			var matchModel = context.PlayerFixture.GetMatch(request.MatchID);

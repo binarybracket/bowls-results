@@ -10,11 +10,12 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 	public interface IParseGamesProcessor : IProcessor<IPlayerResultEngineContext, IGameResults, ResultsEngineResponse>
 	{
 	}
+
 	public sealed class ParseGamesProcessor : IParseGamesProcessor
 	{
 		private readonly ILogger _logger;
 		private readonly IUnitOfWork _unitOfWork;
-		
+
 
 		public ParseGamesProcessor(ILogger<ParseGamesProcessor> logger, IUnitOfWork unitOfWork)
 		{
@@ -22,9 +23,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			this._unitOfWork = unitOfWork;
 		}
 
-		public bool IsSatisfiedBy(IPlayerResultEngineContext context, IGameResults request, ResultsEngineResponse response)
+		public Task<bool> IsSatisfiedBy(IPlayerResultEngineContext context, IGameResults request, ResultsEngineResponse response)
 		{
-			return !context.PlayerFixture.IsMatchProcessed(request.MatchID);
+			bool result = !context.PlayerFixture.IsMatchProcessed(request.MatchID);
+			return Task.FromResult(result);
 		}
 
 		public async Task<ResultsEngineStatuses> Process(IPlayerResultEngineContext context, IGameResults request, ResultsEngineResponse response)

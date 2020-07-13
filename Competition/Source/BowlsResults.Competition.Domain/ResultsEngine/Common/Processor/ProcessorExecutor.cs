@@ -26,7 +26,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common
 
 			foreach (var processor in processors)
 			{
-				if (processor.IsSatisfiedBy(context, request, response))
+				bool process = processor.IsSatisfiedBy(context, request, response).GetAwaiter().GetResult();
+				if (process)
 				{
 					processorFound = true;
 					this._logger.LogDebug($"{key}. Processor '{processor.GetType().FullName}' with Request Type '{request.GetType().FullName}' was satisfied.");

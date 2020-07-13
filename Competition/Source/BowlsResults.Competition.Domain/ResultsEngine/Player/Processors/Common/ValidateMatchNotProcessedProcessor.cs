@@ -18,18 +18,18 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 	{
 		private readonly ILogger _logger;
 		private readonly IUnitOfWork _unitOfWork;
-		
+
 		public ValidateMatchStatusProcessor(ILogger<ValidateMatchStatusProcessor> logger, IUnitOfWork unitOfWork)
 		{
 			this._unitOfWork = unitOfWork;
 			this._logger = logger;
 		}
 
-		public bool IsSatisfiedBy(IPlayerResultEngineContext context, IResultsEngineRequest request, ResultsEngineResponse response)
+		public Task<bool> IsSatisfiedBy(IPlayerResultEngineContext context, IResultsEngineRequest request, ResultsEngineResponse response)
 		{
-			return true;
+			return Task.FromResult(true);
 		}
-		
+
 		public Task<ResultsEngineStatuses> Process(IPlayerResultEngineContext context, IResultsEngineRequest request, ResultsEngineResponse response)
 		{
 			// TODO - use validation result
@@ -37,6 +37,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			{
 				throw new InvalidResultsEngineOperationException("Match is pending.  To make changes you will need to confirm the match details first.");
 			}
+
 			if (context.PlayerFixture.IsMatchProcessed(request.MatchID))
 			{
 				throw new InvalidResultsEngineOperationException("Match has already been processed.  To make changes you will need to revert this match first.");

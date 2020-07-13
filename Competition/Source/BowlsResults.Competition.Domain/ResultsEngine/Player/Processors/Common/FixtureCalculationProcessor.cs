@@ -10,6 +10,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 	public interface IFixtureCalculationProcessor : IProcessor<IPlayerResultEngineContext, IGameResults, ResultsEngineResponse>
 	{
 	}
+
 	public sealed class FixtureCalculationProcessor : IFixtureCalculationProcessor
 	{
 		private readonly ILogger _logger;
@@ -21,11 +22,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			this._logger = logger;
 		}
 
-		public bool IsSatisfiedBy(IPlayerResultEngineContext context, IGameResults request, ResultsEngineResponse response)
+		public Task<bool> IsSatisfiedBy(IPlayerResultEngineContext context, IGameResults request, ResultsEngineResponse response)
 		{
-			return true;
+			return Task.FromResult(true);
 		}
-		
+
 		public Task<ResultsEngineStatuses> Process(IPlayerResultEngineContext context, IGameResults request, ResultsEngineResponse response)
 		{
 			context.PlayerFixture.CalculateFixture();
