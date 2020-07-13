@@ -108,6 +108,23 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 			{
 				this._validationResult.Errors.Add(new ValidationFailure("reference", "Fixture already exists with this reference."));
 			}
+
+			if (command.Entrant1.Mode == PlayerFixtureEntrantConfigurationModel.PendingEntrantModes.Entrant)
+			{
+				if (this._round.Fixtures.Any(x => x.Entrant1 != null && x.Entrant1.ID == command.Entrant1.EntrantID))
+				{
+					this._validationResult.Errors.Add(new ValidationFailure(nameof(command.Entrant1), "Specified entrant is already assigned to another fixture in this round."));	
+				}
+			}
+			
+			if (command.Entrant2.Mode == PlayerFixtureEntrantConfigurationModel.PendingEntrantModes.Entrant)
+			{
+				if (this._round.Fixtures.Any(x => x.Entrant2 != null && x.Entrant2.ID == command.Entrant2.EntrantID))
+				{
+					this._validationResult.Errors.Add(new ValidationFailure(nameof(command.Entrant2), "Specified entrant is already assigned to another fixture in this round."));	
+				}
+			}
+
 			// TODO - may use this yet
 			// if (this._entrant1 != null && this._entrant1.CompetitionEntrantStatusID != CompetitionEntrantStatuses.Confirmed)
 			// {
