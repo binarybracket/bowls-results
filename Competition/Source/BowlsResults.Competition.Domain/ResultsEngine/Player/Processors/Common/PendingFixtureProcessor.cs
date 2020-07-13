@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
@@ -41,9 +42,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 
 		public Task<ResultsEngineStatuses> Process(IPlayerResultEngineContext context, IGameResults request, ResultsEngineResponse response)
 		{
-			context.PlayerFixture.CalculateFixture();
-
-			return Task.FromResult<ResultsEngineStatuses>(ResultsEngineStatuses.Success);
+			throw new NotImplementedException();
 		}
 	}
 }
