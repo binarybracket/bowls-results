@@ -15,15 +15,18 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 		private readonly IMatchCalculationProcessor _matchCalculationProcessor;
 		private readonly IMatchWalkoverProcessor _walkoverProcessor;
 		private readonly IFixtureCalculationProcessor _fixtureCalculationProcessor;
+		private readonly IPendingFixtureProcessor _pendingFixtureProcessor;
 
 		public SaveStandardResultProcessorFactory(IValidateMatchStatusProcessor validateMatchStatusProcessor, IParseGamesProcessor parseGamesProcessor,
-			IMatchCalculationProcessor matchCalculationProcessor, IMatchWalkoverProcessor walkoverProcessor, IFixtureCalculationProcessor fixtureCalculationProcessor)
+			IMatchCalculationProcessor matchCalculationProcessor, IMatchWalkoverProcessor walkoverProcessor, IFixtureCalculationProcessor fixtureCalculationProcessor,
+			IPendingFixtureProcessor pendingFixtureProcessor)
 		{
 			this._validateMatchStatusProcessor = validateMatchStatusProcessor;
 			this._parseGamesProcessor = parseGamesProcessor;
 			this._matchCalculationProcessor = matchCalculationProcessor;
 			this._walkoverProcessor = walkoverProcessor;
 			this._fixtureCalculationProcessor = fixtureCalculationProcessor;
+			this._pendingFixtureProcessor = pendingFixtureProcessor;
 		}
 
 		public IList<IProcessor<IPlayerResultEngineContext, ISaveStandardResultRequest, ResultsEngineResponse>> Create(IPlayerResultEngineContext context,
@@ -39,6 +42,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 					list.Add(this._matchCalculationProcessor);
 					list.Add(this._walkoverProcessor);
 					list.Add(this._fixtureCalculationProcessor);
+					list.Add(this._pendingFixtureProcessor);
 				}
 					break;
 				case CompetitionStageFormats.SingleLeague:

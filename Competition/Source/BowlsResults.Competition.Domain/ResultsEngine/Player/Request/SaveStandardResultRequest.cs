@@ -3,9 +3,6 @@ using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common.Req
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player.Request
 {
-	/// <summary>
-	/// Save Standard Result Request
-	/// </summary>
 	public sealed class SaveStandardResultRequest : ResultsEngineRequest, ISaveStandardResultRequest
 	{
 		public sealed class Builder : BaseBuilder<SaveStandardResultRequest, Builder>

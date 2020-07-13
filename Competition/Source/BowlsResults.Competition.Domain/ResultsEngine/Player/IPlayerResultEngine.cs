@@ -8,6 +8,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 	{
 		void SetContext(IPlayerResultEngineContext context);
 		ResultsEngineResponse SaveStandardResult(SaveStandardResultRequest request);
+		ResultsEngineResponse UpdatePendingFixture(IUpdatePendingFixtureRequest request);
 		Task Save();
 	}
 }

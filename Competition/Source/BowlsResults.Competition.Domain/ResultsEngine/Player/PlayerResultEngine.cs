@@ -12,11 +12,13 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 		private IPlayerResultEngineContext _context;
 		private ILogger<PlayerResultEngine> _logger;
 		private readonly ISaveStandardPlayerResultAction _saveStandardPlayerResultAction;
+		private readonly IUpdatePendingFixtureAction _updatePendingFixtureAction;
 
-		public PlayerResultEngine(ILogger<PlayerResultEngine> logger, ISaveStandardPlayerResultAction saveStandardPlayerResultAction)
+		public PlayerResultEngine(ILogger<PlayerResultEngine> logger, ISaveStandardPlayerResultAction saveStandardPlayerResultAction, IUpdatePendingFixtureAction updatePendingFixtureAction)
 		{
 			this._logger = logger;
 			this._saveStandardPlayerResultAction = saveStandardPlayerResultAction;
+			this._updatePendingFixtureAction = updatePendingFixtureAction;
 		}
 
 		public void SetContext(IPlayerResultEngineContext context)
@@ -32,6 +34,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 		public ResultsEngineResponse SaveStandardResult(SaveStandardResultRequest request)
 		{
 			return this._saveStandardPlayerResultAction.SaveStandardResultRequest(this._context, request);
+		}
+
+		public ResultsEngineResponse UpdatePendingFixture(IUpdatePendingFixtureRequest request)
+		{
+			return this._updatePendingFixtureAction.Execute(this._context, request);
 		}
 
 		public Task Save()

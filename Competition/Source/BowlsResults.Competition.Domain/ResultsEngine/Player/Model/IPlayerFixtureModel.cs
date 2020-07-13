@@ -13,5 +13,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 		void UpdatePendingFixture(PlayerFixture completedFixture);
 		bool IsMatchPending(int id);
 		bool IsComplete();
+		bool IsPending();
 	}
 }

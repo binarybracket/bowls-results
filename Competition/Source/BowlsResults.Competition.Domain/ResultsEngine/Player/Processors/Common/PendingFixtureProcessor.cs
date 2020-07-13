@@ -6,6 +6,7 @@ using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Fixture;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common.Processor;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common.Request;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player.Request;
 using Com.BinaryBracket.Core.Domain2;
 using Microsoft.Extensions.Logging;
 
@@ -20,12 +21,14 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 		private readonly ILogger _logger;
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IPlayerFixtureRepository _playerFixtureRepository;
+		private readonly IPlayerResultEngineManager _playerResultEngineManager;
 		private List<PlayerFixture> _pendingFixtures;
 
-		public PendingFixtureProcessor(ILogger<PendingFixtureProcessor> logger, IUnitOfWork unitOfWork, IPlayerFixtureRepository playerFixtureRepository)
+		public PendingFixtureProcessor(ILogger<PendingFixtureProcessor> logger, IUnitOfWork unitOfWork, IPlayerFixtureRepository playerFixtureRepository, IPlayerResultEngineManager playerResultEngineManager)
 		{
 			this._unitOfWork = unitOfWork;
 			this._playerFixtureRepository = playerFixtureRepository;
+			this._playerResultEngineManager = playerResultEngineManager;
 			this._logger = logger;
 		}
 
@@ -42,7 +45,26 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 
 		public Task<ResultsEngineStatuses> Process(IPlayerResultEngineContext context, IGameResults request, ResultsEngineResponse response)
 		{
-			throw new NotImplementedException();
+			var status = ResultsEngineStatuses.Success;
+			
+			foreach (PlayerFixture pendingFixture in this._pendingFixtures)
+			{
+				var updateRequest = UpdatePendingFixtureRequest.New()
+					.WithCompetitionID(pendingFixture.CompetitionID)
+					.WithFixtureID(pendingFixture.ID)
+					.WithCompetitionStageID(pendingFixture.CompetitionRound.CompetitionEvent.CompetitionStage.ID)
+					.WithCompletedFixture(context.PlayerFixture.Data)
+					.Build();
+				IPlayerResultEngine engine = this._playerResultEngineManager.GetEngine(updateRequest).GetAwaiter().GetResult();
+				var updateResponse = engine.UpdatePendingFixture(updateRequest);
+				status = updateResponse.Status;
+				if (status != ResultsEngineStatuses.Success)
+				{
+					break;
+				}
+			}
+
+			return Task.FromResult(status);
 		}
 	}
 }

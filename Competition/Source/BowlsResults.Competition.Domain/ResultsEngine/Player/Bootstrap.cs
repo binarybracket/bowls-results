@@ -3,6 +3,7 @@ using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player.Act
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player.Model;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player.Processors.Common;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player.Processors.SaveStandardResult;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player.Processors.UpdatePendingFixture;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
@@ -20,6 +21,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			
 			// Processor Factories
 			services.AddTransient<ISaveStandardResultProcessorFactory, SaveStandardResultProcessorFactory>();
+			services.AddTransient<IUpdatePendingFixtureProcessorFactory, UpdatePendingFixtureProcessorFactory>();
 			
 			// Processors
 			services.AddTransient<IValidateMatchStatusProcessor, ValidateMatchStatusProcessor>();
@@ -27,10 +29,12 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			services.AddTransient<IMatchCalculationProcessor, MatchCalculationProcessor>();
 			services.AddTransient<IMatchWalkoverProcessor, MatchWalkoverProcessor>();
 			services.AddTransient<IFixtureCalculationProcessor, FixtureCalculationProcessor>();
-			
+			services.AddTransient<IPendingFixtureProcessor, PendingFixtureProcessor>();
+			services.AddTransient<IUpdatePendingFixtureProcessor, UpdatePendingFixtureProcessor>();
 			
 			// Actions
 			services.AddTransient<ISaveStandardPlayerResultAction, SaveStandardPlayerResultAction>();
+			services.AddTransient<IUpdatePendingFixtureAction, UpdatePendingFixtureAction>();
 			
 			// Models
 			services.AddTransient<IPlayerMatchModel, PlayerMatchModel>();
