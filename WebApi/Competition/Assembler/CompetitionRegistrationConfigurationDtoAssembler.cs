@@ -14,6 +14,7 @@ namespace BowlsResults.WebApi.Competition.Assembler
 			dto.OpenDate = data.OpenDate.Value;
 			dto.CloseDate = data.CloseDate.Value;
 			dto.OrganiserContact = data.OrganiserContact.AssembleDto();
+			dto.EntryGameFormatID = data.EntryGameFormatID;
 			
 			return dto;
 		}

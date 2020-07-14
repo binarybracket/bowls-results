@@ -19,7 +19,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Helpers.Registration
 
 		public static void ValidateGameFormat(ValidationResult validationResult, Entities.Competition competition, GameFormats gameFormat)
 		{
-			if (competition.GameVariation.GameFormatID != gameFormat)
+			if (competition.GetEntryGameFormat() != gameFormat)
 			{
 				validationResult.Errors.Add(new ValidationFailure("GameFormat", "Invalid Game Format."));
 			}

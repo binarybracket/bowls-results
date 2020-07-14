@@ -1,3 +1,4 @@
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.Core.Data2.Mapping;
 
@@ -15,6 +16,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Registration
 			this.Map(x => x.OpenDate).Column("OpenDate");
 			this.Map(x => x.CloseDate).Column("CloseDate");
 			this.Map(x => x.Amount).Column("Amount").Nullable();
+			this.Map(x => x.EntryGameFormatID).Column("EntryGameFormatID").Nullable().CustomType<GameFormats>();
 			this.References(x => x.OrganiserContact).Column("OrganiserContactID").Not.Nullable().Cascade.None();
 		}
 	}

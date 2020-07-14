@@ -1,5 +1,6 @@
 using System;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.Core.Domain2.Entities;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration
@@ -12,6 +13,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 		public virtual DateTime? CloseDate { get; set; }
 		public virtual decimal? Amount { get; set; }
 		public virtual Contact OrganiserContact { get; set; }
+		public virtual GameFormats? EntryGameFormatID { get; set; }
 
 		public virtual CompetitionRegistrationStatuses CalculateStatus()
 		{

@@ -259,7 +259,7 @@ Competition Details
 		{
 			plural = "Players";
 			singular = "Player";
-			if (this._competition.GameVariation.GameFormatID != GameFormats.Singles)
+			if (this._competition.GetEntryGameFormat() != GameFormats.Singles)
 			{
 				plural = "Teams";
 				singular = "Team";

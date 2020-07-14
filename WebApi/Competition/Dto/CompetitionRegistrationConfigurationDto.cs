@@ -1,4 +1,5 @@
 using System;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 
 namespace BowlsResults.WebApi.Competition.Dto
 {
@@ -8,5 +9,6 @@ namespace BowlsResults.WebApi.Competition.Dto
 		public DateTime CloseDate { get; set; }
 		public decimal? Amount { get; set; }
 		public ContactDto OrganiserContact { get; set; }
+		public GameFormats? EntryGameFormatID { get; set; }
 	}
 }

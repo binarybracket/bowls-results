@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Models;
 using Com.BinaryBracket.Core.Domain2.Entities;
@@ -142,6 +143,17 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 				default:
 					throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
 			}
+		}
+
+		public virtual GameFormats GetEntryGameFormat()
+		{
+			var competitionGameFormat = this.GameVariation.GameFormatID;
+			if (this.RegistrationConfiguration.EntryGameFormatID.HasValue)
+			{
+				competitionGameFormat = this.RegistrationConfiguration.EntryGameFormatID.Value;
+			}
+
+			return competitionGameFormat;
 		}
 	}
 }
