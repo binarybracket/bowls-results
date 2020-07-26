@@ -31,7 +31,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 		private Club _venueClub;
 		private Club _organiserClub;
 
-		public CreateCompetitionCommandHandler(IUnitOfWork unitOfWork, ISeasonRepository seasonRepository, ICompetitionHeaderRepository competitionHeaderRepository, ICompetitionRepository competitionRepository,
+		public CreateCompetitionCommandHandler(IUnitOfWork unitOfWork, ISeasonRepository seasonRepository, ICompetitionHeaderRepository competitionHeaderRepository,
+			ICompetitionRepository competitionRepository,
 			IGameVariationRepository gameVariationRepository, CreateCompetitionCommandValidator validator, IClubRepository clubRepository)
 		{
 			this._unitOfWork = unitOfWork;
@@ -91,7 +92,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 				command.Name,
 				command.StartDate,
 				command.EndDate);
-			
+
 			this._competition.Sponsor = command.Sponsor;
 			this._competition.OrganisingClub = this._organiserClub;
 			this._competition.VenueClub = this._venueClub;
@@ -104,7 +105,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 
 		private void ValidateAssociation(int associationID)
 		{
-			if (this._header.AssociationID != associationID)
+			if (this._header != null && this._header.AssociationID != associationID)
 			{
 				this._validationResult.Errors.Add(new ValidationFailure(nameof(associationID), "Association does not match"));
 			}
@@ -112,7 +113,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 
 		private async Task Load(CreateCompetitionCommand command)
 		{
-			this._header = await this._competitionHeaderRepository.Get(command.CompetitionHeaderID);
+			if (command.CompetitionHeaderID.HasValue)
+			{
+				this._header = await this._competitionHeaderRepository.Get(command.CompetitionHeaderID.Value);
+			}
+
 			this._season = await this._seasonRepository.Get(command.SeasonID);
 			if (command.GameVariationID.HasValue)
 			{

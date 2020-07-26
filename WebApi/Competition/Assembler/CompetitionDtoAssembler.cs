@@ -35,6 +35,11 @@ namespace BowlsResults.WebApi.Competition.Assembler
 				dto.RegistrationConfiguration = competition.RegistrationConfiguration.AssembleDto();
 			}
 
+			if (competition.Dates != null && competition.Dates.Count > 0)
+			{
+				dto.Dates = competition.Dates.AssembleDtoList();
+			}
+
 			return dto;
 		}
 	}

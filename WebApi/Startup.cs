@@ -7,6 +7,7 @@ using Com.BinaryBracket.BowlsResults.Common.Data.Repository;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Repository;
 using Com.BinaryBracket.BowlsResults.Competition.Data.Repository;
 using Com.BinaryBracket.BowlsResults.Competition.Data.Repository.Registration;
+using Com.BinaryBracket.BowlsResults.Competition.Domain;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registration.Validators;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Registration;
@@ -116,10 +117,12 @@ namespace BowlsResults.WebApi
 			services.AddTransient<IEmailSender, EmailSender>();
 
 			services.AddScoped<IUnitOfWork, TestAppUnitOfWork>();
+			services.AddScoped<IRegistrationUnitOfWork, TestAppRegistrationUnitOfWork>();
 			services.AddScoped<ISessionProvider, TestAppSessionProvider>();
 			services.AddScoped<IRegistrationSessionProvider, RegistrationSessionProvider>();
 			services.AddTransient<ICompetitionRepository, CompetitionRepository>();
 			services.AddTransient<ICompetitionRegistrationRepository, CompetitionRegistrationRepository>();
+			services.AddTransient<ICompetitionRegistrationAttemptRepository, CompetitionRegistrationAttemptRepository>();
 			services.AddTransient<IClubRepository, ClubRepository>();
 
 			services.AddTransient<CreateSinglesRegistrationCommandHandler, CreateSinglesRegistrationCommandHandler>();

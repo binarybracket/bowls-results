@@ -26,6 +26,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 			services.AddTransient<IGameVariationRepository, GameVariationRepository>();
 			services.AddTransient<IKnockoutCalculationEngineRepository, KnockoutCalculationEngineRepository>();
 			services.AddTransient<IPlayerCompetitionRoundRepository, PlayerCompetitionRoundRepository>();
+			services.AddTransient<ICompetitionDateRepository, CompetitionDateRepository>();
+			services.AddTransient<ICompetitionRegistrationAttemptRepository, CompetitionRegistrationAttemptRepository>();
 		}
 	}
 }

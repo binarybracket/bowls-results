@@ -29,7 +29,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 					return CompetitionRegistrationStatuses.Closed;
 				}
 
-				TimeSpan difference = (DateTime.UtcNow - this.CloseDate.Value);
+				TimeSpan difference = (this.CloseDate.Value - DateTime.UtcNow);
 				if (difference.TotalDays <= 3)
 				{
 					return CompetitionRegistrationStatuses.ClosingSoon;

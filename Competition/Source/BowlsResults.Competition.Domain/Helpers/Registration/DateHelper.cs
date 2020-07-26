@@ -25,8 +25,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Helpers.Registration
 			}
 			else
 			{
-				DateTime newDate = competitionDate.Date.AddDays(-1);
-				return newDate.AddHours(18);
+				return competitionDate.AddHours(-19);
 			}
 		}
 	}

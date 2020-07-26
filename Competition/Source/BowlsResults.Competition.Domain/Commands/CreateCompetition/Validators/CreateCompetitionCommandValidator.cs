@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.Core.Domain2.Commands;
 using Com.BinaryBracket.Core.Domain2.Validators;
@@ -10,7 +11,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CreateCompe
 	{
 		public CreateCompetitionCommandValidator()
 		{
-			this.RuleFor(command => command.CompetitionHeaderID).NotEmpty();
+			this.When(x => x.Scope == CompetitionScopes.Team, () =>
+			{
+				this.RuleFor(command => command.CompetitionHeaderID).NotEmpty();
+			});
+			
 			this.RuleFor(command => command.SeasonID).NotEmpty();
 			this.RuleFor(command => command.Name).NotEmpty().MaximumLength(50);
 			this.RuleFor(command => command.Organiser).NotEmpty();

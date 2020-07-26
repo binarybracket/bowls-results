@@ -22,7 +22,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 			this.References(x => x.OrganisingClub).Column("OrganisingClubID");
 			this.References(x => x.VenueClub).Column("VenueClubID").Nullable();
 			this.References(x => x.VenuePitch).Column("VenuePitchID").Nullable();
-			this.Map(x => x.CompetitionHeaderID).Column("CompetitionHeaderID").Not.Nullable();
+			this.Map(x => x.CompetitionHeaderID).Column("CompetitionHeaderID").Nullable();
 			this.Map(x => x.Name).Column("Name").Not.Nullable();
 			this.Map(x => x.Sponsor).Column("Sponsor");
 			this.Map(x => x.StartDate).Column("StartDate").Not.Nullable();
@@ -30,6 +30,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 			this.Map(x => x.PlayerMeritTableCalculationEngineID).Column("PlayerMeritTableCalculationEngineID");
 			this.References(x => x.GameVariation).Column("GameVariationID");
 			this.HasMany(x => x.Stages).Cascade.SaveUpdate().Inverse();
+			this.HasMany(x => x.Dates).Cascade.SaveUpdate().Inverse();
 			this.References(x => x.RegistrationConfiguration).Column("CompetitionRegistrationConfigurationID").Cascade.SaveUpdate();
 		}
 	}

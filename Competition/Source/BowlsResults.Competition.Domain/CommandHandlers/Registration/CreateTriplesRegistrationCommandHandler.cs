@@ -15,6 +15,7 @@ using Com.BinaryBracket.Core.Domain2.Email;
 using Com.BinaryBracket.Core.Domain2.reCAPTCHA;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Registration
 {
@@ -22,30 +23,37 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 	{
 		private readonly CreateTriplesRegistrationCommandValidator _validator;
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IRegistrationUnitOfWork _registrationUnitOfWork;
 		private readonly ICompetitionRepository _competitionRepository;
 		private readonly ILogger<CreateTriplesRegistrationCommandHandler> _logger;
 		private readonly ICompetitionRegistrationRepository _competitionRegistrationRepository;
 		private readonly IRecaptchaService _recaptchaService;
 		private readonly IRegistrationEmailManager _registrationEmailManager;
+		private readonly ICompetitionRegistrationAttemptRepository _competitionRegistrationAttemptRepository;
 
 		private ValidationResult _validationResult;
 		private Entities.Competition _competition;
 
-		public CreateTriplesRegistrationCommandHandler(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, CreateTriplesRegistrationCommandValidator validator, ICompetitionRepository competitionRepository,
-			ICompetitionRegistrationRepository competitionRegistrationRepository, IRecaptchaService recaptchaService, IRegistrationEmailManager registrationEmailManager)
+		public CreateTriplesRegistrationCommandHandler(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, IRegistrationUnitOfWork registrationUnitOfWork, CreateTriplesRegistrationCommandValidator validator, ICompetitionRepository competitionRepository,
+			ICompetitionRegistrationRepository competitionRegistrationRepository, IRecaptchaService recaptchaService, IRegistrationEmailManager registrationEmailManager, ICompetitionRegistrationAttemptRepository competitionRegistrationAttemptRepository)
 		{
 			this._logger = loggerFactory.CreateLogger<CreateTriplesRegistrationCommandHandler>();
 			this._validator = validator;
 			this._unitOfWork = unitOfWork;
+			this._registrationUnitOfWork = registrationUnitOfWork;
 			this._competitionRepository = competitionRepository;
 			this._competitionRegistrationRepository = competitionRegistrationRepository;
 			this._recaptchaService = recaptchaService;
 			this._registrationEmailManager = registrationEmailManager;
+			this._competitionRegistrationAttemptRepository = competitionRegistrationAttemptRepository;
 		}
 
 		public async Task<DefaultCommandResponse> Handle(CreateTriplesRegistrationCommand command)
 		{
+			await this.StoreAttempt(command);
+			
 			this._unitOfWork.Begin();
+			this._registrationUnitOfWork.Begin();
 
 			try
 			{
@@ -87,6 +95,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 				if (this._validationResult.IsValid)
 				{
 					this._unitOfWork.SoftCommit();
+					this._registrationUnitOfWork.SoftCommit();
 
 					await this._registrationEmailManager.SendConfirmationEmails(registration, this._competition);
 
@@ -95,17 +104,36 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 				else
 				{
 					this._unitOfWork.Rollback();
+					this._registrationUnitOfWork.Rollback();
 					return DefaultCommandResponse.Create(this._validationResult);
 				}
 			}
 			catch (Exception e)
 			{
 				this._unitOfWork.Rollback();
+				this._registrationUnitOfWork.Rollback();
 				Console.WriteLine(e);
 				throw;
 			}
 		}
 
+		private async Task StoreAttempt(CreateTriplesRegistrationCommand command)
+		{
+			try
+			{
+				string x = JsonConvert.SerializeObject(command);
+				
+				var data = new CompetitionRegistrationAttempt();
+				data.Data = x;
+
+				await this._competitionRegistrationAttemptRepository.Save(data);
+			}
+			catch (Exception e)
+			{
+				this._logger.LogError(e, "Store Attempt Failed");
+			}
+		}
+		
 		private async Task Load(CreateTriplesRegistrationCommand command)
 		{
 			this._competition = await this._competitionRepository.GetForUpdate(command.Registration.CompetitionID);
