@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.AddCompetitionStage;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.AddCompetitionStage.Validators;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Com.BinaryBracket.Core.Domain2;
 using Com.BinaryBracket.Core.Domain2.CommandHandlers;
@@ -16,6 +18,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly AddCompetitionStageCommandValidator _validator;
+		private readonly ICompetitionRoundRepository _competitionRoundRepository;
 		private readonly ICompetitionRepository _competitionRepository;
 		private readonly ICompetitionStageRepository _competitionStageRepository;
 		private readonly ICompetitionEventRepository _competitionEventRepository;
@@ -31,7 +34,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 			ICompetitionStageRepository competitionStageRepository,
 			ICompetitionEventRepository competitionEventRepository,
 			IKnockoutCalculationEngineRepository knockoutCalculationEngineRepository,
-			AddCompetitionStageCommandValidator validator)
+			AddCompetitionStageCommandValidator validator,
+			ICompetitionRoundRepository competitionRoundRepository)
 		{
 			this._unitOfWork = unitOfWork;
 			this._competitionRepository = competitionRepository;
@@ -39,6 +43,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 			this._competitionEventRepository = competitionEventRepository;
 			this._knockoutCalculationEngineRepository = knockoutCalculationEngineRepository;
 			this._validator = validator;
+			this._competitionRoundRepository = competitionRoundRepository;
 		}
 
 		public async Task<DefaultCommandResponse> Handle(AddCompetitionStageCommand command)
@@ -58,6 +63,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 
 					foreach (var eventTemplate in command.Events)
 					{
+						CompetitionEvent competitionEvent;
 						if (eventTemplate is LeagueEventTemplate)
 						{
 							throw new NotImplementedException("League not yet supported");
@@ -66,12 +72,18 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 						if (eventTemplate is KnockoutEventTemplate)
 						{
 							var knockoutTemplate = eventTemplate as KnockoutEventTemplate;
-							await this.CreateKnockout(stage, knockoutTemplate);
+							var knockoutEvent = await this.CreateKnockout(stage, knockoutTemplate);
+							competitionEvent = knockoutEvent;
+							
+							if (this._competition.CompetitionScopeID == CompetitionScopes.Player)
+							{
+								await this.CreateKnockoutPlayerRounds(knockoutEvent, knockoutTemplate.Rounds);
+							}
 						}
 					}
 				}
 
-				this._unitOfWork.HardCommit();
+				this._unitOfWork.SoftCommit();
 				return DefaultCommandResponse.Create(this._validationResult);
 			}
 			catch (Exception e)
@@ -82,12 +94,22 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 			}
 		}
 
-		private async Task CreateKnockout(CompetitionStage stage, KnockoutEventTemplate knockoutEventTemplate)
+		private async Task CreateKnockoutPlayerRounds(Knockout competitionEvent, Dictionary<byte,CompetitionRoundTypes> rounds)
+		{
+			foreach (var round in rounds)
+			{
+				var roundData = competitionEvent.CreateRound<PlayerCompetitionRound>(round.Value, round.Key);
+				await this._competitionRoundRepository.Save(roundData);
+			}
+		}
+
+		private async Task<Knockout> CreateKnockout(CompetitionStage stage, KnockoutEventTemplate knockoutEventTemplate)
 		{
 			var engine = await this._knockoutCalculationEngineRepository.GetFull(knockoutEventTemplate.KnockoutCalculationEngine);
 			
 			var knockout = Knockout.Create(stage, engine);
 			await this._competitionEventRepository.Save(knockout);
+			return knockout;
 		}
 
 		private async Task Load(int competitionID)

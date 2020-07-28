@@ -85,7 +85,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 
 				if (this._validationResult.IsValid)
 				{
-					this._unitOfWork.HardCommit();
+					this._unitOfWork.SoftCommit();
 					return DefaultIdentityCommandResponse.Create(this._validationResult, fixture.ID);
 				}
 				else
