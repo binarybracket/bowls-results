@@ -29,6 +29,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 			services.AddTransient<ICompetitionDateRepository, CompetitionDateRepository>();
 			services.AddTransient<ICompetitionRegistrationAttemptRepository, CompetitionRegistrationAttemptRepository>();
 			services.AddTransient<ICompetitionResultRepository, CompetitionResultRepository>();
+			services.AddTransient<ICompetitionRegistrationSummaryRepository, CompetitionRegistrationSummaryRepository>();
 		}
 	}
 }
