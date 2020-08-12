@@ -36,7 +36,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 				.ThenFetch(x => x.Pitch)
 				.Fetch(x => x.OrganisingClub)
 				.FetchMany(x => x.Dates)
-				.Where(x => x.CompetitionScopeID == CompetitionScopes.Player && x.StartDate > DateTime.UtcNow.Date)
+				.Where(x => x.CompetitionScopeID == CompetitionScopes.Player && x.StartDate > DateTime.UtcNow)
 				.ToListAsync();
 		}
 
@@ -60,6 +60,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 				.Fetch(x=>x.Stages)
 				.Where(x => x.CompetitionScopeID == CompetitionScopes.Player && x.StartDate < DateTime.UtcNow.Date)
 				.ToListAsync();
+		}
+
+		public Task<Domain.Entities.Competition> GetTop()
+		{
+			return this.SessionQuery().FirstOrDefaultAsync();
 		}
 	}
 }

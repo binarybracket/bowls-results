@@ -32,6 +32,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 			services.AddTransient<IPendingFixtureProcessor, PendingFixtureProcessor>();
 			services.AddTransient<IUpdatePendingFixtureProcessor, UpdatePendingFixtureProcessor>();
 			services.AddTransient<IValidateGameResultsProcessor, ValidateGameResultsProcessor>();
+			services.AddTransient<ICompetitionResultProcessor, CompetitionResultProcessor>();
 			
 			// Actions
 			services.AddTransient<ISaveStandardPlayerResultAction, SaveStandardPlayerResultAction>();

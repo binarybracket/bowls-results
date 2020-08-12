@@ -21,5 +21,12 @@ namespace Com.BinaryBracket.BowlsResults.Common.Data.Repository
 				.Where(x => ids.Contains(x.ID))
 				.ToListAsync();
 		}
+
+		public Task<Player> GetSingle(string forename, string surname)
+		{
+			return this.SessionQuery()
+				.Where(x => x.Forename == forename && x.Surname == surname)
+				.SingleAsync();
+		}
 	}
 }

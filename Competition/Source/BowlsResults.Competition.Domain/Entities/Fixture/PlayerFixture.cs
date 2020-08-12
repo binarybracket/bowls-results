@@ -127,7 +127,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			game.Pitch = new Pitch {ID = match.Pitch.ID};
 			game.VenueTypeID = match.VenueTypeID;
 			game.GameFormatID = gameVariation.GameFormatID;
-			game.GameVariationID = gameVariation.ID;
+			game.GameVariation = gameVariation;
 			game.SeasonID = this.Season.ID;
 			game.AssociationID = this.CompetitionRound.CompetitionEvent.Competition.AssociationID;
 			game.GameStatusID = GameStatuses.Standard;
@@ -157,16 +157,16 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			return this.Matches.Single(x => x.ID == id);
 		}
 
-		public virtual CompetitionEntrant GetEntrantByResultType(ResultType pendingTeam1ResultType)
+		public virtual CompetitionEntrant GetEntrantByResultType(ResultType resultType)
 		{
-			switch (pendingTeam1ResultType)
+			switch (resultType)
 			{
 				case ResultType.Win:
 					return this.WinningEntrantID;
 				case ResultType.Lose:
 					return this.LosingEntrantID;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(pendingTeam1ResultType));
+					throw new ArgumentOutOfRangeException(nameof(resultType));
 			}
 		}
 

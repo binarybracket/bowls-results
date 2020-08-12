@@ -55,7 +55,12 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 
 				if (this._competition.RegistrationConfiguration == null)
 				{
-					this._competition.CreateRegistrationConfiguration(CompetitionRegistrationModes.Online, this._organiserContact);										
+					var mode = command.RegistrationMode;
+					if (!mode.HasValue)
+					{
+						mode = CompetitionRegistrationModes.Online;
+					}
+					this._competition.CreateRegistrationConfiguration(mode.Value, this._organiserContact);										
 				}
 				this._competition.RegistrationConfiguration.OpenDate = DateHelper.GenerateOpenDate(this._competition.StartDate, command.OpenDate);
 				this._competition.RegistrationConfiguration.CloseDate = DateHelper.GenerateCloseDate(this._competition.StartDate, command.CloseDate);

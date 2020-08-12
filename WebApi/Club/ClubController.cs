@@ -1,15 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BowlsResults.WebApi.Club.Result;
 using BowlsResults.WebApi.Competition.Assembler;
-using BowlsResults.WebApi.Competition.Dto;
-using BowlsResults.WebApi.Competition.Result;
-using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Repository;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BowlsResults.WebApi.Competition
+namespace BowlsResults.WebApi.Club
 {
 	[ApiController]
 	[ApiVersion("1.0")]
@@ -25,19 +23,21 @@ namespace BowlsResults.WebApi.Competition
 		private readonly IClubRepository _clubRepository;
 		private readonly ICompetitionRepository _competitionRepository;
 
+		[ResponseCache(Duration = 60)]
 		[HttpGet]
 		public async Task<ApiResponse> Get(int associationID, bool active = false)
 		{
-			IList<Club> clubs = await this._clubRepository.GetAllActiveByAssociation(associationID);
-			var listDo = clubs.AssembleDtoList();
+			IList<Com.BinaryBracket.BowlsResults.Common.Domain.Entities.Club> clubs = await this._clubRepository.GetAllActiveByAssociation(associationID);
+			var listDo = ClubDtoAssembler.AssembleDtoList(clubs);
 			return ApiResponse.CreateSuccess(listDo);
 		}
 		
+		[ResponseCache(Duration = 60)]
 		[Route("{id}")]
 		[HttpGet]
 		public async Task<ApiResponse> Get(int id)
 		{
-			Club club = await this._clubRepository.GetWithContacts(id);
+			Com.BinaryBracket.BowlsResults.Common.Domain.Entities.Club club = await this._clubRepository.GetWithContacts(id);
 			var competitions = await this._competitionRepository.GetPendingPlayerCompetitions();
 			
 			var result = new GetClubResult();			

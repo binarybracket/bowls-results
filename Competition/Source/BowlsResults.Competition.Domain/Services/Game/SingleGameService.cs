@@ -26,6 +26,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Services.Game
 			this._playerRepository = playerRepository;
 		}
 
+		protected override GameFormats GameFormat => GameFormats.Singles;
+
 		protected override async Task<Entities.Game.Game> InnerCreate(IPlayerMatchModel matchModel, GameResult gameResult)
 		{
 			var matchConfiguration = matchModel.Data.MatchFormat.GetVariationByID(gameResult.MatchFormatXGameVariationID);

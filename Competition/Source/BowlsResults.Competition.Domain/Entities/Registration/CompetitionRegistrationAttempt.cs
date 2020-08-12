@@ -11,5 +11,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 		}
 		public virtual string Data { get; set; }
 		public virtual DateTime Date { get; set; }
+		public virtual decimal? RecaptchaScore { get; set; }
+		public virtual bool? Status { get; set; }
+		public virtual string Response { get; set; }
 	}
 }

@@ -24,7 +24,6 @@ namespace BowlsResults.WebApi
 
 		public TestAppSessionProvider(ILogger<TestAppSessionProvider> logger)
 		{
-			logger.LogWarning("AAA");
 		}
 
 		public ISession Session

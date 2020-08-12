@@ -6,7 +6,7 @@ namespace BowlsResults.WebApi.Competition.Assembler
 {
 	public static class ClubDtoAssembler
 	{
-		public static List<ClubDto> AssembleDtoList(this IEnumerable<Club> clubs)
+		public static List<ClubDto> AssembleDtoList(this IEnumerable<Com.BinaryBracket.BowlsResults.Common.Domain.Entities.Club> clubs)
 		{
 			var list = new List<ClubDto>();
 
@@ -17,7 +17,7 @@ namespace BowlsResults.WebApi.Competition.Assembler
 
 			return list;
 		}
-		public static ClubDto AssembleDto(this Club club)
+		public static ClubDto AssembleDto(this Com.BinaryBracket.BowlsResults.Common.Domain.Entities.Club club)
 		{
 			return  new ClubDto
 			{

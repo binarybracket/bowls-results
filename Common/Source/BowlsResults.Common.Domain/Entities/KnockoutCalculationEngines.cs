@@ -16,6 +16,16 @@
 		IomMenRaynerShield8Players = 14,
 		IomMenRaynerPlate8Players = 15,
 		CrossfieldCup = 16,
-		MensSinglesOpen = 20
+		MensSinglesOpen = 20,
+		MensDoublesOpen = 21,
+		MensThreesomesOpen = 22,
+		LadiesSinglesOpen = 23,
+		LadiesDoublesOpen = 24,
+		LadiesThreesomesOpen = 25,
+		MixedSinglesOpen = 26,
+		MixedDoublesOpen = 27,
+		MixedThreesomesOpen = 28,
+		AnyCombinationDoublesOpen = 29,
+		AnyCombinationThreesomesOpen = 30
 	}
 }

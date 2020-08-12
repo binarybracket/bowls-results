@@ -10,6 +10,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Services
 		{
 			services.AddTransient<IGameServiceFactory, GameServiceFactory>();
 			services.AddTransient<IGameService<SinglesGame>, SingleGameService>();
+			services.AddTransient<IGameService<DoublesGame>, DoublesGameService>();
+			services.AddTransient<IGameService<ThreesomesGame>, ThreesomesGameService>();
 		}
 	}
 }

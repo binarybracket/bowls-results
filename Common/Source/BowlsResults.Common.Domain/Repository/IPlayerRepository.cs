@@ -8,5 +8,6 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.Repository
 	public interface IPlayerRepository : IIdentityRepository<Player, int>
 	{
 		Task<List<Player>> Get(int[] ids);
+		Task<Player> GetSingle(string forename, string surname);
 	}
 }

@@ -3,21 +3,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using BowlsResults.WebApi.Jobs;
-using Com.BinaryBracket.BowlsResults.Common.Data.Repository;
-using Com.BinaryBracket.BowlsResults.Common.Domain.Repository;
-using Com.BinaryBracket.BowlsResults.Competition.Data.Repository;
-using Com.BinaryBracket.BowlsResults.Competition.Data.Repository.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain;
-using Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Registration;
-using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registration.Validators;
-using Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Registration;
-using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
-using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Registration;
+using Com.BinaryBracket.Core.Common.WebApi;
 using Com.BinaryBracket.Core.Data2.SessionProvider;
 using Com.BinaryBracket.Core.Domain2;
 using Com.BinaryBracket.Core.Domain2.Email;
 using Com.BinaryBracket.Core.Domain2.reCAPTCHA;
-using Com.BinaryBracket.Core.Domain2.reCAPTCHA.Gateway;
 using Com.BinaryBracket.Core.Job.Quartz;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,10 +30,13 @@ namespace BowlsResults.WebApi
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		private readonly IHostingEnvironment _env;
+
+		public Startup(IConfiguration configuration, IHostingEnvironment env)
 		{
+			this._env = env;
 			this.Configuration = configuration;
-			
+
 			Log.Logger = new LoggerConfiguration()
 				.ReadFrom.Configuration(configuration)
 				.Enrich.FromLogContext()
@@ -61,13 +55,15 @@ namespace BowlsResults.WebApi
 				options.AddPolicy("BOB",
 					builder =>
 					{
-						builder.WithOrigins("http://localhost:8080", "http://dev.iombowls.dev.cc")
+						builder.WithOrigins("http://localhost:8080", "http://dev.iombowls.dev.cc", "http://www.iombowls.com", "https://www.iombowls.com")
 							.AllowAnyMethod()
 							.AllowAnyHeader();
 					});
 			});
-			
-			services.AddMvc();
+
+			services.AddResponseCaching();
+			services.AddMvc().AddJsonOptions(a => a.SerializerSettings.Converters.Add(
+				new TrimmingConverter()));;
 
 			services.AddApiVersioning(x =>
 			{
@@ -97,11 +93,34 @@ namespace BowlsResults.WebApi
 					//options.IncludeXmlComments(XmlCommentsFilePath);
 				});
 
+			this.ConfigureSettings(services);
 
-//			services.AddLogging(loggingBuilder =>
-//				loggingBuilder.AddSerilog(dispose: true));
+			Com.BinaryBracket.Core.Domain2.Bootstrap.Wire(services);
 
+			services.AddScoped<IUnitOfWork, TestAppUnitOfWork>();
+			services.AddScoped<IRegistrationUnitOfWork, TestAppRegistrationUnitOfWork>();
+			services.AddScoped<ISessionProvider, TestAppSessionProvider>();
+			services.AddScoped<IRegistrationSessionProvider, RegistrationSessionProvider>();
 
+			Com.BinaryBracket.BowlsResults.Common.Data.Bootstrap.Wire(services);
+			Com.BinaryBracket.BowlsResults.Competition.Data.Repository.Bootstrap.Wire(services);
+			Com.BinaryBracket.BowlsResults.Competition.Domain.Bootstrap.Wire(services);
+
+			TestAppSessionProvider.Initialise(this.Configuration.GetConnectionString("BowlingDatabase"));
+			RegistrationSessionProvider.Initialise(this.Configuration.GetConnectionString("RegistrationDatabase"));
+
+			// TODO ENABLE JOBS
+			// services.AddSingleton<IJobFactory, SingletonJobFactory>();
+			// services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+			// services.AddSingleton<KeepAliveJob>();
+			// services.AddSingleton(new JobSchedule(
+			// 	jobType: typeof(KeepAliveJob),
+			// 	cronExpression: "0 0/1 * * * ?")); // run every 5 seconds
+			// services.AddHostedService<QuartzHostedService>();
+		}
+
+		private void ConfigureSettings(IServiceCollection services)
+		{
 			var recaptchaSection = this.Configuration.GetSection("RecaptchaSettings");
 			if (!recaptchaSection.Exists())
 				throw new ArgumentException("Missing RecaptchaSettings in configuration.");
@@ -111,42 +130,6 @@ namespace BowlsResults.WebApi
 			if (!emailSection.Exists())
 				throw new ArgumentException("Missing EmailSettings in configuration.");
 			services.Configure<EmailSettings>(emailSection);
-
-			services.AddTransient<IRecaptchaGateway, RecaptchaGateway>();
-			services.AddTransient<IRecaptchaService, RecaptchaService>();
-			services.AddTransient<IEmailSender, EmailSender>();
-
-			services.AddScoped<IUnitOfWork, TestAppUnitOfWork>();
-			services.AddScoped<IRegistrationUnitOfWork, TestAppRegistrationUnitOfWork>();
-			services.AddScoped<ISessionProvider, TestAppSessionProvider>();
-			services.AddScoped<IRegistrationSessionProvider, RegistrationSessionProvider>();
-			services.AddTransient<ICompetitionRepository, CompetitionRepository>();
-			services.AddTransient<ICompetitionRegistrationRepository, CompetitionRegistrationRepository>();
-			services.AddTransient<ICompetitionRegistrationAttemptRepository, CompetitionRegistrationAttemptRepository>();
-			services.AddTransient<IClubRepository, ClubRepository>();
-
-			services.AddTransient<CreateSinglesRegistrationCommandHandler, CreateSinglesRegistrationCommandHandler>();
-			services.AddTransient<CreateDoublesRegistrationCommandHandler, CreateDoublesRegistrationCommandHandler>();
-			services.AddTransient<CreateTriplesRegistrationCommandHandler, CreateTriplesRegistrationCommandHandler>();
-
-			services.AddTransient<CreateSinglesRegistrationCommandValidator, CreateSinglesRegistrationCommandValidator>();
-			services.AddTransient<CreateDoublesRegistrationCommandValidator, CreateDoublesRegistrationCommandValidator>();
-			services.AddTransient<CreateTriplesRegistrationCommandValidator, CreateTriplesRegistrationCommandValidator>();
-
-			services.AddTransient<IRegistrationEmailManager, RegistrationEmailManager>();
-
-			TestAppSessionProvider.Initialise(this.Configuration.GetConnectionString("BowlingDatabase"));
-			RegistrationSessionProvider.Initialise(this.Configuration.GetConnectionString("RegistrationDatabase"));
-
-			services.AddSingleton<IJobFactory, SingletonJobFactory>();
-			services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
-
-			services.AddSingleton<HelloWorldJob>();
-			//services.AddSingleton(new JobSchedule(
-			//	jobType: typeof(HelloWorldJob),
-			//	cronExpression: "0/5 * * * * ?")); // run every 5 seconds
-
-			services.AddHostedService<QuartzHostedService>();
 		}
 
 		static string XmlCommentsFilePath
@@ -160,33 +143,32 @@ namespace BowlsResults.WebApi
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory loggerFactory)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
 		{
 			loggerFactory.AddSerilog();
-			
+
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
+
+				var provider = serviceProvider.GetService<IApiVersionDescriptionProvider>();
+
+				// And add this, an endpoint for our swagger doc 
+				app.UseSwagger();
+				app.UseSwaggerUI(
+					options =>
+					{
+						// build a swagger endpoint for each discovered API version
+						foreach (var description in provider.ApiVersionDescriptions)
+						{
+							options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+						}
+					});
 			}
 
-			// And add this, an endpoint for our swagger doc 
-			app.UseSwagger();
-			app.UseSwaggerUI(
-				options =>
-				{
-					// build a swagger endpoint for each discovered API version
-					foreach (var description in provider.ApiVersionDescriptions)
-					{
-						options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
-					}
-				});
-
-			app.UseCors("BOB"); 
+			app.UseCors("BOB");
+			app.UseResponseCaching();
 			app.UseMvc();
-
-			//loggerFactory.AddSerilog();
-
-//			
 		}
 	}
 

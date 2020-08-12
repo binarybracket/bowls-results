@@ -12,7 +12,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Game
 			this.LazyLoad();
 			this.DiscriminateSubClassesOnColumn("GameFormatID");
 			
-			this.Map(x => x.GameVariationID).Column("GameVariationID");
+			this.References(x => x.GameVariation).Column("GameVariationID").Not.Nullable().Cascade.None();
 			this.Map(x => x.HomeResultTypeID).Column("HomeResultTypeID").CustomType<ResultType>();
 			this.Map(x => x.AwayResultTypeID).Column("AwayResultTypeID").CustomType<ResultType>();
 			this.Map(x => x.AssociationID).Column("AssociationID").Not.Nullable();

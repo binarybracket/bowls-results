@@ -13,16 +13,17 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Services.Game
 		{
 			this._serviceProvider = serviceProvider;
 		}
-		
+
 		public IGameService Create(MatchFormatXGameVariation matchConfiguration)
 		{
 			switch (matchConfiguration.GameVariation.GameFormatID)
 			{
 				case GameFormats.Singles:
 					return this._serviceProvider.GetService<IGameService<SinglesGame>>();
-					break;
 				case GameFormats.Doubles:
+					return this._serviceProvider.GetService<IGameService<DoublesGame>>();
 				case GameFormats.Threesomes:
+					return this._serviceProvider.GetService<IGameService<ThreesomesGame>>();
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

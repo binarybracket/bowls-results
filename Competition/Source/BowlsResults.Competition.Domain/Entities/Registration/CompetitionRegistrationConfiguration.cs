@@ -15,8 +15,13 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 		public virtual Contact OrganiserContact { get; set; }
 		public virtual GameFormats? EntryGameFormatID { get; set; }
 
-		public virtual CompetitionRegistrationStatuses CalculateStatus()
+		public virtual CompetitionRegistrationStatuses CalculateOnlineStatus()
 		{
+			if ((DateTime.UtcNow - this.Competition.StartDate).Days > 1)
+			{
+				return CompetitionRegistrationStatuses.Past;
+			}
+			
 			if (this.OpenDate.HasValue && this.OpenDate.Value > DateTime.UtcNow)
 			{
 				return CompetitionRegistrationStatuses.NotOpenYet;
@@ -37,6 +42,26 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 			}
 
 			return CompetitionRegistrationStatuses.Open;
+		}
+		
+		public virtual CompetitionRegistrationStatuses CalculateInvitationalStatus()
+		{
+			if ((DateTime.UtcNow - this.Competition.StartDate).Days > 1)
+			{
+				return CompetitionRegistrationStatuses.Past;
+			}
+
+			return CompetitionRegistrationStatuses.Invitational;
+		}
+		
+		public virtual CompetitionRegistrationStatuses CalculateUnavailableStatus()
+		{
+			if ((DateTime.UtcNow - this.Competition.StartDate).Days > 1)
+			{
+				return CompetitionRegistrationStatuses.Past;
+			}
+
+			return CompetitionRegistrationStatuses.Unavailable;
 		}
 	}
 }

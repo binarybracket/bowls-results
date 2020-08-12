@@ -29,6 +29,7 @@ namespace BowlsResults.WebApi.Competition
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ISessionProvider _sessionProvider;
 
+		[ResponseCache(Duration = 60)]
 		[Route("{id}")]
 		[HttpGet]
 		public async Task<ApiResponse> Get(int id)
@@ -38,6 +39,7 @@ namespace BowlsResults.WebApi.Competition
 			return ApiResponse.CreateSuccess(dto);
 		}
 
+		[ResponseCache(Duration = 60)]
 		[HttpGet]
 		public async Task<ApiResponse> Get()
 		{
@@ -46,6 +48,7 @@ namespace BowlsResults.WebApi.Competition
 			return ApiResponse.CreateSuccess(dto);
 		}
 
+		[ResponseCache(Duration = 60)]
 		[Route("player/results")]
 		[HttpGet]
 		public async Task<ApiResponse> GetResults()

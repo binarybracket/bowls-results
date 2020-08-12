@@ -1,5 +1,6 @@
 using System;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 
 namespace BowlsResults.WebApi.Competition.Dto
 {
@@ -10,5 +11,6 @@ namespace BowlsResults.WebApi.Competition.Dto
 		public decimal? Amount { get; set; }
 		public ContactDto OrganiserContact { get; set; }
 		public GameFormats? EntryGameFormatID { get; set; }
+		public CompetitionRegistrationModes Mode { get; set; }
 	}
 }

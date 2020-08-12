@@ -13,6 +13,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Services.Game
 	public abstract class BaseGameService<TData>
 		where TData : Entities.Game.Game
 	{
+		protected abstract GameFormats GameFormat { get; }
+		
 		public Task<Entities.Game.Game> Create(IPlayerMatchModel matchModel, GameResult gameResult)
 		{
 			if (matchModel == null) throw new ArgumentNullException(nameof(matchModel));
@@ -21,7 +23,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Services.Game
 			var matchConfiguration = matchModel.Data.MatchFormat.GetVariationByID(gameResult.MatchFormatXGameVariationID);
 			if (matchConfiguration == null) throw new ArgumentNullException(nameof(matchConfiguration));
 
-			if (matchConfiguration.GameVariation.GameFormatID != GameFormats.Singles)
+			if (matchConfiguration.GameVariation.GameFormatID != this.GameFormat)
 			{
 				throw new InvalidOperationException("Wrong Game Format for Service");
 			}
@@ -61,7 +63,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Services.Game
 			gameData.HomeScore = gameResult.HomeScore;
 			gameData.AwayScore = gameResult.AwayScore;
 
-			gameData.GameVariationID = matchConfiguration.GameVariation.ID;
+			gameData.GameVariation = matchConfiguration.GameVariation;
 
 			gameData.GameCalculationEngineID = matchConfiguration.GameCalculationEngineID;
 		}
@@ -79,7 +81,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Services.Game
 			gameData.HomeScore = gameResult.HomeScore;
 			gameData.AwayScore = gameResult.AwayScore;
 
-			gameData.GameVariationID = (byte) matchConfiguration.GameVariation.ID;
+			gameData.GameVariation = matchConfiguration.GameVariation;
 			gameData.GameCalculationEngineID = matchConfiguration.GameCalculationEngineID;
 		}
 

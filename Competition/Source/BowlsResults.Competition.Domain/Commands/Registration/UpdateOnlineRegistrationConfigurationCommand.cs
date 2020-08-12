@@ -1,4 +1,5 @@
 using System;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.Core.Domain2.Commands;
 
 namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registration
@@ -11,5 +12,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registratio
 		
 		public decimal? Amount { get; set; }
 		public int? OrganiserContactID { get; set; }
+		
+		public CompetitionRegistrationModes? RegistrationMode { get; set; }
 	}
 }

@@ -56,7 +56,15 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 
 			if (this.RegistrationConfiguration != null && this.RegistrationConfiguration.CompetitionRegistrationModeID == CompetitionRegistrationModes.Online)
 			{
-				return this.RegistrationConfiguration.CalculateStatus();
+				return this.RegistrationConfiguration.CalculateOnlineStatus();
+			}
+			else if (this.RegistrationConfiguration != null && this.RegistrationConfiguration.CompetitionRegistrationModeID == CompetitionRegistrationModes.Invitational)
+			{
+				return this.RegistrationConfiguration.CalculateInvitationalStatus();
+			}
+			else if (this.RegistrationConfiguration != null && this.RegistrationConfiguration.CompetitionRegistrationModeID == CompetitionRegistrationModes.Unavailable)
+			{
+				return this.RegistrationConfiguration.CalculateUnavailableStatus();
 			}
 
 			return status;

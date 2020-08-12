@@ -34,10 +34,12 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 		private ValidationResult _validationResult;
 		private Entities.Competition _competition;
 
-		public CreateSinglesRegistrationCommandHandler(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, IRegistrationUnitOfWork registrationUnitOfWork, CreateSinglesRegistrationCommandValidator validator, ICompetitionRepository competitionRepository,
-			ICompetitionRegistrationRepository competitionRegistrationRepository, IRecaptchaService recaptchaService, IRegistrationEmailManager registrationEmailManager, ICompetitionRegistrationAttemptRepository competitionRegistrationAttemptRepository)
+		public CreateSinglesRegistrationCommandHandler(ILogger<CreateSinglesRegistrationCommandHandler> logger, IUnitOfWork unitOfWork, IRegistrationUnitOfWork registrationUnitOfWork,
+			CreateSinglesRegistrationCommandValidator validator, ICompetitionRepository competitionRepository,
+			ICompetitionRegistrationRepository competitionRegistrationRepository, IRecaptchaService recaptchaService, IRegistrationEmailManager registrationEmailManager,
+			ICompetitionRegistrationAttemptRepository competitionRegistrationAttemptRepository)
 		{
-			this._logger = loggerFactory.CreateLogger<CreateSinglesRegistrationCommandHandler>();
+			this._logger = logger;
 			this._validator = validator;
 			this._unitOfWork = unitOfWork;
 			this._registrationUnitOfWork = registrationUnitOfWork;
@@ -50,11 +52,14 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 
 		public async Task<DefaultCommandResponse> Handle(CreateSinglesRegistrationCommand command)
 		{
-			await this.StoreAttempt(command);
-			
+			var attempt = await this.StoreAttempt(command);
+			var status = false;
+			DefaultCommandResponse response;
+
 			this._unitOfWork.Begin();
 			this._registrationUnitOfWork.Begin();
 
+			RecaptchaResponse recaptchaResponse = null;
 			try
 			{
 				CompetitionRegistration registration = null;
@@ -63,7 +68,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 				if (this._validationResult.IsValid)
 				{
 					await this.Load(command);
-
 					RegistrationValidatorHelper.Validate(this._validationResult, this._competition);
 				}
 
@@ -74,13 +78,12 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 
 				if (this._validationResult.IsValid)
 				{
-					await this._recaptchaService.Validate(command.Registration, "opens/registration", this._validationResult);
+					recaptchaResponse = await this._recaptchaService.Validate(command.Registration, "opens/registration", this._validationResult);
 				}
 
 				if (this._validationResult.IsValid)
 				{
-					registration = this._competition.CreateRegistration(command.Registration.Contact.Forename, command.Registration.Contact.Surname,
-						command.Registration.Contact.EmailAddress);
+					registration = this._competition.CreateRegistration(command.Registration.Contact.Forename, command.Registration.Contact.Surname, command.Registration.Contact.EmailAddress);
 
 					foreach (var player in command.Registration.Players)
 					{
@@ -97,14 +100,16 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 					this._registrationUnitOfWork.SoftCommit();
 
 					await this._registrationEmailManager.SendConfirmationEmails(registration, this._competition);
-
-					return DefaultCommandResponse.Create(this._validationResult);
+					status = true;
+					response = DefaultCommandResponse.Create(this._validationResult);
+					this.StoreAttemptResponse(attempt, response);
 				}
 				else
 				{
 					this._unitOfWork.Rollback();
 					this._registrationUnitOfWork.Rollback();
-					return DefaultCommandResponse.Create(this._validationResult);
+					response = DefaultCommandResponse.Create(this._validationResult);
+					this.StoreAttemptResponse(attempt, response);
 				}
 			}
 			catch (Exception e)
@@ -114,15 +119,26 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 				Console.WriteLine(e);
 				throw;
 			}
+			finally
+			{
+				if (recaptchaResponse != null && recaptchaResponse.Data != null)
+				{
+					attempt.RecaptchaScore = recaptchaResponse.Data.Score;
+				}
+
+				attempt.Status = status;
+				await this._competitionRegistrationAttemptRepository.Save(attempt);
+			}
+
+			return response;
 		}
 
-		private async Task StoreAttempt(CreateSinglesRegistrationCommand command)
+		private async Task<CompetitionRegistrationAttempt> StoreAttempt(CreateSinglesRegistrationCommand command)
 		{
+			var data = new CompetitionRegistrationAttempt();
 			try
 			{
 				string x = JsonConvert.SerializeObject(command);
-				
-				var data = new CompetitionRegistrationAttempt();
 				data.Data = x;
 
 				await this._competitionRegistrationAttemptRepository.Save(data);
@@ -130,6 +146,21 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 			catch (Exception e)
 			{
 				this._logger.LogError(e, "Store Attempt Failed");
+			}
+
+			return data;
+		}
+
+		private void StoreAttemptResponse(CompetitionRegistrationAttempt data, DefaultCommandResponse response)
+		{
+			try
+			{
+				string x = JsonConvert.SerializeObject(response);
+				data.Response = x;
+			}
+			catch (Exception e)
+			{
+				this._logger.LogError(e, "Response conversion failed");
 			}
 		}
 

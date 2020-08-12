@@ -24,7 +24,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game
 
 		public virtual int AssociationID { get; set; }
 		public virtual short SeasonID { get; set; }
-		public virtual byte GameVariationID { get; set; }
+		public virtual GameVariation GameVariation { get; set; }
 		public virtual GameFormats GameFormatID { get; set; }
 		public virtual GameCalculationEngines GameCalculationEngineID { get; set; }
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using BowlsResults.WebApi.Competition.Dto;
 
-namespace BowlsResults.WebApi.Competition.Result
+namespace BowlsResults.WebApi.Club.Result
 {
 	public sealed class GetClubResult
 	{
