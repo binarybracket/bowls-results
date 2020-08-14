@@ -4,9 +4,12 @@ using System.Threading.Tasks;
 using BowlsResults.WebApi.Competition.Assembler;
 using BowlsResults.WebApi.Competition.Dto;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Registration;
 using Com.BinaryBracket.Core.Data2.SessionProvider;
 using Com.BinaryBracket.Core.Domain2;
 using Microsoft.AspNetCore.Mvc;
@@ -18,16 +21,20 @@ namespace BowlsResults.WebApi.Competition
 	[Route("api/{v:apiVersion}/competition/")]
 	public class CompetitionController	
 	{
-		public CompetitionController(ICompetitionRepository competitionRepository, IUnitOfWork unitOfWork, ISessionProvider sessionProvider)
+		public CompetitionController(ICompetitionRepository competitionRepository, IUnitOfWork unitOfWork, ISessionProvider sessionProvider, ICompetitionRegistrationRepository competitionRegistrationRepository, IRegistrationEmailManager registrationEmailManager)
 		{
 			this._competitionRepository = competitionRepository;
 			this._unitOfWork = unitOfWork;
 			this._sessionProvider = sessionProvider;
+			this._competitionRegistrationRepository = competitionRegistrationRepository;
+			this._registrationEmailManager = registrationEmailManager;
 		}
 		
 		private ICompetitionRepository _competitionRepository;
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ISessionProvider _sessionProvider;
+		private readonly ICompetitionRegistrationRepository _competitionRegistrationRepository;
+		private readonly IRegistrationEmailManager _registrationEmailManager;
 
 		[ResponseCache(Duration = 60)]
 		[Route("{id}")]
@@ -85,6 +92,20 @@ namespace BowlsResults.WebApi.Competition
 			
 			List<CompetitionDto> dto = competitions.AssembleDtoList();
 			return ApiResponse.CreateSuccess(dto);
+		}
+		
+		[Route("{id}/registration/summary")]
+		[HttpPost]
+		public async Task<ApiResponse> RegistrationSummary(int id)
+		{
+			var competition = await this._competitionRepository.GetWithRegistrationConfiguration(id);
+			if (competition.RegistrationConfiguration != null)
+			{
+				List<CompetitionRegistration> registrations = await this._competitionRegistrationRepository.GetAll(competition.ID);
+				await this._registrationEmailManager.SendSummaryEmail(registrations, competition);
+			}
+
+			return ApiResponse.CreateSuccess(new object());
 		}
 	}
 }

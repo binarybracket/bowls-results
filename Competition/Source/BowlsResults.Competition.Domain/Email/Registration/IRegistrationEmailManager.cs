@@ -8,6 +8,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Registration
 	{
 		Task SendConfirmationEmails(CompetitionRegistration registration, Entities.Competition competition);
 
-		Task SendSummaryEmail(List<CompetitionRegistration> registrations, Entities.Competition competitions);
+		Task SendSummaryEmail(List<CompetitionRegistration> registration, Entities.Competition competition);
 	}
 }
