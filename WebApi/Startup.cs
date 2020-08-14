@@ -110,13 +110,14 @@ namespace BowlsResults.WebApi
 			RegistrationSessionProvider.Initialise(this.Configuration.GetConnectionString("RegistrationDatabase"));
 
 			// TODO ENABLE JOBS
-			// services.AddSingleton<IJobFactory, SingletonJobFactory>();
-			// services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
-			// services.AddSingleton<KeepAliveJob>();
-			// services.AddSingleton(new JobSchedule(
-			// 	jobType: typeof(KeepAliveJob),
-			// 	cronExpression: "0 0/1 * * * ?")); // run every 5 seconds
-			// services.AddHostedService<QuartzHostedService>();
+			 // services.AddSingleton<IJobFactory, SingletonJobFactory>();
+			 // services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+			 // services.AddSingleton<KeepAliveJob>();
+			 // services.AddSingleton(new JobSchedule(
+			 // 	jobType: typeof(KeepAliveJob),
+				// cronExpression: "0/5 * * * * ?")); // run every 5 seconds
+				// //cronExpression: "0 0/1 * * * ?")); // run every 1 minute
+			 // services.AddHostedService<QuartzHostedService>();
 		}
 
 		private void ConfigureSettings(IServiceCollection services)

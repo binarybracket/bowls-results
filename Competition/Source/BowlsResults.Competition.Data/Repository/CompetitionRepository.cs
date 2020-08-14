@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Com.BinaryBracket.Core.Data2;
 using Com.BinaryBracket.Core.Data2.Repositories;
@@ -65,6 +66,17 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 		public Task<Domain.Entities.Competition> GetTop()
 		{
 			return this.SessionQuery().FirstOrDefaultAsync();
+		}
+
+		public Task<List<Domain.Entities.Competition>> GetClosedOnlineCompetitions(DateTime start, DateTime end)
+		{
+			var registrationSubQuery = this.Session.Query<CompetitionRegistrationConfiguration>()
+				.Where(x => x.CompetitionRegistrationModeID == CompetitionRegistrationModes.Online && (x.CloseDate > start && x.CloseDate <= end))
+				.Select(x => x.Competition.ID);
+
+			return this.SessionQuery()
+				.Where(x => registrationSubQuery.Contains(x.ID))
+				.ToListAsync();
 		}
 	}
 }

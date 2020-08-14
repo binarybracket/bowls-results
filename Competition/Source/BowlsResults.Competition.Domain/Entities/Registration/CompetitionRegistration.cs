@@ -11,14 +11,14 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 	{
 		public CompetitionRegistration()
 		{
-			this.Entrants = new List<CompetitionEntrant>();
+			this.Entrants = new HashSet<CompetitionEntrant>();
 		}
 
 		public virtual int CompetitionID { get; set; }
 		public virtual string EmailAddress { get; set; }
 		public virtual string Forename { get; set; }
 		public virtual string Surname { get; set; }
-		public virtual IList<CompetitionEntrant> Entrants { get; set; }
+		public virtual ISet<CompetitionEntrant> Entrants { get; set; }
 
 		public virtual CompetitionEntrant CreateEntrant(Entities.Competition competition)
 		{

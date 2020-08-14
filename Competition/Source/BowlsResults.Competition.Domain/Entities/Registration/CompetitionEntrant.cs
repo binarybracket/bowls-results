@@ -13,15 +13,17 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 	{
 		public CompetitionEntrant()
 		{
-			this.Players = new List<CompetitionEntrantPlayer>();
+			this.Players = new HashSet<CompetitionEntrantPlayer>();
 		}
 
 		public virtual CompetitionRegistration CompetitionRegistration { get; set; }
 		public virtual CompetitionEntrantStatuses CompetitionEntrantStatusID { get; set; }
 		public virtual int CompetitionID { get; set; }
 		public virtual GameFormats EntrantGameFormatID { get; set; }
-		public virtual IList<CompetitionEntrantPlayer> Players { get; set; }
-		
+		public virtual ISet<CompetitionEntrantPlayer> Players { get; set; }
+
+		protected override bool SupportTransient => true;
+
 		public virtual IList<Player> GetPlayers()
 		{
 			return this.Players.Select(x => x.Player).ToList();

@@ -11,6 +11,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers
 			services.AddTransient<CreateSinglesRegistrationCommandHandler, CreateSinglesRegistrationCommandHandler>();
 			services.AddTransient<CreateDoublesRegistrationCommandHandler, CreateDoublesRegistrationCommandHandler>();
 			services.AddTransient<CreateTriplesRegistrationCommandHandler, CreateTriplesRegistrationCommandHandler>();
+			services.AddTransient<CheckClosedCompetitionRegistrationsCommandHandler, CheckClosedCompetitionRegistrationsCommandHandler>();
 
 			services.AddTransient<CreateSinglesRegistrationCommandValidator, CreateSinglesRegistrationCommandValidator>();
 			services.AddTransient<CreateDoublesRegistrationCommandValidator, CreateDoublesRegistrationCommandValidator>();

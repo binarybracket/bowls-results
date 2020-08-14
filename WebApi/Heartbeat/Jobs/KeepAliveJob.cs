@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Registration;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.CheckClosedCompetitionRegistrations;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Registration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +34,11 @@ namespace BowlsResults.WebApi.Jobs
 				var competition = competitionRepository.GetTop().GetAwaiter().GetResult();
 
 				this._logger.LogDebug($"Keep Alive Complete");
+
+				//var commandHandler = scope.ServiceProvider.GetService<CheckClosedCompetitionRegistrationsCommandHandler>();
+				//CheckClosedCompetitionRegistrationsCommand command = new CheckClosedCompetitionRegistrationsCommand();
+				//var response = commandHandler.Handle(command).GetAwaiter().GetResult();
+				
 				return Task.CompletedTask;
 			}
 		}

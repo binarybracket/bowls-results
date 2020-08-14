@@ -33,6 +33,7 @@
       <None Remove="Email\Registration\Assets\registration-oraniser-confirmation.html" />
       <EmbeddedResource Include="Email\Registration\Assets\registration-organiser-confirmation.html" />
       <None Remove="Email\Registration\Assets\registration-player-confirmation.html" />
+      <EmbeddedResource Include="Email\Registration\Assets\registration-organiser-summary.html" />
       <EmbeddedResource Include="Email\Registration\Assets\registration-player-confirmation.html" />
     </ItemGroup>
 

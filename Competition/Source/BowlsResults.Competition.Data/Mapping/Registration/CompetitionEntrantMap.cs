@@ -18,7 +18,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Registration {
 			this.Map(x => x.CompetitionEntrantStatusID).Column("CompetitionEntrantStatusID").Not.Nullable();
 			this.Map(x => x.CompetitionID).Column("CompetitionID").Not.Nullable();
 			this.Map(x => x.EntrantGameFormatID).Column("EntrantGameFormatID").Not.Nullable();
-			this.HasMany(x => x.Players).KeyColumn("CompetitionEntrantID").Inverse().Cascade.SaveUpdate();
+			this.HasMany(x => x.Players).KeyColumn("CompetitionEntrantID").Inverse().AsSet().Cascade.SaveUpdate();
         }
     }
 }

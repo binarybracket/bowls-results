@@ -15,7 +15,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Registration {
 			this.Map(x => x.EmailAddress).Column("EmailAddress").Not.Nullable();
 			this.Map(x => x.Forename).Column("Forename").Not.Nullable();
 			this.Map(x => x.Surname).Column("Surname").Not.Nullable();
-			this.HasMany(x => x.Entrants).KeyColumn("CompetitionRegistrationID").Inverse().Cascade.SaveUpdate();
+			this.HasMany(x => x.Entrants).KeyColumn("CompetitionRegistrationID").Inverse().AsSet().Cascade.SaveUpdate();
         }
     }
 }

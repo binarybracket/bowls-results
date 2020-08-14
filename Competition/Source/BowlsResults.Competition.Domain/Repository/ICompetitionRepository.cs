@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Com.BinaryBracket.Core.Domain2.Repository;
@@ -14,5 +14,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Repository
 
 		Task<List<Entities.Competition>> GetPastPlayerCompetitions();
 		Task<Entities.Competition> GetTop();
+		Task<List<Entities.Competition>> GetClosedOnlineCompetitions(DateTime start, DateTime end);
 	}
 }

@@ -16,6 +16,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 		public virtual string LastName { get; set; }
 		public virtual Player Player { get; set; }
 
+		protected override bool SupportTransient => true;
+
 		public virtual void SetPlayer(Player player)
 		{
 			this.Player = player;
