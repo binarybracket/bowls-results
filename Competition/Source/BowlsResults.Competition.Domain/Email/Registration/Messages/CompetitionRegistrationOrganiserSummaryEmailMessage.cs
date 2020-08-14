@@ -190,7 +190,6 @@ Competition Details
 
 		private StringBuilder GetHtmlEntrants()
 		{
-			this.GetEntrantType(out _, out var entrantTypeSingular);
 			var entrants = new StringBuilder();
 			var count = 0;
 			foreach (var competitionRegistration in this._competitionRegistrations)
@@ -210,7 +209,7 @@ Competition Details
 						first = false;
 					}
 
-					entrants.Append(_entrantValueTemplate.Replace("%%ENTRANT%%", $"{entrantTypeSingular} {++count} - {players}"));
+					entrants.Append(_entrantValueTemplate.Replace("%%ENTRANT%%", $"{players}"));
 				}
 			}
 
