@@ -1,4 +1,4 @@
-using System;
+	using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -29,9 +29,19 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Messages
 		private static string _entrantValueTemplate;
 		private static string _registrationConfirmationTemplate;
 
-		private const string PlainTextTemplate = @"Dear %%CONTACT-NAME%%
+		private const string PlainTextTemplateClosed = @"Dear %%CONTACT-NAME%%
 
 Entries have closed for the %%COMPETITION-NAME%% competition that you are running.  Below is a summary of all entries received.
+
+%%ENTRANTS-HEADER%%
+%%ENTRANTS%%
+
+Competition Details
+%%COMPETITION-VALUES%%";
+		
+		private const string PlainTextTemplateUpdate = @"Dear %%CONTACT-NAME%%
+
+For the %%COMPETITION-NAME%% competition that you are running.  Below is a summary of all entries received to date.
 
 %%ENTRANTS-HEADER%%
 %%ENTRANTS%%
@@ -110,7 +120,13 @@ Competition Details
 			var competitionValues = this.GetPlainTextCompetitionValues();
 			var entrantsHeader = this.GetEntrantsHeader();
 
-			var message = PlainTextTemplate.Replace("%%CONTACT-NAME%%", this._competition.RegistrationConfiguration.OrganiserContact.DisplayName());
+			var template = PlainTextTemplateUpdate;
+			if (this._competition.RegistrationConfiguration.IsClosed())
+			{
+				template = PlainTextTemplateClosed;
+			}
+			
+			var message = template.Replace("%%CONTACT-NAME%%", this._competition.RegistrationConfiguration.OrganiserContact.DisplayName());
 			message = message.Replace("%%COMPETITION-NAME%%", this._competition.Name);
 			message = message.Replace("%%ENTRANTS%%", entrants.ToString());
 			message = message.Replace("%%COMPETITION-VALUES%%", competitionValues.ToString());
@@ -120,9 +136,11 @@ Competition Details
 
 		private void BuildHtml(BodyBuilder builder)
 		{
+			var emailHeader = this.GetEmailHeader();
 			var entrants = this.GetHtmlEntrants();
 			var competitionValues = this.GetHtmlCompetitionValues();
 			var entrantsHeader = this.GetEntrantsHeader();
+			var entriesMessage = this.GetEntriesMessageHtml();
 
 			var image1 = builder.LinkedResources.Add("logo.png", _logoFile.CreateReadStream());
 			image1.ContentId = MimeUtils.GenerateMessageId();
@@ -135,6 +153,8 @@ Competition Details
 			file = file.Replace("OKIMAGEID", image2.ContentId);
 			file = file.Replace("%%ENTRANTS-HEADER%%", entrantsHeader.ToUpperInvariant());
 			file = file.Replace("%%COMPETITION-NAME%%", this._competition.Name);
+			file = file.Replace("%%EMAIL-HEADER%%", emailHeader);
+			file = file.Replace("%%ENTRIES-MESSAGE%%", entriesMessage);
 			builder.HtmlBody = file;
 		}
 		
@@ -194,7 +214,7 @@ Competition Details
 			var count = 0;
 			foreach (var competitionRegistration in this._competitionRegistrations)
 			{
-				foreach (var competitionEntrant in competitionRegistration.Entrants)
+				foreach (var competitionEntrant in competitionRegistration.GetPendingOrConfirmedEntrants())
 				{
 					var players = new StringBuilder();
 					var first = true;
@@ -224,7 +244,7 @@ Competition Details
 
 			foreach (var competitionRegistration in this._competitionRegistrations)
 			{
-				foreach (var competitionEntrant in competitionRegistration.Entrants)
+				foreach (var competitionEntrant in competitionRegistration.GetPendingOrConfirmedEntrants())
 				{
 					var players = new StringBuilder();
 					var first = true;
@@ -249,7 +269,7 @@ Competition Details
 		private string GetEntrantsHeader()
 		{
 			this.GetEntrantType(out var entrantTypePlural, out _);
-			return $"Total {this._competitionRegistrations.Sum(x => x.Entrants.Count)} {entrantTypePlural} entered";
+			return $"Total {this._competitionRegistrations.Sum(x => x.GetPendingOrConfirmedEntrants().ToList().Count)} {entrantTypePlural} entered";
 		}
 
 		private void GetEntrantType(out string plural, out string singular)
@@ -261,6 +281,24 @@ Competition Details
 				plural = "Teams";
 				singular = "Team";
 			}
+		}
+
+		private string GetEmailHeader()
+		{
+			if (this._competition.RegistrationConfiguration.IsClosed())
+			{
+				return "Entries Closed";
+			}
+			return "Entries Update";
+		}
+
+		private string GetEntriesMessageHtml()
+		{
+			if (this._competition.RegistrationConfiguration.IsClosed())
+			{
+				return "Entries have now <b>closed</b>.  Below is a summary of all the entries received online.";
+			}
+			return "Below is a summary of all the entries received online to date.";
 		}
 	}
 }

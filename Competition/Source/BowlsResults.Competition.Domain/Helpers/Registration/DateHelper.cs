@@ -12,7 +12,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Helpers.Registration
 			}
 			else
 			{
-				DateTime newDate = competitionDate.Date.AddDays(-21);
+				DateTime newDate = competitionDate.Date.AddDays(-14);
 				return newDate.AddHours(6);
 			}
 		}

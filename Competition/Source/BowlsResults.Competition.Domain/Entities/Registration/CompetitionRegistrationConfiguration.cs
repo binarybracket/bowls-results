@@ -63,5 +63,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 
 			return CompetitionRegistrationStatuses.Unavailable;
 		}
+
+		public virtual bool IsClosed()
+		{
+			return this.CloseDate < DateTime.UtcNow;
+		}
 	}
 }

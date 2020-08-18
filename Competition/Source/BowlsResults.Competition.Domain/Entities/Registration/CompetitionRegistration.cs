@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http.Headers;
 using Com.BinaryBracket.Core.Domain2.Entities;
 
@@ -34,6 +36,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 		public virtual string DisplayName()
 		{
 			return $"{this.Forename} {this.Surname}";
+		}
+
+		public virtual IEnumerable<CompetitionEntrant> GetPendingOrConfirmedEntrants()
+		{
+			return this.Entrants.Where(x => x.CompetitionEntrantStatusID == CompetitionEntrantStatuses.Pending || x.CompetitionEntrantStatusID == CompetitionEntrantStatuses.Confirmed);
 		}
 	}
 }
