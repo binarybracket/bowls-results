@@ -31,6 +31,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Match
 			this.Map(x => x.AwayResultTypeID).Column("AwayResultTypeID").CustomType<ResultType>();
 			this.Map(x => x.MatchCalculationEngineID).Column("MatchCalculationEngineID").Not.Nullable();
 			this.Map(x => x.Sequence).Column("Sequence");
+			this.Map(x => x.Comment).Column("Comment");
 			this.Map(x => x.DataString1).Column("DataString1");
 			this.Map(x => x.DataString2).Column("DataString2");
 

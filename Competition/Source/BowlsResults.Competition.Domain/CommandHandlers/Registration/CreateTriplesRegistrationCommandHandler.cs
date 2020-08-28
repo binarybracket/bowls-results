@@ -76,7 +76,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 
 				if (this._validationResult.IsValid)
 				{
-					await this._recaptchaService.Validate(command.Registration, "opens/registration", this._validationResult);
+					recaptchaResponse = await this._recaptchaService.Validate(command.Registration, "opens/registration", this._validationResult);
 				}
 
 				if (this._validationResult.IsValid)

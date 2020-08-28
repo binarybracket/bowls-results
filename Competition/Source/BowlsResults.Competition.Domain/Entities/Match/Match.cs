@@ -27,6 +27,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 		public virtual ResultType? AwayResultTypeID { get; set; }
 		public virtual MatchCalculationEngines MatchCalculationEngineID { get; set; }
 		public virtual int? Sequence { get; set; }
+		public virtual string Comment { get; set; }
 		public virtual string DataString1 { get; set; }
 		public virtual string DataString2 { get; set; }
 		

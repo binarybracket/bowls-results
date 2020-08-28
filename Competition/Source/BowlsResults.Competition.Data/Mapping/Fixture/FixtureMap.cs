@@ -7,7 +7,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Fixture
 	{
 		public FixtureMap()
 		{
-			this.Table("Fixture");
+			this.Table("Fixture2");
 			this.LazyLoad();
 			this.References(x => x.Season).Column("SeasonID");
 			this.Map(x => x.FixtureStatusID).Column("FixtureStatusID");
