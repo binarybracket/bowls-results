@@ -12,5 +12,6 @@ namespace BowlsResults.WebApi.Competition.Dto
 		public ContactDto OrganiserContact { get; set; }
 		public GameFormats? EntryGameFormatID { get; set; }
 		public CompetitionRegistrationModes Mode { get; set; }
+		public bool ShowQualificationDates { get; set; }
 	}
 }

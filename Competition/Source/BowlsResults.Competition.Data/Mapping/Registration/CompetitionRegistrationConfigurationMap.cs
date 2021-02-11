@@ -17,6 +17,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Registration
 			this.Map(x => x.CloseDate).Column("CloseDate");
 			this.Map(x => x.Amount).Column("Amount").Nullable();
 			this.Map(x => x.EntryGameFormatID).Column("EntryGameFormatID").Nullable().CustomType<GameFormats>();
+			this.Map(x => x.ShowQualificationDates).Column("ShowQualificationDates").Nullable();
 			this.References(x => x.OrganiserContact).Column("OrganiserContactID").Not.Nullable().Cascade.None();
 		}
 	}

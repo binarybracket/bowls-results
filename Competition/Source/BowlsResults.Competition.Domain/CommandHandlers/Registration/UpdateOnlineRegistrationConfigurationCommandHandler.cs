@@ -65,6 +65,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 				this._competition.RegistrationConfiguration.OpenDate = DateHelper.GenerateOpenDate(this._competition.StartDate, command.OpenDate);
 				this._competition.RegistrationConfiguration.CloseDate = DateHelper.GenerateCloseDate(this._competition.StartDate, command.CloseDate);
 				this._competition.RegistrationConfiguration.Amount = command.Amount;
+				this._competition.RegistrationConfiguration.ShowQualificationDates = command.ShowQualificationDates;
 
 				await this._competitionRepository.Save(this._competition);
 				

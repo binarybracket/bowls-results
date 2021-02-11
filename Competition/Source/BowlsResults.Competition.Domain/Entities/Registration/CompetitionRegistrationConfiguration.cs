@@ -14,6 +14,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 		public virtual decimal? Amount { get; set; }
 		public virtual Contact OrganiserContact { get; set; }
 		public virtual GameFormats? EntryGameFormatID { get; set; }
+		public virtual bool ShowQualificationDates { get; set; }
 
 		public virtual CompetitionRegistrationStatuses CalculateOnlineStatus()
 		{

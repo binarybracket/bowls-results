@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BowlsResults.WebApi.Competition.Dto;
 
 namespace BowlsResults.WebApi.Competition.Assembler
@@ -37,7 +38,7 @@ namespace BowlsResults.WebApi.Competition.Assembler
 
 			if (competition.Dates != null && competition.Dates.Count > 0)
 			{
-				dto.Dates = competition.Dates.AssembleDtoList();
+				dto.Dates = competition.Dates.OrderBy(x => x.Date).AssembleDtoList();
 			}
 
 			return dto;

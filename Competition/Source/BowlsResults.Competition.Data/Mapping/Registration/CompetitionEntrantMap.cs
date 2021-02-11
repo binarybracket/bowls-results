@@ -14,7 +14,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping.Registration {
 			this.Table("CompetitionEntrant");
 			this.LazyLoad();
 			
-			this.References(x => x.CompetitionRegistration).Column("CompetitionRegistrationID");
+			this.References(x => x.CompetitionRegistration).Column("CompetitionRegistrationID").Nullable();
+			this.Map(x => x.CompetitionDateID).Column("CompetitionDateID").Nullable();
 			this.Map(x => x.CompetitionEntrantStatusID).Column("CompetitionEntrantStatusID").Not.Nullable();
 			this.Map(x => x.CompetitionID).Column("CompetitionID").Not.Nullable();
 			this.Map(x => x.EntrantGameFormatID).Column("EntrantGameFormatID").Not.Nullable();

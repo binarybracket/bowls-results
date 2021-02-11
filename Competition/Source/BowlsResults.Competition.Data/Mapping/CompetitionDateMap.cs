@@ -13,6 +13,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Mapping
 			this.References(x => x.Competition).Cascade.None().Column("CompetitionID");
 			this.Map(x => x.Description).Column("Description");
 			this.Map(x => x.Date).Column("Date");
+			this.Map(x => x.Qualifier).Column("Qualifier");
+			this.Map(x => x.CompetitionDateStatusID).Column("CompetitionDateStatusID").CustomType<CompetitionDateStatuses>();
 		}
 	}
 }

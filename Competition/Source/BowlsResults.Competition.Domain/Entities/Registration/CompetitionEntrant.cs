@@ -21,6 +21,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registratio
 		public virtual int CompetitionID { get; set; }
 		public virtual GameFormats EntrantGameFormatID { get; set; }
 		public virtual ISet<CompetitionEntrantPlayer> Players { get; set; }
+		public virtual int? CompetitionDateID { get; set; }
 
 		protected override bool SupportTransient => true;
 

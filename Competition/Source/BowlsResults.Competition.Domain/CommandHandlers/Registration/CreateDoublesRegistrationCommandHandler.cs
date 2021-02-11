@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registration.Validators;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Registration;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Helpers.Registration;
@@ -30,12 +31,14 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 		private readonly IRecaptchaService _recaptchaService;
 		private readonly IRegistrationEmailManager _registrationEmailManager;
 		private readonly ICompetitionRegistrationAttemptRepository _competitionRegistrationAttemptRepository;
+		private readonly ICompetitionDateRepository _competitionDateRepository;
 
 		private ValidationResult _validationResult;
 		private Entities.Competition _competition;
 
 		public CreateDoublesRegistrationCommandHandler(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, IRegistrationUnitOfWork registrationUnitOfWork, CreateDoublesRegistrationCommandValidator validator, ICompetitionRepository competitionRepository,
-			ICompetitionRegistrationRepository competitionRegistrationRepository, IRecaptchaService recaptchaService, IRegistrationEmailManager registrationEmailManager, ICompetitionRegistrationAttemptRepository competitionRegistrationAttemptRepository)
+			ICompetitionRegistrationRepository competitionRegistrationRepository, IRecaptchaService recaptchaService, IRegistrationEmailManager registrationEmailManager, ICompetitionRegistrationAttemptRepository competitionRegistrationAttemptRepository,
+			ICompetitionDateRepository competitionDateRepository)
 		{
 			this._logger = loggerFactory.CreateLogger<CreateDoublesRegistrationCommandHandler>();
 			this._validator = validator;
@@ -46,6 +49,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 			this._recaptchaService = recaptchaService;
 			this._registrationEmailManager = registrationEmailManager;
 			this._competitionRegistrationAttemptRepository = competitionRegistrationAttemptRepository;
+			this._competitionDateRepository = competitionDateRepository;
 		}
 
 		public async Task<DefaultCommandResponse> Handle(CreateDoublesRegistrationCommand command)
@@ -88,6 +92,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Regi
 						var entrant = registration.CreateEntrant(this._competition);
 						entrant.CreatePlayer(player.Player1.Forename, player.Player1.Surname);
 						entrant.CreatePlayer(player.Player2.Forename, player.Player2.Surname);
+						if (player.QualificationDate.HasValue)
+						{
+							entrant.CompetitionDateID = player.QualificationDate.Value;
+						}
 					}
 
 					await this._competitionRegistrationRepository.Save(registration);

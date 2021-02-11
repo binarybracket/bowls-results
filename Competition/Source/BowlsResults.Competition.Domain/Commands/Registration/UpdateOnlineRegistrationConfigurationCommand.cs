@@ -14,5 +14,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.Registratio
 		public int? OrganiserContactID { get; set; }
 		
 		public CompetitionRegistrationModes? RegistrationMode { get; set; }
+		public bool ShowQualificationDates { get; set; }
 	}
 }

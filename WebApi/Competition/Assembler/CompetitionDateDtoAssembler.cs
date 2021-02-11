@@ -22,8 +22,11 @@ namespace BowlsResults.WebApi.Competition.Assembler
 		{
 			return  new CompetitionDateDto
 			{
+				ID = competitionDate.ID,
 				Description =  competitionDate.Description,
-				Date =  competitionDate.Date
+				Date =  competitionDate.Date,
+				Qualifier = competitionDate.Qualifier,
+				CompetitionDateStatusID = competitionDate.CompetitionDateStatusID
 			};
 		}
 	}

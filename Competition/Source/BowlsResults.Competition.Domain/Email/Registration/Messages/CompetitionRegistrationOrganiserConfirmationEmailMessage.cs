@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Commands.AddCompetitionStage;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.Core.Domain2.Email;
@@ -42,6 +45,7 @@ Competition Details
 
 		private readonly Entities.Competition _competition;
 		private readonly CompetitionRegistration _competitionRegistration;
+		private readonly List<CompetitionDate> _dates;
 
 		static CompetitionRegistrationOrganiserConfirmationEmailMessage()
 		{
@@ -62,10 +66,11 @@ Competition Details
 			_registrationConfirmationTemplate = reader.ReadToEnd();
 		}
 
-		public CompetitionRegistrationOrganiserConfirmationEmailMessage(Entities.Competition competition, CompetitionRegistration competitionRegistration)
+		public CompetitionRegistrationOrganiserConfirmationEmailMessage(Entities.Competition competition, CompetitionRegistration competitionRegistration, List<CompetitionDate> dates)
 		{
 			this._competition = competition;
 			this._competitionRegistration = competitionRegistration;
+			this._dates = dates;
 		}
 
 		public MailboxAddress GetFrom()
@@ -232,6 +237,15 @@ Competition Details
 					first = false;
 				}
 
+				if (competitionEntrant.CompetitionDateID != null)
+				{
+					var competitionDate = this._dates.FirstOrDefault(x => x.ID == competitionEntrant.CompetitionDateID);
+					if (competitionDate != null)
+					{
+						players.Append($" ({competitionDate.Description})");	
+					}
+				}
+				
 				entrants.Append(_entrantValueTemplate.Replace("%%ENTRANT%%", $"{entrantTypeSingular} {++count} - {players}"));
 			}
 
@@ -255,6 +269,15 @@ Competition Details
 					}
 					players.Append(player.DisplayName());
 					first = false;
+				}
+				
+				if (competitionEntrant.CompetitionDateID != null)
+				{
+					var competitionDate = this._dates.FirstOrDefault(x => x.ID == competitionEntrant.CompetitionDateID);
+					if (competitionDate != null)
+					{
+						players.Append($" ({competitionDate.Description})");	
+					}
 				}
 
 				entrants.AppendLine($"{entrantTypeSingular} {++count} - " + players);

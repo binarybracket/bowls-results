@@ -6,5 +6,6 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Models.Registration.
 		public PlayerRegistrationModel Player2 { get; set; }
 		public PlayerRegistrationModel Player3 { get; set; }
 		public PlayerRegistrationModel Player4 { get; set; }
+		public int? QualificationDate { get; set; }
 	}
 }

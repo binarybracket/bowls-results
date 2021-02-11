@@ -16,6 +16,7 @@ namespace BowlsResults.WebApi.Competition.Assembler
 			dto.OrganiserContact = data.OrganiserContact.AssembleDto();
 			dto.EntryGameFormatID = data.EntryGameFormatID;
 			dto.Mode = data.CompetitionRegistrationModeID;
+			dto.ShowQualificationDates = data.ShowQualificationDates;
 			
 			return dto;
 		}
