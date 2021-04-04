@@ -255,6 +255,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture
 			{
 				match.SetIncomplete();
 			}
+			else
+			{
+				match.SetAuditFields();
+			}
 
 			this._matches.Add(match);
 			return match;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using BowlsResults.WebApi.Competition.Dto;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 

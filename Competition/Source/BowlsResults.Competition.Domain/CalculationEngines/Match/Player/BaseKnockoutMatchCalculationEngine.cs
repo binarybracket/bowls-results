@@ -12,6 +12,10 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CalculationEngines.M
 		/// </summary>
 		public void CalculateResultFromGames(PlayerMatch match)
 		{
+			if (match.MatchStatusID != MatchStatuses.Incomplete)
+			{
+				return;
+			}
 			if (match.Games.Count > 0 && match.Games.All(x => x.Game.Completed))
 			{
 				match.HomeResultTypeID = ResultType.Draw;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BowlsResults.WebApi.CompetitionResult.Dto;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Game;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 
@@ -16,7 +17,6 @@ namespace BowlsResults.WebApi.Competition.Dto
 		public CompetitionRegistrationConfigurationDto RegistrationConfiguration { get; set; }
 		public CompetitionRegistrationStatuses RegistrationStatus { get; set; }
 		public string Sponsor { get; set; }
-		
 		public List<CompetitionDateDto> Dates { get; set; }
 	}
 }

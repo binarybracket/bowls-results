@@ -52,7 +52,7 @@ namespace BowlsResults.WebApi
 		{
 			services.AddCors(options =>
 			{
-				options.AddPolicy("BOB",
+				options.AddPolicy("POLICY",
 					builder =>
 					{
 						builder.WithOrigins("http://localhost:8080", "http://dev.iombowls.dev.cc", "http://www.iombowls.com", "https://www.iombowls.com")
@@ -167,7 +167,7 @@ namespace BowlsResults.WebApi
 					});
 			}
 
-			app.UseCors("BOB");
+			app.UseCors("POLICY");
 			app.UseResponseCaching();
 			app.UseMvc();
 		}

@@ -66,8 +66,22 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities
 			{
 				return this.RegistrationConfiguration.CalculateUnavailableStatus();
 			}
+			else
+			{
+				return this.CalculateUnavailableStatus();
+			}
 
 			return status;
+		}
+
+		private CompetitionRegistrationStatuses CalculateUnavailableStatus()
+		{
+			if ((DateTime.UtcNow - this.StartDate).Days > 1)
+			{
+				return CompetitionRegistrationStatuses.Past;
+			}
+
+			return CompetitionRegistrationStatuses.Unavailable;
 		}
 
 		public static Competition Create(CompetitionHeader header, Season season, CompetitionOrganisers organiser, CompetitionScopes scope, CompetitionFormats format,

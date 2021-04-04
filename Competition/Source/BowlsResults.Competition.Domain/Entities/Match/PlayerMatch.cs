@@ -23,7 +23,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 		
 		public virtual CompetitionEntrant Home { get; set; }
 		public virtual CompetitionEntrant Away { get; set; }
-
+		
+		protected override bool SupportTransient => true;
+		
 		public virtual IEnumerable<PlayerMatchXGame> ValidGamesForCalculation
 		{
 			get 
@@ -57,6 +59,27 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Match
 			}
 
 			return matchGame;
+		}
+
+		public virtual void GetScoresByEntrantID(int entrantID, out short gameScore, out short chalkScore, out short? bonusScore, out bool? walkover)
+		{
+			if(entrantID == this.Home.ID)
+			{
+				gameScore = this.HomeGameScore.Value;
+				chalkScore = this.HomeChalkScore.Value;
+				bonusScore = this.HomeBonusScore;
+				walkover = this.HomeWalkover;
+				return;
+			}
+			else if (entrantID == this.Away.ID)
+			{
+				gameScore = this.AwayGameScore.Value;
+				chalkScore = this.AwayChalkScore.Value;
+				bonusScore = this.AwayBonusScore;
+				walkover = this.AwayWalkover;
+				return;
+			}
+			throw new ArgumentOutOfRangeException($"Entrant {entrantID} is not part of this match");
 		}
 	}
 }

@@ -68,7 +68,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 			try
 			{
 				PlayerFixture fixture = null;
-				
+
 				if (this._validationResult.IsValid)
 				{
 					await this.Load(command);
@@ -104,7 +104,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 
 		private void Validate(AddPlayerFixtureCommand command)
 		{
-			if (this._round.Fixtures.Any(x => x.Reference == command.Reference))
+			if (!string.IsNullOrEmpty(command.Reference) && this._round.Fixtures.Any(x => x.Reference == command.Reference))
 			{
 				this._validationResult.Errors.Add(new ValidationFailure("reference", "Fixture already exists with this reference."));
 			}
@@ -113,15 +113,15 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 			{
 				if (this._round.Fixtures.Any(x => x.Entrant1 != null && x.Entrant1.ID == command.Entrant1.EntrantID))
 				{
-					this._validationResult.Errors.Add(new ValidationFailure(nameof(command.Entrant1), "Specified entrant is already assigned to another fixture in this round."));	
+					this._validationResult.Errors.Add(new ValidationFailure(nameof(command.Entrant1), "Specified entrant is already assigned to another fixture in this round."));
 				}
 			}
-			
+
 			if (command.Entrant2.Mode == PlayerFixtureEntrantConfigurationModel.PendingEntrantModes.Entrant)
 			{
 				if (this._round.Fixtures.Any(x => x.Entrant2 != null && x.Entrant2.ID == command.Entrant2.EntrantID))
 				{
-					this._validationResult.Errors.Add(new ValidationFailure(nameof(command.Entrant2), "Specified entrant is already assigned to another fixture in this round."));	
+					this._validationResult.Errors.Add(new ValidationFailure(nameof(command.Entrant2), "Specified entrant is already assigned to another fixture in this round."));
 				}
 			}
 
@@ -155,6 +155,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 				if (command.Entrant1.FixtureID == null) throw new ArgumentNullException(nameof(command.Entrant1.FixtureID));
 				this._pendingFixture1 = await this._playerFixtureRepository.Get(command.Entrant1.FixtureID.Value);
 			}
+
 			if (command.Entrant2.Mode == PlayerFixtureEntrantConfigurationModel.PendingEntrantModes.Fixture)
 			{
 				if (command.Entrant2.FixtureID == null) throw new ArgumentNullException(nameof(command.Entrant2.FixtureID));
@@ -169,6 +170,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 				if (command.Entrant1.EntrantID == null) throw new ArgumentNullException(nameof(command.Entrant1.EntrantID));
 				this._entrant1 = await this._competitionEntrantRepository.Get(command.Entrant1.EntrantID.Value);
 			}
+
 			if (command.Entrant2.Mode == PlayerFixtureEntrantConfigurationModel.PendingEntrantModes.Entrant)
 			{
 				if (command.Entrant2.EntrantID == null) throw new ArgumentNullException(nameof(command.Entrant2.EntrantID));
@@ -194,21 +196,24 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 				throw new NotImplementedException();
 			}
 		}
-		
+
 		private void SetupFixture(PlayerFixture fixture, AddPlayerFixtureCommand command)
 		{
 			if (this._pendingFixture1 != null)
 			{
 				fixture.SetPendingFixture1(this._pendingFixture1, command.Entrant1.FixtureResultType.Value);
 			}
+
 			if (this._pendingFixture2 != null)
 			{
 				fixture.SetPendingFixture2(this._pendingFixture2, command.Entrant2.FixtureResultType.Value);
 			}
+
 			if (this._entrant1 != null)
 			{
 				fixture.SetEntrant1(this._entrant1);
 			}
+
 			if (this._entrant2 != null)
 			{
 				fixture.SetEntrant2(this._entrant2);

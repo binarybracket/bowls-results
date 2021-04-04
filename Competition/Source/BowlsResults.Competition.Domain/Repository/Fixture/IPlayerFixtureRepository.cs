@@ -9,6 +9,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Fixture
 	{
 		Task<PlayerFixture> GetFull(short id);
 		Task<List<PlayerFixture>> GetAll(short competitionRoundID);
+		Task<List<PlayerFixture>> GetAllFullByCompetition(int competitionID);
 		Task<List<PlayerFixture>> GetPendingFixtures(short relatedFixtureID);
 	}
 }

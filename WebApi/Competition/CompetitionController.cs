@@ -3,12 +3,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using BowlsResults.WebApi.Competition.Assembler;
 using BowlsResults.WebApi.Competition.Dto;
+using BowlsResults.WebApi.CompetitionResult.Assembler;
+using BowlsResults.WebApi.CompetitionResult.Dto;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Fixture;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository.Registration;
 using Com.BinaryBracket.Core.Data2.SessionProvider;
 using Com.BinaryBracket.Core.Domain2;
@@ -21,13 +25,15 @@ namespace BowlsResults.WebApi.Competition
 	[Route("api/{v:apiVersion}/competition/")]
 	public class CompetitionController	
 	{
-		public CompetitionController(ICompetitionRepository competitionRepository, IUnitOfWork unitOfWork, ISessionProvider sessionProvider, ICompetitionRegistrationRepository competitionRegistrationRepository, IRegistrationEmailManager registrationEmailManager)
+		public CompetitionController(ICompetitionRepository competitionRepository, IUnitOfWork unitOfWork, ISessionProvider sessionProvider, ICompetitionRegistrationRepository competitionRegistrationRepository, IRegistrationEmailManager registrationEmailManager, ICompetitionResultRepository competitionResultRepository, IPlayerFixtureRepository playerFixtureRepository)
 		{
 			this._competitionRepository = competitionRepository;
 			this._unitOfWork = unitOfWork;
 			this._sessionProvider = sessionProvider;
 			this._competitionRegistrationRepository = competitionRegistrationRepository;
 			this._registrationEmailManager = registrationEmailManager;
+			this._competitionResultRepository = competitionResultRepository;
+			this._playerFixtureRepository = playerFixtureRepository;
 		}
 		
 		private ICompetitionRepository _competitionRepository;
@@ -35,26 +41,9 @@ namespace BowlsResults.WebApi.Competition
 		private readonly ISessionProvider _sessionProvider;
 		private readonly ICompetitionRegistrationRepository _competitionRegistrationRepository;
 		private readonly IRegistrationEmailManager _registrationEmailManager;
-
-		[ResponseCache(Duration = 60)]
-		[Route("{id}")]
-		[HttpGet]
-		public async Task<ApiResponse> Get(int id)
-		{
-			Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Competition competition = await this._competitionRepository.GetWithRegistrationConfiguration(id);
-			CompetitionDto dto = competition.AssembleDto();
-			return ApiResponse.CreateSuccess(dto);
-		}
-
-		[ResponseCache(Duration = 60)]
-		[HttpGet]
-		public async Task<ApiResponse> Get()
-		{
-			List<Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Competition> competitions = await this._competitionRepository.GetPendingPlayerCompetitions();
-			List<CompetitionDto> dto = competitions.AssembleDtoList();
-			return ApiResponse.CreateSuccess(dto);
-		}
-
+		private readonly ICompetitionResultRepository _competitionResultRepository;
+		private readonly IPlayerFixtureRepository _playerFixtureRepository;
+		
 		[ResponseCache(Duration = 60)]
 		[Route("player/results")]
 		[HttpGet]
@@ -92,20 +81,6 @@ namespace BowlsResults.WebApi.Competition
 			
 			List<CompetitionDto> dto = competitions.AssembleDtoList();
 			return ApiResponse.CreateSuccess(dto);
-		}
-		
-		[Route("{id}/registration/summary")]
-		[HttpPost]
-		public async Task<ApiResponse> RegistrationSummary(int id)
-		{
-			var competition = await this._competitionRepository.GetWithRegistrationConfiguration(id);
-			if (competition.RegistrationConfiguration != null)
-			{
-				List<CompetitionRegistration> registrations = await this._competitionRegistrationRepository.GetAll(competition.ID);
-				await this._registrationEmailManager.SendSummaryEmail(registrations, competition);
-			}
-
-			return ApiResponse.CreateSuccess(new object());
 		}
 	}
 }

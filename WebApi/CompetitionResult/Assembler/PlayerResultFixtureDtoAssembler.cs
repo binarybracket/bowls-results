@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BowlsResults.WebApi.Common.Dto;
+using BowlsResults.WebApi.Competition.Assembler;
 using BowlsResults.WebApi.CompetitionResult.Dto;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
@@ -14,6 +15,18 @@ namespace BowlsResults.WebApi.CompetitionResult.Assembler
 {
 	public static class PlayerResultFixtureDtoAssembler
 	{
+		public static List<PlayerResultFixtureDto> AssembleDtoList(this IEnumerable<PlayerFixture> fixtures)
+		{
+			var list = new List<PlayerResultFixtureDto>();
+
+			foreach (var fixture in fixtures)
+			{
+				list.Add(fixture.AssembleDto());
+			}
+
+			return list;
+		}
+
 		public static PlayerResultFixtureDto AssembleDto(this PlayerFixture fixture)
 		{
 			var dto = new PlayerResultFixtureDto
@@ -23,8 +36,10 @@ namespace BowlsResults.WebApi.CompetitionResult.Assembler
 				Entrant2 = fixture.Entrant2.AssembleDto(),
 				Legs = fixture.Legs,
 				FixtureCalculationEngineID = fixture.FixtureCalculationEngineID,
+				FixtureStatusID = fixture.FixtureStatusID,
 				Result1 = fixture.AssemblePlayerFixtureEntrant1Score(),
 				Result2 = fixture.AssemblePlayerFixtureEntrant2Score(),
+				SummaryData = fixture.AssembleSummaryDataDto()
 			};
 
 			foreach (var match in fixture.Matches)
@@ -53,7 +68,8 @@ namespace BowlsResults.WebApi.CompetitionResult.Assembler
 				MatchCalculationEngineID = match.MatchCalculationEngineID,
 				Pitch = match.Pitch.AssembleDto(),
 				HomeEntrant = homeEntrant,
-				AwayEntrant = awayEntrant
+				AwayEntrant = awayEntrant,
+				VenueTypeID = match.VenueTypeID
 			};
 
 			if (match.MatchStatusID.IsProcessedWithResult())

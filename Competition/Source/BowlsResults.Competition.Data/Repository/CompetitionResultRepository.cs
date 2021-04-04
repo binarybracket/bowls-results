@@ -42,5 +42,20 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 				.OrderByDescending(x => x.Competition.StartDate)
 				.ToListAsync();
 		}
+
+		public Task<PlayerCompetitionResult> GetPlayerCompetitionResult(int competitionID, int season)
+		{
+			return this.Session.Query<PlayerCompetitionResult>()
+				.Fetch(x => x.Competition)
+				.Fetch(x => x.Fixture)
+				.ThenFetchMany(x => x.Matches)
+				.ThenFetchMany(f => f.Games)
+				.ThenFetch(f => f.Game)
+				.ThenFetchMany(f => f.Players)
+				.ThenFetch(f => f.Player)
+				.Where(x => x.SeasonID == season && x.Competition.ID == competitionID)
+				.OrderByDescending(x => x.Competition.StartDate)
+				.SingleOrDefaultAsync();
+		}
 	}
 }

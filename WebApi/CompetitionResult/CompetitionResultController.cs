@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BowlsResults.WebApi.CompetitionResult.Assembler;
+using BowlsResults.WebApi.CompetitionResult.Dto;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Com.BinaryBracket.Core.Data2.SessionProvider;
 using Com.BinaryBracket.Core.Domain2;
@@ -31,14 +33,16 @@ namespace BowlsResults.WebApi.CompetitionResult
 		[HttpGet]
 		public async Task<ApiResponse> Get(int? clubID)
 		{
-			var competitions = await this._competitionResultRepository.GetPlayerCompetitionResults(DateTime.UtcNow.Year);
+			var season = DateTime.UtcNow.Year;
+			season = 2020;
+			var competitions = await this._competitionResultRepository.GetPlayerCompetitionResults(season);
 
 			if (clubID.HasValue)
 			{
 				competitions = competitions.Where(x => x.Competition.VenueClub.ID == clubID).ToList();
 			}
 			
-			var dtoList = competitions.AssembleDtoList();
+			List<PlayerCompetitionResultDto> dtoList = competitions.AssembleDtoList();
 
 			return ApiResponse.CreateSuccess(dtoList);
 		}

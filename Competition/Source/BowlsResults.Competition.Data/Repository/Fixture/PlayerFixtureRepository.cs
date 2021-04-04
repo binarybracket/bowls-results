@@ -36,6 +36,21 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository.Fixture
 				.ToListAsync();
 		}
 
+		public Task<List<PlayerFixture>> GetAllFullByCompetition(int competitionID)
+		{
+			return this.Session.Query<PlayerFixture>()
+				.Fetch(x => x.CompetitionRound)
+				.ThenFetch(x => x.CompetitionEvent)
+				.ThenFetch(x => x.CompetitionStage)
+				.FetchMany(x => x.Matches)
+				.ThenFetchMany(f => f.Games)
+				.ThenFetch(f => f.Game)
+				.ThenFetchMany(f => f.Players)
+				.ThenFetch(f => f.Player)
+				.Where(x => x.CompetitionRound.Competition.ID == competitionID)
+				.ToListAsync();
+		}
+
 		public Task<List<PlayerFixture>> GetPendingFixtures(short relatedFixtureID)
 		{
 			return this.Session.Query<PlayerFixture>().Where(

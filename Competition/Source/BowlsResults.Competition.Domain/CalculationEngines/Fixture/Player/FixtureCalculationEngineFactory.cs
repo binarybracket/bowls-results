@@ -16,6 +16,8 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CalculationEngines.F
 			{
 				case FixtureCalculationEngines.SingleMatch:
 					return new SingleMatchFixtureCalculationEngine();
+				case FixtureCalculationEngines.IomMixedTeam2005_2014:
+					return new IomMixedPlayerFixtureCalculationEngine();
 				default:
 					throw new ArgumentOutOfRangeException("engine");
 			}
