@@ -82,7 +82,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CalculationEngines.F
 					fixture.Entrant1ResultTypeID = ResultType.Win;
 					fixture.Entrant2ResultTypeID = ResultType.Lose;
 				}
-				else
+				else if (fixture.Entrant1GameScore < fixture.Entrant2GameScore)
 				{
 					fixture.Entrant1ResultTypeID = ResultType.Lose;
 					fixture.Entrant2ResultTypeID = ResultType.Win;

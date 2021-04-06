@@ -45,7 +45,7 @@ namespace BowlsResults.WebApi.CompetitionResult.Assembler
 			foreach (var match in fixture.Matches)
 			{
 				var homeEntrant = (match.Home.ID == fixture.Entrant1.ID ? dto.Entrant1 : dto.Entrant2);
-				var awayEntrant = (match.Away.ID == fixture.Entrant2.ID ? dto.Entrant1 : dto.Entrant2);
+				var awayEntrant = (match.Away.ID == fixture.Entrant2.ID ? dto.Entrant2 : dto.Entrant1);
 
 				var matchDto = match.AssembleDto(homeEntrant, awayEntrant);
 				dto.Matches.Add(matchDto);

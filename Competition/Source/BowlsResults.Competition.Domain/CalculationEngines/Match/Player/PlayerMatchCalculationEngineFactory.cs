@@ -10,8 +10,9 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CalculationEngines.M
 			switch (engineID)
 			{
 				case MatchCalculationEngines.KnockoutMatchByGames:
-				case MatchCalculationEngines.KnockoutMatchByChalksThenGames:
 					return KnockoutPlayerMatchByGamesCalculationEngine.Instance;
+				case MatchCalculationEngines.KnockoutMatchByChalksThenGames:
+					return KnockoutPlayerMatchByChalksGamesCalculationEngine.Instance;
 				default:
 					throw new ArgumentOutOfRangeException("engineID");
 			}

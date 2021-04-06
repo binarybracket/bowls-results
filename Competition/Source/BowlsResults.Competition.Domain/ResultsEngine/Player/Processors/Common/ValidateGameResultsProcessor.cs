@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Common.Processor;
@@ -40,19 +41,26 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.ResultsEngine.Player
 				var matchModel = context.PlayerFixture.GetMatch(request.MatchID);
 
 				var competition = context.Competition;
-				foreach (var gameResult in request.GameResults)
+
+				HashSet<int> homePlayers = new HashSet<int>(); 
+				HashSet<int> awayPlayers = new HashSet<int>();
+
+				homePlayers.UnionWith(request.GameResults.SelectMany(x => x.HomePlayers));
+				awayPlayers.UnionWith(request.GameResults.SelectMany(x => x.AwayPlayers));
+				
+				//foreach (var gameResult in request.GameResults)
 				{
-					if (!gameResult.HomePlayers.SequenceEqual(matchModel.Data.Home.GetPlayerIDs()))
+					if (!homePlayers.SequenceEqual(matchModel.Data.Home.GetPlayerIDs()))
 					{
-						response.ValidationResult.Errors.Add(new ValidationFailure(nameof(gameResult.HomePlayers),
+						response.ValidationResult.Errors.Add(new ValidationFailure(nameof(homePlayers),
 							"Home players are different to the entrant players on the match."));
 						ok = false;
 					}
 
-					if (!gameResult.AwayPlayers.SequenceEqual(matchModel.Data.Away.GetPlayerIDs()))
+					if (!awayPlayers.SequenceEqual(matchModel.Data.Away.GetPlayerIDs()))
 					{
 						response.ValidationResult.Errors.Add(
-							new ValidationFailure(nameof(gameResult.AwayPlayers), "Away players are different to the entrant players on the match"));
+							new ValidationFailure(nameof(awayPlayers), "Away players are different to the entrant players on the match"));
 						ok = false;
 					}
 				}
