@@ -78,6 +78,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 				if (this._validationResult.IsValid)
 				{
 					fixture = this._round.CreateFixture(command.TotalLegs, command.Date);
+					fixture.Reference = command.Reference;
 					this.SetupFixture(fixture, command);
 
 					await this._playerCompetitionRoundRepository.Save(this._round);
@@ -104,6 +105,11 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Domain.CommandHandlers.Fixt
 
 		private void Validate(AddPlayerFixtureCommand command)
 		{
+			if (this._competitionEvent is Knockout && string.IsNullOrEmpty(command.Reference))
+			{
+				this._validationResult.Errors.Add(new ValidationFailure("reference", "Reference is required on knockout competitions."));
+			}
+			
 			if (!string.IsNullOrEmpty(command.Reference) && this._round.Fixtures.Any(x => x.Reference == command.Reference))
 			{
 				this._validationResult.Errors.Add(new ValidationFailure("reference", "Fixture already exists with this reference."));
