@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BowlsResults.WebApi.Competition.Assembler;
 using BowlsResults.WebApi.Competition.Dto;
 using BowlsResults.WebApi.CompetitionResult.Assembler;
+using BowlsResults.WebApi.PlayerCompetition.Assembler;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Email.Registration;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
@@ -57,17 +58,7 @@ namespace BowlsResults.WebApi.Competition.Player
 		{
 			Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Competition competition = await this._competitionRepository.GetWithRegistrationConfiguration(id);
 			CompetitionDto dto = competition.AssembleDto();
-			
-			if (competition != null && competition.CompetitionScopeID == CompetitionScopes.Player)
-			{
-				List<PlayerFixture> fixtures = this._playerFixtureRepository.GetAllFullByCompetition(id).GetAwaiter().GetResult();
-				foreach (var competitionRound in fixtures.GroupBy(x=>x.CompetitionRound))
-				{
-					PlayerCompetitionRoundDto competitionRoundDto = competitionRound.Key.AssemblePlayerDto();
-					competitionRoundDto.Results = competitionRound.AssembleDtoList();
-				}
-			}
-			
+
 			return ApiResponse.CreateSuccess(dto);
 		}
 		
@@ -82,11 +73,13 @@ namespace BowlsResults.WebApi.Competition.Player
 			if (competition != null && competition.CompetitionScopeID == CompetitionScopes.Player)
 			{
 				List<PlayerFixture> fixtures = this._playerFixtureRepository.GetAllFullByCompetition(id).GetAwaiter().GetResult();
-				return ApiResponse.CreateSuccess(fixtures.AssembleDtoList());
+				return ApiResponse.CreateSuccess(PlayerFixtureDtoAssembler.AssembleDtoList(fixtures));
+				
+				
 				foreach (var competitionRound in fixtures.GroupBy(x => x.CompetitionRound))
 				{
 					PlayerCompetitionRoundDto competitionRoundDto = competitionRound.Key.AssemblePlayerDto();
-					competitionRoundDto.Results = competitionRound.AssembleDtoList();
+					competitionRoundDto.Results = PlayerResultFixtureDtoAssembler.AssembleDtoList(competitionRound);
 
 					list.Add(competitionRoundDto);
 				}
