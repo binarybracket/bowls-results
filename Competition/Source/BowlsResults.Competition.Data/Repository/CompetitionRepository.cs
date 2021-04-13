@@ -45,6 +45,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 		public Task<Domain.Entities.Competition> GetWithRegistrationConfiguration(int competitionID)
 		{
 			return this.Session.Query<Domain.Entities.Competition>()
+				.FetchMany(x => x.Stages)
 				.Fetch(x => x.RegistrationConfiguration)
 				.Fetch(x => x.VenueClub)
 				.ThenFetch(x => x.Pitch)
@@ -59,7 +60,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 				.Fetch(x => x.VenueClub)
 				.ThenFetch(x => x.Pitch)
 				.Fetch(x => x.OrganisingClub)
-				.Fetch(x=>x.Stages)
+				.Fetch(x => x.Stages)
 				.Where(x => x.CompetitionScopeID == CompetitionScopes.Player && x.StartDate < DateTime.UtcNow.Date)
 				.ToListAsync();
 		}

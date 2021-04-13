@@ -1,5 +1,6 @@
 using System;
 using BowlsResults.WebApi.Competition.Dto;
+using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Round;
@@ -13,9 +14,12 @@ namespace BowlsResults.WebApi.Competition.Assembler
 			var dto = new FixtureSummaryDataDto();
 
 			dto.CompetitionName = data.CompetitionRound.Competition.Name;
+			dto.CompetitionVenueDefaultPitchID = GetCompetitionDefaultPitch(data.CompetitionRound.Competition).ID;
 			dto.CompetitionStageDescription = GenerateCompetitionStageDescription(data);
 			dto.CompetitionRoundDescription = GenerateCompetitionRoundDescription(data.CompetitionRound);
-			
+			dto.CompetitionRoundType = data.CompetitionRound.CompetitionRoundTypeID;
+			dto.CompetitionRoundGameNumber = data.CompetitionRound.GameNumber;
+
 			return dto;
 		}
 
@@ -40,6 +44,16 @@ namespace BowlsResults.WebApi.Competition.Assembler
 
 			description += dto.Description;
 			return description;
+		}
+
+		private static Pitch GetCompetitionDefaultPitch(Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Competition competition)
+		{
+			if (competition.VenuePitch != null)
+			{
+				return competition.VenuePitch;
+			}
+
+			return competition.VenueClub.Pitch;
 		}
 	}
 }

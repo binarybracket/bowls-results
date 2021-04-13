@@ -69,7 +69,8 @@ namespace BowlsResults.WebApi.CompetitionResult.Assembler
 				Pitch = match.Pitch.AssembleDto(),
 				HomeEntrant = homeEntrant,
 				AwayEntrant = awayEntrant,
-				VenueTypeID = match.VenueTypeID
+				VenueTypeID = match.VenueTypeID,
+				Comment = match.Comment
 			};
 
 			if (match.MatchStatusID.IsProcessedWithResult())
@@ -236,7 +237,8 @@ namespace BowlsResults.WebApi.CompetitionResult.Assembler
 				ID = data.ID,
 				GameFormatID = data.GameFormatID,
 				GenderID = data.GenderID,
-				Name = data.Name
+				Name = data.Name,
+				Description = data.Description
 			};
 
 			return dto;
@@ -256,7 +258,9 @@ namespace BowlsResults.WebApi.CompetitionResult.Assembler
 
 			dto.ResultType = game.HomeResultTypeID.Value;
 			dto.Handicap = game.HomeHandicap;
+			dto.ChalkHandicap = game.HomeHandicap;
 			dto.Chalks = game.HomeScore;
+			dto.ChalkScore = game.HomeScore;
 			dto.IsWalkover = game.HomeWalkover;
 
 			return dto;
@@ -273,7 +277,9 @@ namespace BowlsResults.WebApi.CompetitionResult.Assembler
 
 			dto.ResultType = game.AwayResultTypeID.Value;
 			dto.Handicap = game.AwayHandicap;
+			dto.ChalkHandicap = game.AwayHandicap;
 			dto.Chalks = game.AwayScore;
+			dto.ChalkScore = game.AwayScore;
 			dto.IsWalkover = game.AwayWalkover;
 
 			return dto;

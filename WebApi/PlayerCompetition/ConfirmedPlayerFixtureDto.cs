@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using BowlsResults.WebApi.CompetitionResult.Dto;
 
 namespace BowlsResults.WebApi.PlayerCompetition
@@ -16,5 +18,14 @@ namespace BowlsResults.WebApi.PlayerCompetition
 		public ResultDto Result2 { get; set; }
 
 		public List<PlayerMatchDto> Matches { get; private set; }
+
+		public override DateTime SortDate
+		{
+			get
+			{
+				// NOTE: take earliest match date
+				return this.Matches.OrderBy(x => x.Date).First().Date;
+			}
+		}
 	}
 }

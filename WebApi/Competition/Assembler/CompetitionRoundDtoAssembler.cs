@@ -43,9 +43,9 @@ namespace BowlsResults.WebApi.Competition.Assembler
 				case CompetitionRoundTypes.Last16:
 					return $"Last 16";
 				case CompetitionRoundTypes.QuarterFinals:
-					return $"Quarter Finals";
+					return $"Quarter Final";
 				case CompetitionRoundTypes.SemiFinals:
-					return $"Semi Finals";
+					return $"Semi Final";
 				case CompetitionRoundTypes.Final:
 					return $"Final";
 				default:

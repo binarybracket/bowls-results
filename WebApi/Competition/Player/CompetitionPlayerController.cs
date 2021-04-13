@@ -72,17 +72,9 @@ namespace BowlsResults.WebApi.Competition.Player
 
 			if (competition != null && competition.CompetitionScopeID == CompetitionScopes.Player)
 			{
-				List<PlayerFixture> fixtures = this._playerFixtureRepository.GetAllFullByCompetition(id).GetAwaiter().GetResult();
-				return ApiResponse.CreateSuccess(PlayerFixtureDtoAssembler.AssembleDtoList(fixtures));
-				
-				
-				foreach (var competitionRound in fixtures.GroupBy(x => x.CompetitionRound))
-				{
-					PlayerCompetitionRoundDto competitionRoundDto = competitionRound.Key.AssemblePlayerDto();
-					competitionRoundDto.Results = PlayerResultFixtureDtoAssembler.AssembleDtoList(competitionRound);
-
-					list.Add(competitionRoundDto);
-				}
+				List<PlayerFixture> fixtures = await this._playerFixtureRepository.GetAllFullByCompetition(id);
+				var dtoList = PlayerFixtureDtoAssembler.AssembleDtoList(fixtures);
+				return ApiResponse.CreateSuccess(dtoList.OrderByDescending(x => x.SortDate).ThenByDescending(x => x.SummaryData.CompetitionRoundType).ThenByDescending(x => x.SummaryData.CompetitionRoundGameNumber));
 			}
 
 			return ApiResponse.CreateSuccess(list);

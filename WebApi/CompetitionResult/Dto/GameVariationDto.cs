@@ -9,5 +9,6 @@ namespace BowlsResults.WebApi.CompetitionResult.Dto
 		public GameFormats GameFormatID { get; set; }
 		public Genders GenderID { get; set; }
 		public string Name { get; set; }
+		public string Description { get; set; }
 	}
 }

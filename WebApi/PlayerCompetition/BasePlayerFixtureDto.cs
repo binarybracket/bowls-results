@@ -1,3 +1,5 @@
+using System;
+using BowlsResults.WebApi.Common.Dto;
 using BowlsResults.WebApi.Competition.Dto;
 
 namespace BowlsResults.WebApi.PlayerCompetition

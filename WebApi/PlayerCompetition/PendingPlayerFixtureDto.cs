@@ -10,7 +10,7 @@ namespace BowlsResults.WebApi.PlayerCompetition
 		public List<PlayerEntrantDto> Entrant2 { get; set; }
 		public string Entrant1Description { get; set; }
 		public string Entrant2Description { get; set; }
-		
 		public DateTime PendingDate { get; set; }
+		public override DateTime SortDate => this.PendingDate;
 	}
 }

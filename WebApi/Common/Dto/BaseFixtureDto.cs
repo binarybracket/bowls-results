@@ -1,6 +1,7 @@
+using System;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Fixture;
 
-namespace BowlsResults.WebApi.PlayerCompetition
+namespace BowlsResults.WebApi.Common.Dto
 {
 	public abstract class BaseFixtureDto
 	{
@@ -9,5 +10,6 @@ namespace BowlsResults.WebApi.PlayerCompetition
 		public FixtureCalculationEngines FixtureCalculationEngineID { get; set; }
 		public FixtureStatuses FixtureStatusID { get; set; }
 		public string Reference { get; set; }
+		public abstract DateTime SortDate { get; }
 	}
 }

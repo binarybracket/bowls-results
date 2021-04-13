@@ -6,7 +6,9 @@ namespace BowlsResults.WebApi.CompetitionResult.Dto
 	{
 		public ResultType ResultType { get; set; }
 		public byte? Handicap { get; set; }
+		public byte? ChalkHandicap { get; set; }
 		public byte Chalks { get; set; }
+		public byte ChalkScore { get; set; }
 		public bool IsWalkover { get; set; }
 	}
 }
