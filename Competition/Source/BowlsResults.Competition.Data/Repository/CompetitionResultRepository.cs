@@ -15,7 +15,7 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 		{
 		}
 
-		public Task<List<PlayerCompetitionResult>> GetPlayerCompetitionResults(int season)
+		public Task<List<PlayerCompetitionResult>> GetPlayerCompetitionResultsBySeason(int season)
 		{
 			// return this.Session.QueryOver<PlayerCompetitionResult>()
 			// 	.Fetch(x => x.Competition).Eager
@@ -40,6 +40,22 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 				.ThenFetch(f => f.Player)
 				.Where(x => x.SeasonID == season)
 				.OrderByDescending(x => x.Competition.StartDate)
+				.ToListAsync();
+		}
+
+		public Task<List<PlayerCompetitionResult>> GetPlayerCompetitionResults(int clubID, int count)
+		{
+			return this.Session.Query<PlayerCompetitionResult>()
+				.Fetch(x => x.Competition)
+				.Fetch(x => x.Fixture)
+				.ThenFetchMany(x => x.Matches)
+				.ThenFetchMany(f => f.Games)
+				.ThenFetch(f => f.Game)
+				.ThenFetchMany(f => f.Players)
+				.ThenFetch(f => f.Player)
+				.OrderByDescending(x => x.Competition.StartDate)
+				.Where(x=>x.Competition.VenueClub.ID == clubID)
+				.Take(count)
 				.ToListAsync();
 		}
 

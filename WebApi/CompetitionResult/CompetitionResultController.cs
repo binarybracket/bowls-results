@@ -35,7 +35,7 @@ namespace BowlsResults.WebApi.CompetitionResult
 		{
 			var season = DateTime.UtcNow.Year;
 			season = 2020;
-			var competitions = await this._competitionResultRepository.GetPlayerCompetitionResults(season);
+			var competitions = await this._competitionResultRepository.GetPlayerCompetitionResultsBySeason(season);
 
 			if (clubID.HasValue)
 			{
@@ -52,7 +52,7 @@ namespace BowlsResults.WebApi.CompetitionResult
 		[HttpGet]
 		public async Task<ApiResponse> Get(int id)
 		{
-			var competitions = await this._competitionResultRepository.GetPlayerCompetitionResults(DateTime.UtcNow.Year);
+			var competitions = await this._competitionResultRepository.GetPlayerCompetitionResults(id, 15);
 
 			competitions = competitions.Where(x => x.Competition.VenueClub.ID == id).ToList();
 			
