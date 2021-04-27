@@ -20,6 +20,9 @@ namespace Com.BinaryBracket.BowlsResults.Common.Data.Repository
 			return this.SessionQuery()
 				.FetchMany(x => x.Contacts)
 				.ThenFetch(x => x.Contact)
+				.FetchMany(x => x.Contacts)
+				.ThenFetch(x => x.Team)
+				.ThenFetch(x => x.Club)
 				.SingleOrDefaultAsync(x => x.ID == id);
 		}
 

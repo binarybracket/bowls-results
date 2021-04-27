@@ -12,6 +12,7 @@ namespace Com.BinaryBracket.BowlsResults.Common.Data.Mappings
 			
 			this.References(x => x.Club).Column("ClubID").Cascade.None();
 			this.References(x => x.Contact).Column("ContactID").Cascade.None();
+			this.References(x => x.Team).Column("TeamID").Nullable().Cascade.None();
 		}
 		
 	}

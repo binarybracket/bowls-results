@@ -4,6 +4,7 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.Entities
 	{
 		Secretary = 1,
 		CompetitionSecretary = 2,
-		Player = 3
+		Player = 3,
+		Captain = 4
 	}
 }

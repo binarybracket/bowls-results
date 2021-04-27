@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Com.BinaryBracket.BowlsResults.Common.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Registration;
+using Com.BinaryBracket.BowlsResults.Competition.Domain.Entities.Views;
 using Com.BinaryBracket.BowlsResults.Competition.Domain.Repository;
 using Com.BinaryBracket.Core.Data2;
 using Com.BinaryBracket.Core.Data2.Repositories;
@@ -78,6 +79,14 @@ namespace Com.BinaryBracket.BowlsResults.Competition.Data.Repository
 
 			return this.SessionQuery()
 				.Where(x => registrationSubQuery.Contains(x.ID))
+				.ToListAsync();
+		}
+
+		public Task<List<CompetitionTeam>> GetCompetitionTeams(int competitionHeaderID, int season)
+		{
+			return this.Session.Query<CompetitionTeam>()
+				.Where(x => x.CompetitionHeaderID == competitionHeaderID && x.SeasonID == season)
+				.OrderBy(x=>x.Team.Name)
 				.ToListAsync();
 		}
 	}

@@ -7,6 +7,7 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.Commands.Contact
 	{
 		public int? AssociationID { get; set; }
 		public int? ClubID { get; set; }
+		public int? TeamID { get; set; }
 		public ContactTypes ContactTypeID { get; set; }
 		public string Forename { get; set; }
 		public string Surname { get; set; }

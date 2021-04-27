@@ -24,23 +24,25 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.Entities
 			return this.Contacts.Single(x => x.Contact.ContactTypeID == contactType).Contact;
 		}
 		
-		public virtual void AddContact(Contact contact)
+		public virtual void AddContact(Contact contact, Team team)
 		{
 			this.RemoveAll(contact);
 			if (!this.Contacts.Any(x => x.Contact.ContactTypeID == contact.ContactTypeID && x.Contact.ID == contact.ID))
 			{
 				var data = new ClubXContact
 				{
+					Club = this,
 					Contact = contact,
-					Club = this
+					Team = team
 				};
 				this.Contacts.Add(data);
+				team.Captain = contact;
 			}
 		}
 
 		private void RemoveAll(Contact contact)
 		{
-			var itemsToRemove = this.Contacts.Where(x => x.Contact.ContactTypeID == contact.ContactTypeID && x.Contact.ID != contact.ID).ToArray();
+			var itemsToRemove = this.Contacts.Where(x => x.Contact.ContactTypeID == contact.ContactTypeID && x.Contact.ID == contact.ID).ToArray();
 			foreach(var item in itemsToRemove)
 			{
 				this.Contacts.Remove(item);

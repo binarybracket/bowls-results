@@ -19,20 +19,23 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.CommandHandlers.Contact
 		private readonly CreateContactCommandValidator _validator;
 		private readonly IContactRepository _contactRepository;
 		private readonly IClubRepository _clubRepository;
+		private readonly ITeamRepository _teamRepository;
 		private readonly IAssociationRepository _associationRepository;
 		
 		private ValidationResult _validationResult;
 		private Entities.Contact _contact;
 		private Club _club;
 		private Association _association;
+		private Team _team;
 
-		public CreateContactCommandHandler(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, CreateContactCommandValidator validator, IContactRepository contactRepository, IClubRepository clubRepository, IAssociationRepository associationRepository)
+		public CreateContactCommandHandler(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, CreateContactCommandValidator validator, IContactRepository contactRepository, IClubRepository clubRepository, ITeamRepository teamRepository, IAssociationRepository associationRepository)
 		{
 			this._logger = loggerFactory.CreateLogger<CreateContactCommandHandler>();
 			this._unitOfWork = unitOfWork;
 			this._validator = validator;
 			this._contactRepository = contactRepository;
 			this._clubRepository = clubRepository;
+			this._teamRepository = teamRepository;
 			this._associationRepository = associationRepository;
 		}
 		
@@ -62,8 +65,15 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.CommandHandlers.Contact
 
 					if (command.ClubID.HasValue)
 					{
-						this._club.AddContact(this._contact);
+						if (this._team.Club.ID != this._club.ID)
+						{
+							throw new ArgumentOutOfRangeException("club", $"Team {this._team.Name} is not associated with club {this._club.Name}");
+						}
+						
+						this._club.AddContact(this._contact, this._team);
+						
 						await this._clubRepository.Save(this._club);
+						await this._teamRepository.Save(this._team);
 					}
 					if (command.AssociationID.HasValue)
 					{
@@ -97,6 +107,10 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.CommandHandlers.Contact
 			if (command.ClubID.HasValue)
 			{
 				this._club = await this._clubRepository.GetWithContacts(command.ClubID.Value);
+			}
+			if (command.TeamID.HasValue && command.ContactTypeID == ContactTypes.Captain)
+			{
+				this._team = await this._teamRepository.Get(command.TeamID.Value);
 			}
 			if (command.AssociationID.HasValue)
 			{

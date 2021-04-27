@@ -6,5 +6,6 @@ namespace Com.BinaryBracket.BowlsResults.Common.Domain.Entities
 	{
 		public virtual Club Club { get; set; }
 		public virtual Contact Contact { get; set; }
+		public virtual Team Team { get; set; }
 	}
 }

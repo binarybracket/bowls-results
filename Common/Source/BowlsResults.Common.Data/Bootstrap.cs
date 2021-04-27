@@ -10,6 +10,7 @@ namespace Com.BinaryBracket.BowlsResults.Common.Data
 		{
 			services.AddTransient<IAssociationRepository, AssociationRepository>();
 			services.AddTransient<IClubRepository, ClubRepository>();
+			services.AddTransient<ITeamRepository, TeamRepository>();
 			services.AddTransient<IContactRepository, ContactRepository>();
 			services.AddTransient<IPitchRepository, PitchRepository>();
 			services.AddTransient<IPlayerRepository, PlayerRepository>();
